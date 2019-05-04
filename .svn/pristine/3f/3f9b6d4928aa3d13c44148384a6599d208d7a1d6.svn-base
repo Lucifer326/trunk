@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+    SELECT * FROM REP_SUBSTANCE_CATEGORY WHERE ISDELETED NOT IN(1)
+    <#if vo.categoryNumber ?exists && vo.categoryNumber ?length gt 0>
+	    and CATEGORY_NUMBER like '%' || '${vo.categoryNumber}' || '%'
+    </#if>
+    <#if vo.categoryName ?exists && vo.categoryName ?length gt 0>
+	    and CATEGORY_NAME like '%' || '${vo.categoryName}' || '%'
+    </#if>
+    ORDER BY CREATE_DATE DESC
+]]></SQL>

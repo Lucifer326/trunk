@@ -1,0 +1,45 @@
+package com.jeecg.allocation_notice.service;
+
+import com.jeecg.allocation_notice.entity.RepAllotInform;
+import com.jeecg.allocation_notice.entity.RepInformDetail;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.pojo.RepSubstanceMessage;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.core.common.service.CommonService;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author fuhai_deng
+ * @Description:com.jeecg.allocation_notice.service
+ */
+public interface NoticeAllocationServiceI extends CommonService {
+    public List<RepAllotInform> getList(int page, int rows, String where, String order);
+    //查询调拨单的调拨详情
+    public List<Map<String,Object>> detailGet(String uuid);
+
+
+    //添加调拨通知的信息（调拨通知和调拨通知详情表）
+    public AjaxJson noticeSave(RepAllotInform repAllotInform, List<RepInformDetail> list);
+    //查询调拨详情的对象by  uuid
+    public RepInformDetail detailGetByid(String uuid);
+    //根据调拨单据号查出调拨通知的相应信息
+    public RepAllotInform repAllotInformGetByid(String uuid);
+    //根据调拨单据号查出调拨通知的相应信息
+    public RepAllotInform noticeGetBydanjuhao(String danjuhao);
+    //根据调拨单据号查出所有的调拨详情的信息
+    public List<RepInformDetail> repInformDetailGetByid(String allotNumber);
+    //更新调拨数据
+    public AjaxJson InformDetailupdate(RepAllotInform repAllotInform, List<RepInformDetail> list,List<RepInformDetail> list1,List<String> list2);
+    //获得仓储机构信息byid
+    public RepAccessRepository respoityGet(String uuid);
+    //根据调拨单据号更改调拨通知的可删除
+    public void InformdelByid(String allotNumber);
+    //查询物资信息
+    public RepSubstanceMessage MessageGet(String bainhao);
+    //模糊查询列表集合
+    public List<Map<String,Object>> NoticelistLike(String diaobo, String project, String date);
+
+
+}

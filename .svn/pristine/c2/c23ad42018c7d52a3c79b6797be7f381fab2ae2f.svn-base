@@ -1,0 +1,54 @@
+package com.jeecg.system_management.dao;
+
+import com.jeecg.system_management.common.MaterialCategoryVo;
+import com.jeecg.system_management.pojo.RepSubstanceCategory;
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.jeecgframework.minidao.annotation.MiniDao;
+
+import java.util.List;
+
+/**
+ * 物资类别管理dao
+ *
+ * @author 苑希阳
+ */
+@MiniDao
+public interface MaterialCategoryDao {
+
+    /**
+     * 物资类别列表查询
+     *
+     * @param userId 用户id,需要根据此id做角色业务数据权限
+     * @return
+     */
+    @Arguments("userId")
+    List<RepSubstanceCategory> materialCategoryList(String userId);
+
+    /**
+     * 物资类别查看，通过uuid查找到对应类别信息
+     *
+     * @param uuid
+     * @return
+     */
+    @Arguments("uuid")
+    RepSubstanceCategory materialCategorySee(String uuid);
+
+    /**
+     * 物资类别条件查询
+     *
+     * @param vo
+     * @param userId 用户id,需要根据此id做角色业务数据权限
+     * @return
+     */
+    @Arguments({"vo", "userId"})
+    List<RepSubstanceCategory> materialCategoryByQuery(MaterialCategoryVo vo, String userId);
+
+    /**
+     * 统计指定物资类别名称个数
+     *
+     * @param categoryName
+     * @return
+     */
+    @Arguments({"categoryName", "userId"})
+    int countCategoryByName(String categoryName, String userId);
+}

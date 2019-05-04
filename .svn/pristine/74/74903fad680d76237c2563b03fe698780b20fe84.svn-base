@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT
+distinct
+REP_SUBSTANCE_MESSAGE.UUID,
+REP_SUBSTANCE_MESSAGE.SUB_NUMBER,
+REP_SUBSTANCE_MESSAGE.SUB_NAME,
+REP_SUBSTANCE_CATEGORY.CATEGORY_NAME,
+REP_SUBSTANCE_MESSAGE.SPECIFICATION_TYPE,
+REP_SUBSTANCE_MESSAGE.ISRECYCLE,
+REP_SUBSTANCE_MESSAGE.UNIT,
+REP_SUBSTANCE_MESSAGE.PRICE,
+REP_SUBSTANCE_MESSAGE.SUPPLIER,
+REP_SUBSTANCE_MESSAGE.CREATE_DATE
+FROM  REP_SUBSTANCE_MESSAGE
+LEFT JOIN REP_SUBSTANCE_CATEGORY ON REP_SUBSTANCE_MESSAGE.SUB_CATEGORY = REP_SUBSTANCE_CATEGORY.UUID
+LEFT JOIN T_S_USERCARDINFO tsu ON REP_SUBSTANCE_MESSAGE.create_by = tsu.user_name
+LEFT JOIN t_s_user tsus ON tsu.user_card_id = tsus.cardid
+LEFT JOIN T_S_ROLE_USER_BASE tsrub ON tsrub.userid = tsus. ID
+    WHERE
+       tsrub.orgid IN (
+        SELECT
+            T . ID
+        FROM
+            T_S_DEPART T START WITH T . ID = (
+                SELECT DISTINCT
+                    tsrub.orgid
+                FROM
+                    T_S_ROLE_USER_BASE tsrub
+                WHERE
+                    tsrub.userid = '${userId}'
+            ) CONNECT BY T .parentdepartid = PRIOR T . ID
+    )
+    AND (REP_SUBSTANCE_MESSAGE.ISDELETED IS NULL OR REP_SUBSTANCE_MESSAGE.ISDELETED = 0)
+<#if uuids? exists && uuids ?length gt 0>
+    AND REP_SUBSTANCE_MESSAGE.UUID NOT IN('${uuids}')
+</#if>
+<#if vo.subNumber? exists && vo.subNumber ?length gt 0>
+        and REP_SUBSTANCE_MESSAGE.SUB_NUMBER like '%' || '${vo.subNumber}' || '%'
+</#if>
+<#if vo.subName? exists && vo.subName ?length gt 0>
+        and REP_SUBSTANCE_MESSAGE.SUB_NAME like '%' || '${vo.subName}' || '%'
+</#if>
+<#if vo.subCategory? exists && vo.subCategory ?length gt 0>
+        and REP_SUBSTANCE_CATEGORY.CATEGORY_NAME like '%' || '${vo.subCategory}' || '%'
+</#if>
+ORDER BY
+        REP_SUBSTANCE_MESSAGE.CREATE_DATE DESC
+]]></SQL>

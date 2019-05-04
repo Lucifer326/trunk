@@ -1,0 +1,130 @@
+package com.jeecg.MaterialsOutPut.controller;
+
+import com.jeecg.MaterialsOutPut.common.MaterialsOutPutLogicException;
+import com.jeecg.MaterialsOutPut.common.MaterialsOutPutQueryVo;
+import com.jeecg.MaterialsOutPut.service.RepOuthouseDetailService;
+import com.jeecg.MaterialsOutPut.service.RepSubstanceOuthouseService;
+import com.jeecg.system_management.common.WarehouseQueryVo;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.service.WarehouseService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 用来跳转页面的控制器
+ * @version 1.0
+ * @Auther zhenleichao
+ * @Date 2019/4/2
+ * @Description com.jeecg.MaterialsOutPut.controller
+ */
+@Scope("prototype")
+@Controller
+@RequestMapping("/MaterialsOutPut")
+public class MaterialsOutPutDispatcherController {
+
+    @Autowired
+    private RepSubstanceOuthouseService repSubstanceOuthouseService;
+
+    @Autowired
+    private WarehouseService warehouseService;
+
+    @Autowired
+    private RepOuthouseDetailService repOuthouseDetailService;
+
+    private static Logger logger = Logger.getLogger(MaterialsOutPutDispatcherController.class);
+
+    @RequestMapping(params = "AllocateValid")
+    public String toAllocateValidPage(){
+        return "jzwz/MaterialsOutPut/AllocateValid";
+    }
+
+    @RequestMapping(params = "MaterialsLook")
+    public String toMaterialsLookPage(){
+        return "jzwz/MaterialsOutPut/MaterialsLook";
+    }
+
+    @RequestMapping(params = "MaterialsOutPutAdd")
+    public String toMaterialsOutPutAddPage(){
+        return "jzwz/MaterialsOutPut/MaterialsOutPutAdd";
+    }
+
+    @RequestMapping(params = "MaterialsOutPutEdit")
+    public String toMaterialsOutPutEditPage(String uuid,Model model){
+        if (StringUtils.isNotBlank(uuid)){
+            try{
+                Map<String, Object> detilById = repSubstanceOuthouseService.getDetilById(uuid);
+                model.addAttribute("outPut",detilById);
+                String outhouse_warehouse = (String) detilById.get("outhouse_warehouse");
+                List<Map<String, Object>> details = repOuthouseDetailService.getByOuthouseId(outhouse_warehouse);
+                model.addAttribute("details",details);
+            }catch (MaterialsOutPutLogicException e){
+
+            }catch (Exception e){
+                logger.error(e.getMessage());
+            }
+        }
+        return "jzwz/MaterialsOutPut/MaterialsOutPutEdit";
+    }
+
+    @RequestMapping(params = "MaterialsOutPutList")
+    public String toMaterialsOutPutListPage(MaterialsOutPutQueryVo vo, Model model){
+        if (vo == null){
+            vo = new MaterialsOutPutQueryVo();
+        }
+        try{
+            model.addAttribute("outPutList",repSubstanceOuthouseService.getAllByCondition(vo));
+        }catch (MaterialsOutPutLogicException e){
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+        model.addAttribute("vo",vo);
+        return "jzwz/MaterialsOutPut/MaterialsOutPutList";
+    }
+
+    @RequestMapping(params = "MaterialsOutPutLook")
+    public String toMaterialsOutPutLookPage(String uuid,Model model){
+        if (StringUtils.isNotBlank(uuid)){
+            try{
+                Map<String,Object> detilById = repSubstanceOuthouseService.getDetilById(uuid);
+                model.addAttribute("outPut",detilById);
+                String outhouse_warehouse = (String) detilById.get("outhouse_warehouse");
+                List<Map<String, Object>> details = repOuthouseDetailService.getByOuthouseId(outhouse_warehouse);
+                model.addAttribute("details",details);
+            }catch (MaterialsOutPutLogicException e){
+
+            }catch (Exception e){
+                logger.error(e.getMessage());
+            }
+        }
+        return "jzwz/MaterialsOutPut/MaterialsOutPutLook";
+    }
+
+    @RequestMapping(params = "MaterialsSelect")
+    public String toMaterialsSelectPage(){
+
+        return "jzwz/MaterialsOutPut/MaterialsSelect";
+    }
+
+    @RequestMapping(params = "SelectAllocationNoticeList")
+    public String toSelectAllocationNoticeListPage(){
+        return "jzwz/MaterialsOutPut/SelectAllocationNoticeList";
+    }
+
+    @RequestMapping(params = "WareHouseSelect")
+    public String toWareHouseSelectPage(WarehouseQueryVo vo,Model model){
+        List<RepAccessRepository> repositories = warehouseService.repositoryListByQuery(vo);
+        model.addAttribute("repositories", repositories);
+        model.addAttribute("vo", vo);
+        return "jzwz/MaterialsOutPut/WareHouseSelect";
+    }
+}

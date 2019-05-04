@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select * from t_s_type where typegroupid = :typegroupId and is_deleted = 0 and is_stop = 0 and typepid is null
+]]></SQL>

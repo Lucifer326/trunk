@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select dl.ALLOT_AMOUNT,
+       dl.PRICE_TOTAL,
+       me.UUID,
+       me.SUB_NAME,
+       me.SPECIFICATION_TYPE,
+       me.SUB_CATEGORY,
+       me.UNIT,
+       me.PRICE,
+       me.SUPPLIER
+  from REP_INFORM_DETAIL dl, REP_SUBSTANCE_MESSAGE me
+ where dl.INFORMID = '${informid}'
+   and dl.MESSAGEID = me.UUID(+)
+   and dl.isdeleted = 0
+]]></SQL>

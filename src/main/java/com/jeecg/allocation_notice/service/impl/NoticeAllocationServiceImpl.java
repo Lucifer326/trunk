@@ -1,0 +1,372 @@
+package com.jeecg.allocation_notice.service.impl;
+
+import com.jeecg.allocation_notice.dao.NoticeAllocationDao;
+import com.jeecg.allocation_notice.entity.RepAllotInform;
+import com.jeecg.allocation_notice.entity.RepInformDetail;
+import com.jeecg.allocation_notice.service.NoticeAllocationServiceI;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.pojo.RepSubstanceMessage;
+import org.jeecgframework.core.common.dao.impl.CommonDao;
+import org.jeecgframework.core.common.exception.BusinessException;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.ResourceUtil;
+import org.jeecgframework.core.util.StringUtil;
+import org.jeecgframework.web.system.pojo.base.TSUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author fuhai_deng
+ * @Description:com.jeecg.allocation_notice.service.impl
+ */
+@Service("noticeAllocationService")
+@Transactional
+public class NoticeAllocationServiceImpl extends CommonServiceImpl implements NoticeAllocationServiceI {
+    /**
+     *删除状态
+     */
+    private short del=1;
+    /**
+     *未删除状态
+     */
+    private short ke=0;
+    @Autowired
+    /**
+     *调用父类的dao
+     */
+    private CommonDao commonDao;
+    @Autowired
+    /**
+     *  minidao 中的查询对象
+     */
+    private NoticeAllocationDao noticeAllocationDao;
+
+    /**
+     * 显示调拨通知的页面list显示
+     * @param page
+     * @param rows
+     * @param where
+     * @param order
+     * @return
+     */
+    @Override
+    public List<RepAllotInform> getList(int page, int rows, String where, String order) {
+        //起始数据
+        rows = page* rows;
+        page = (page-1)*rows;
+        TSUser user = ResourceUtil.getSessionUserName();
+        List<RepAllotInform> list = noticeAllocationDao.listGet(page,rows, where, order, user.getId());
+        return list;
+    }
+
+    @Override
+    /**
+     * 功能描述:/查询调拨单的调拨详情
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param uuid
+     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     */
+    public List<Map<String, Object>> detailGet(String uuid) {
+        List<Map<String, Object>> maps = noticeAllocationDao.detailGet(uuid);
+        return maps;
+    }
+
+
+
+    /**
+     * 功能描述://获得确定的物资信息
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param uuid
+     * @return com.jeecg.system_management.pojo.RepSubstanceMessage
+     */
+    public RepSubstanceMessage cateMessageGet(String uuid) {
+        RepSubstanceMessage message = get(RepSubstanceMessage.class, uuid);
+        return message;
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    /**
+     * 功能描述://添加调拨通知的信息（调拨通知和调拨通知详情表）
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param repAllotInform
+     * @param list
+     * @return org.jeecgframework.core.common.model.json.AjaxJson
+     */
+    public AjaxJson noticeSave(RepAllotInform repAllotInform, List<RepInformDetail> list ) {
+
+        AjaxJson ajaxJson = new AjaxJson();
+        Serializable save = null;
+        if (repAllotInform != null){
+            // 	是否删除( 0 :未删除 1 ： 已删除)
+            repAllotInform.setIsdeleted(ke);
+            // 	是否已使用（0：使用，1：未使用）
+            repAllotInform.setIsuse((short) 1);
+            // 	调拨单状态  1:未出库  2:已出库
+            repAllotInform.setAllotStatus("1");
+        }
+        save = super.save(repAllotInform);
+        //更具调拨单据号查找相应的调拨通知的对象
+        RepAllotInform repAllotInform1 = noticeGetBydanjuhao(repAllotInform.getAllotNumber());
+
+        if(list!=null&&list.size()>0){
+            for (RepInformDetail rep: list){
+                if (StringUtil.isEmpty(rep.getMessageid())){
+                    throw new BusinessException("请选择物资");
+                }
+                if ("0".equals(rep.getAllotAmount().toString())){
+                    throw new BusinessException("请正确输入调拨数量");
+                }
+                rep.setIsdeleted(ke);
+                rep.setInformid(repAllotInform1.getUuid());
+
+                Serializable save1 = super.save(rep);
+                if(save==null||save1==null){
+                    ajaxJson.setSuccess(false);
+                    ajaxJson.setMsg("新增失败");
+                    return ajaxJson;
+
+                }
+            }
+        }else{
+            throw new BusinessException("请选择物资");
+
+
+        }
+
+
+        return ajaxJson;
+
+    }
+
+    @Override
+    /**
+     * 功能描述://据uuid查询调拨详情的对象
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param uuid
+     * @return com.jeecg.allocation_notice.entity.RepInformDetail
+     */
+    public RepInformDetail detailGetByid(String uuid) {
+        RepInformDetail uuid1 = findUniqueByProperty(RepInformDetail.class, "uuid", uuid);
+        return uuid1;
+    }
+    //据调拨单据号查询调拨通知的对象
+    @Override
+    /**
+     * 功能描述://据调拨单据号查询调拨通知的对象
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param allotNumber
+     * @return com.jeecg.allocation_notice.entity.RepAllotInform
+     */
+    public RepAllotInform noticeGetBydanjuhao(String allotNumber) {
+        RepAllotInform repAllotInform = findUniqueByProperty(RepAllotInform.class, "allotNumber", allotNumber);
+        return repAllotInform;
+    }
+
+
+    @Override
+    /**
+     * 功能描述://根据调拨uuid查出调拨通知的数据
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param uuid
+     * @return com.jeecg.allocation_notice.entity.RepAllotInform
+     */
+    public RepAllotInform repAllotInformGetByid(String uuid) {
+        RepAllotInform repInformDetail = findUniqueByProperty(RepAllotInform.class, "uuid", uuid);
+        return repInformDetail;
+    }
+
+    @Override
+    /**
+     * 功能描述://根据调拨uuid查出所有的调拨详情的信息
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param uuid
+     * @return java.util.List<com.jeecg.allocation_notice.entity.RepInformDetail>
+     */
+    public List<RepInformDetail> repInformDetailGetByid(String uuid) {
+        List<RepInformDetail> detaiList = findByProperty(RepInformDetail.class, "informid", uuid);
+        return detaiList;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    /**
+     * 功能描述://更新调拨
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param repAllotInform1
+     * @param repAllotInform
+     * @param list
+     * @param list1
+     * @param list2
+     * @return org.jeecgframework.core.common.model.json.AjaxJson
+     */
+    public AjaxJson InformDetailupdate(RepAllotInform repAllotInform1,RepAllotInform repAllotInform, List<RepInformDetail> list,List<RepInformDetail> list1,List<String> list2) {
+        AjaxJson ajaxJson = new AjaxJson();
+
+        if(list.size()==0&&list1.size()==0){
+            throw new BusinessException("物资信息不能为空");
+        }
+
+        if (repAllotInform1 != null){
+            if (repAllotInform != null){
+                // 救灾项目
+                repAllotInform.setReloefProject(repAllotInform1.getReloefProject());
+                // 	调出部门
+                repAllotInform.setCalloutDepartment(repAllotInform1.getCalloutDepartment());
+                // 	调入部门
+                repAllotInform.setCallinDepartment(repAllotInform1.getCallinDepartment());
+                // 	调拨日期
+                repAllotInform.setAllotDate(repAllotInform1.getAllotDate());
+                // 	物资用途
+                repAllotInform.setStorageUse(repAllotInform1.getStorageUse());
+                // 	仓储机构
+                repAllotInform.setRepositoryid(repAllotInform1.getRepositoryid());
+
+
+            }
+
+            updateEntitie(repAllotInform);
+        }
+
+        //更新
+        if(list!=null&&list.size()>0){
+
+
+        for (RepInformDetail rep:list) {
+            if (StringUtil.isEmpty(rep.getMessageid())){
+                throw new BusinessException("请选择物资");
+            }
+            if ("0".equals(rep.getAllotAmount().toString())){
+                throw new BusinessException("请正确输入调拨数量");
+            }
+            //判断uuid是否为空（若为空，保存，不空，更新）
+            if(rep.getUuid()!=null&&!"".equals(rep.getUuid())){
+                rep.setIsdeleted(ke);
+                rep.setCreateBy(repAllotInform.getCreateBy());
+                rep.setCreateDate(repAllotInform.getCreateDate());
+                rep.setCreateName(repAllotInform.getCreateName());
+                updateEntitie(rep);
+            }else{
+                rep.setIsdeleted(ke);
+                rep.setCreateBy(repAllotInform.getCreateBy());
+                rep.setCreateDate(repAllotInform.getCreateDate());
+                rep.setCreateName(repAllotInform.getCreateName());
+                updateEntitie(rep);
+            }
+
+        } }
+        //添加
+        if(list1!=null&&list1.size()>0){
+
+        for (RepInformDetail rep:list1) {
+            rep.setIsdeleted(ke);
+
+                super.save(rep);
+        }}
+        //删除调拨详情的信息（修改转台吗）
+        if(list2!=null&&list2.size()>0) {
+            for (String str : list2) {
+                RepInformDetail repInformDetail = get(RepInformDetail.class, str);
+                repInformDetail.setIsdeleted(del);
+                repInformDetail.setCreateBy(repAllotInform.getCreateBy());
+                repInformDetail.setCreateDate(repAllotInform.getCreateDate());
+                repInformDetail.setCreateName(repAllotInform.getCreateName());
+                updateEntitie(repInformDetail);
+            }
+        }
+
+
+
+        return ajaxJson;
+    }
+
+    @Override
+    /**
+     * 功能描述://获得仓储机构信息byid
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param uuid
+     * @return com.jeecg.system_management.pojo.RepAccessRepository
+     */
+    public RepAccessRepository respoityGet(String uuid) {
+        RepAccessRepository repository=null;
+        if(uuid!=null&&!"".equals(uuid)){
+             repository = findUniqueByProperty(RepAccessRepository.class, "uuid", uuid);
+        }
+        return repository;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    /**
+     * 功能描述://删除操作
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param uuid
+     * @return void
+     */
+    public void InformdelByid(String uuid) {
+
+        //获得要删除的调拨通知的数据
+        RepAllotInform repAllotInform1 = repAllotInformGetByid(uuid);
+        repAllotInform1.setIsdeleted(del);
+        updateEntitie(repAllotInform1);
+
+        //根据调拨通知的uuid查找调拨详情中信息  更改调拨通知的可删除
+        List<RepInformDetail> repInformDetails = repInformDetailGetByid(repAllotInform1.getUuid());
+        for (RepInformDetail rep:repInformDetails) {
+            rep.setIsdeleted(del);
+            updateEntitie(rep);
+        }
+
+    }
+
+    @Override
+    /**
+     * 功能描述://查询物资信息by  id
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param bainhao
+     * @return com.jeecg.system_management.pojo.RepSubstanceMessage
+     */
+    public RepSubstanceMessage MessageGet(String bainhao) {
+        RepSubstanceMessage uuid = findUniqueByProperty(RepSubstanceMessage.class, "uuid", bainhao);
+
+        return uuid;
+    }
+
+
+
+    @Override
+    /**
+     * 功能描述://模糊查询列表集合
+     * @author deng_fuhai
+     * @date 2019/4/11 0011
+     * @param diaobo
+     * @param project
+     * @param date
+     * @return java.util.List<com.jeecg.allocation_notice.entity.RepAllotInform>
+     */
+    public List<RepAllotInform> NoticelistLike(String diaobo, String project, String date) {
+        TSUser user = ResourceUtil.getSessionUserName();
+
+        List<RepAllotInform> repAllotInforms = noticeAllocationDao.listLike(diaobo, project, date,user.getId());
+        return repAllotInforms;
+    }
+}

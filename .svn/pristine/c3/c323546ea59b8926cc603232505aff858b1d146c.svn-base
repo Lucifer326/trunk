@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT *
+from REP_ALLOT_INFORM
+WHERE ISDELETED NOT IN(1)
+    <#if input ?exists && input ?length gt 0>
+	    and CALLIN_DEPARTMENT like '%' || '${input}' || '%'
+    </#if>
+    <#if output ?exists && output ?length gt 0>
+	    and CALLOUT_DEPARTMENT like '%' || '${output}' || '%'
+    </#if>
+]]></SQL>

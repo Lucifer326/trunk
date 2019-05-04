@@ -1,0 +1,19 @@
+package com.jeecg.MaterialsOutPut.service;
+
+import com.jeecg.MaterialsOutPut.entity.RepOuthouseDetail;
+import org.jeecgframework.core.common.service.CommonService;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @version 1.0
+ * @Auther zhenleichao
+ * @Date 2019/4/2
+ * @Description com.jeecg.MaterialsOutPut.service
+ */
+public interface RepOuthouseDetailService extends CommonService {
+
+    List<Map<String,Object>> getByOuthouseId(String outhouseId);
+
+}

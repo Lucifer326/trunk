@@ -1,0 +1,45 @@
+  @charset "UTF-8";
+/* CSS Document */
+   .custom{ width:100%; height:calc(100% - 70px); float:left}
+   .custom_left{width:600px; background:#f7f7f7; border:1px solid #ddd; float:left;}
+   .sh_list{width: 600px; height:100%;  max-height:540px;  display:block; overflow:auto;}
+   .custom_right{width:97%; height:100%; background:#f7f7f7; border:1px solid #ddd; margin-left:10px; float:left;}
+   .search{padding:10px; display:inline-block; width:98%;}
+   .search_div{margin-right:10px; float:left;}
+   .spec{width:100%; height:calc(100% - 100px); border-top:1px solid #ddd; margin:0 auto;}
+   .spec_left{width:calc(100% - 100px); height:100%; float:left;}
+   .spec_right{width:99px; height:100%; min-height:230px; float:left;  border-left:1px solid #ddd;}
+   .spec_btn{padding:10px; padding-top:150px; text-align:center;}
+   .btn{ border:1px solid #ddd; padding:4px 7px; margin:5px auto; background:#fff;}
+   .spec_list {
+    margin:10px;
+    width:98%;
+    height:80px;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 14px;
+}
+.spec_list thead tr th {
+    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    line-height: 38px;
+    background:#eee;
+    color: #333;
+}
+.spec_list tbody tr td {
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    line-height: 36px;
+    color: #333;
+}
+.chinfor{width:100%; height:150px;}
+.ch_lat{padding:10px; margin-top:20px;}
+.ch_lat span{ width:80px; display:block; text-align:right; float:left; line-height:24px;}
+.ch_lat input{width:calc(100% - 90px); border:1px solid #bbb; float:left;}
+.ch_lat textarea{width:calc(100% - 90px); height:80px; border:1px solid #bbb; float:left; }
+.foot{width:100%; height:50px; float:left; border-top:1px solid #ddd; margin-top:10px;}
+.pot{float:right; line-height:50px;}
+.fot_but_b{padding:5px 10px; background:#009df8; text-algin:center; color:#fff; border:none; margin-right:10px;}
+.fot_but_g{ padding:5px 10px; background:#ddd; text-algin:center; border:none;}
+div.formDetails label textarea, select{width:70px;}

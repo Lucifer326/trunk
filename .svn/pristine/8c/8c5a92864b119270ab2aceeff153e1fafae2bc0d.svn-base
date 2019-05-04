@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select d.uuid,
+        diao.INFORMID,
+       diao.MESSAGEID,
+       diao.ALLOT_AMOUNT,
+       diao.PRICE_TOTAL,
+       d.RELOEF_PROJECT,
+       d.CALLOUT_DEPARTMENT,
+       d.CALLIN_DEPARTMENT,
+       d.ALLOT_DATE,
+       x.SUB_NAME,
+       x.sub_category,
+       x.specification_type,
+       x.unit
+  from REP_INFORM_DETAIL diao
+  LEFT JOIN REP_ALLOT_INFORM d
+    on diao.INFORMID = d.ALLOT_NUMBER
+  LEFT JOIN REP_SUBSTANCE_MESSAGE x
+    on diao.MESSAGEID = x.SUB_NUMBER
+
+     where (diao.isdeleted is null
+            or diao.isdeleted = 0)
+
+     order by diao.informid
+
+]]></SQL>

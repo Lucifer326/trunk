@@ -1,0 +1,301 @@
+package com.jeecg.MaterialsOutPut.entity;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 物资出库信息
+ */
+@Entity
+@Table(name = "REP_SUBSTANCE_OUTHOUSE")
+public class RepSubstanceOuthouse implements Serializable {
+    /**
+     * 主键编号
+     */
+    private String uuid;
+
+    /**
+     * 出库单号
+     */
+    private String outhouseNumber;
+
+    /**
+     * 出库人
+     */
+    private String outhousePerson;
+
+    /**
+     * 出库日期
+     */
+    private Date outhouseDate;
+
+    /**
+     * 领取人
+     */
+    private String receiver;
+
+    /**
+     * 调拨单
+     */
+    private String requisition;
+
+    /**
+     * 附件
+     */
+    private String accessory;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 创建人姓名
+     */
+    private String createName;
+
+    /**
+     * 创建人登陆名称
+     */
+    private String createBy;
+
+    /**
+     * 创建日期
+     */
+    private Date createDate;
+
+    /**
+     * 更新人姓名
+     */
+    private String updateName;
+
+    /**
+     * 更新人录名称
+     */
+    private String updateBy;
+
+    /**
+     * 更新日期
+     */
+    private Date updateDate;
+
+    /**
+     * 所属公司
+     */
+    private String sysCompanyCode;
+
+    /**
+     * 所属部门
+     */
+    private String sysOrgCode;
+
+    /**
+     * 流程状态
+     */
+    private String bpmStatus;
+
+    /**
+     * 是否删除
+     */
+    private Short isdeleted;
+
+    private String approvalStatus;
+
+    private String approver;
+
+    private String approvalOpinion;
+
+    @Id
+//    @GeneratedValue(generator = "paymentableGenerator")
+//    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
+    @Column(name = "UUID")
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid == null ? null : uuid.trim();
+    }
+
+    @Column(name = "OUTHOUSE_NUMBER")
+    public String getOuthouseNumber() {
+        return outhouseNumber;
+    }
+
+    public void setOuthouseNumber(String outhouseNumber) {
+        this.outhouseNumber = outhouseNumber == null ? null : outhouseNumber.trim();
+    }
+
+    @Column(name = "OUTHOUSE_PERSON")
+    public String getOuthousePerson() {
+        return outhousePerson;
+    }
+
+    public void setOuthousePerson(String outhousePerson) {
+        this.outhousePerson = outhousePerson == null ? null : outhousePerson.trim();
+    }
+
+    @Column(name = "OUTHOUSE_DATE")
+    public Date getOuthouseDate() {
+        return outhouseDate;
+    }
+
+    public void setOuthouseDate(Date outhouseDate) {
+        this.outhouseDate = outhouseDate;
+    }
+
+    @Column(name = "RECEIVER")
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver == null ? null : receiver.trim();
+    }
+
+    @Column(name = "REQUISITION")
+    public String getRequisition() {
+        return requisition;
+    }
+
+    public void setRequisition(String requisition) {
+        this.requisition = requisition == null ? null : requisition.trim();
+    }
+
+    @Column(name = "ACCESSORY")
+    public String getAccessory() {
+        return accessory;
+    }
+
+    public void setAccessory(String accessory) {
+        this.accessory = accessory == null ? null : accessory.trim();
+    }
+
+    @Column(name = "REMARK")
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
+    }
+
+    @Column(name = "CREATE_NAME")
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName == null ? null : createName.trim();
+    }
+
+    @Column(name = "CREATE_BY")
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy == null ? null : createBy.trim();
+    }
+
+    @Column(name = "CREATE_DATE")
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @Column(name = "UPDATE_NAME")
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName == null ? null : updateName.trim();
+    }
+
+    @Column(name = "UPDATE_BY")
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy == null ? null : updateBy.trim();
+    }
+    @Column(name = "UPDATE_DATE")
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    @Column(name = "SYS_COMPANY_CODE")
+    public String getSysCompanyCode() {
+        return sysCompanyCode;
+    }
+
+    public void setSysCompanyCode(String sysCompanyCode) {
+        this.sysCompanyCode = sysCompanyCode == null ? null : sysCompanyCode.trim();
+    }
+
+    @Column(name = "SYS_ORG_CODE")
+    public String getSysOrgCode() {
+        return sysOrgCode;
+    }
+
+    public void setSysOrgCode(String sysOrgCode) {
+        this.sysOrgCode = sysOrgCode == null ? null : sysOrgCode.trim();
+    }
+
+    @Column(name = "BPM_STATUS")
+    public String getBpmStatus() {
+        return bpmStatus;
+    }
+
+    public void setBpmStatus(String bpmStatus) {
+        this.bpmStatus = bpmStatus == null ? null : bpmStatus.trim();
+    }
+
+    @Column(name = "ISDELETED")
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
+    }
+
+    @Column(name = "APPROVAL_STATUS")
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
+    @Column(name = "APPROVER")
+    public String getApprover() {
+        return approver;
+    }
+
+    public void setApprover(String approver) {
+        this.approver = approver;
+    }
+
+    @Column(name = "APPROVAL_OPINION")
+    public String getApprovalOpinion() {
+        return approvalOpinion;
+    }
+
+    public void setApprovalOpinion(String approvalOpinion) {
+        this.approvalOpinion = approvalOpinion;
+    }
+}

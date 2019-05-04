@@ -1,0 +1,51 @@
+package com.jeecg.MaterialsOutPut.common;
+
+public class MaterialsOutPutExamineVo {
+    private  String pl;
+    private  String user;
+    private  String uuid;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    @Override
+    public String toString() {
+        return "MaterialsOutPutExamineVo{" +
+                "pl='" + pl + '\'' +
+                ", user='" + user + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", idea='" + idea + '\'' +
+                '}';
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    private  String idea;
+
+    public String getPl() {
+        return pl;
+    }
+
+    public void setPl(String pl) {
+        this.pl = pl;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getIdea() {
+        return idea;
+    }
+
+    public void setIdea(String idea) {
+        this.idea = idea;
+    }
+}

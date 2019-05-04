@@ -1,0 +1,26 @@
+package com.jeecg.allocation_notice.dao;
+
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.jeecgframework.minidao.annotation.MiniDao;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author fuhai_deng
+ * @Description:com.jeecg.allocation_notice.dao
+ */
+@MiniDao
+public interface NoticeAllocationDao {
+    //调拨列表
+    @Arguments({ "page", "rows", "whereStr", "orderStr" })
+    List<Map<String,Object>> listGet(int page, int rows, String where, String order);
+    //模糊查询列表
+    @Arguments({ "diaobo", "project", "date" })
+    List<Map<String,Object>> listLike(String diaobo, String project, String date);
+    //查询单个调拨详情的对象字段
+    @Arguments({ "diaobo" })
+    List<Map<String,Object>> detailGet(String uuid);
+
+
+}

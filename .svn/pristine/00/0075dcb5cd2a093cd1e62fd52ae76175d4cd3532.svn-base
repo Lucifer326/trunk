@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+delete from t_s_type_unless_region where type_id = :typeId and dictionary_id = :dictionaryId
+]]></SQL>

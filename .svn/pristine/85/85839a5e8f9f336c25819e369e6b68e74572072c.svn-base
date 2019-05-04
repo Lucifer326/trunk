@@ -1,0 +1,12 @@
+package com.jeecg.MaterialsOutPut.service;
+/*
+*
+* 出库审批service层
+* */
+public interface MaterialsOutPutExamineService {
+
+   //计算库存量
+   //public int stock(String uuid);
+   //查询调拨单号
+   public void selectRequisition(String uuid);
+}

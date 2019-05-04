@@ -1,0 +1,135 @@
+//物资出库的表单验证
+function outHouseCheckForm(form) {
+    //正则：匹配数字
+    var number = /^[0-9]*$/;
+    //正则: 匹配日期
+    var date = /^(\d{1,4})(-)(\d{1,2})\2(\d{1,2})$/;
+    if ($.trim(form.$("#outhouseNumber").val()).length == 0){
+        layer.msg("请填写出库仓库", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#outhousePerson").val()).length == 0 ){
+        layer.msg("请填写出库人姓名", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#outhousePerson").val()).length >= 6){
+        layer.msg("出库人姓名不得超过6个字符", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#hello").val()).length == 0){
+        layer.msg("请填出库日期", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#receiver").val()).length == 0){
+        layer.msg("请填写领取人", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#Text1").val()).length == 0){
+        layer.msg("请选择调拨单", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#txt").val()).length == 0){
+        layer.msg("请选择出库仓库", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#remark").val()).length >= 50){
+        layer.msg("备注信息不得超过50个字符", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#subName").val()).length == 0){
+        layer.msg("请新建物资信息", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#allotAmount").val()).length == 0){
+        layer.msg("请新建物资信息", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#storageNumber").val()).length == 0){
+        layer.msg("请选择入库单号", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#amount").val()).length == 0){
+        layer.msg("请获取库存数", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#outhouseAmount").val()).length == 0){
+        layer.msg("请输入出库数量", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#outhouseAmount").val()) > $.trim(form.$("#amount").val())){
+        layer.msg("库存不足，请重新输入出库数量", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if(!number.test($.trim(form.$("#outhouseAmount").val()))){
+        layer.msg("出库数量请输入数字", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    return true;
+}
+function outHouseDetailCheckForm(form) {
+    //正则：匹配数字
+    var number = /^[0-9]*$/;
+    //正则: 匹配日期
+    var date = /^(\d{1,4})(-)(\d{1,2})\2(\d{1,2})$/;
+    if ($.trim(form.$("#txt").val()).length == 0){
+        layer.msg("请填写出库仓库", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#outhousePerson").val()).length == 0 ){
+        layer.msg("请填写出库人姓名", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#outhousePerson").val()).length >= 6){
+        layer.msg("出库人姓名不得超过6个字符", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#hello").val()).length == 0){
+        layer.msg("请填出库日期", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#receiver").val()).length == 0){
+        layer.msg("请填写领取人", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#Text4").val()).length == 0){
+        layer.msg("请选择调拨单", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#txt").val()).length == 0){
+        layer.msg("请选择出库仓库", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#remark").val()).length >= 50){
+        layer.msg("备注信息不得超过50个字符", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#Text1").val()).length == 0){
+        layer.msg("请新建物资信息", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#Text2").val()).length == 0){
+        layer.msg("请新建物资信息", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#Text3").val()).length == 0){
+        layer.msg("请选择入库单号", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#Text5").val()).length == 0){
+        layer.msg("请获取库存数", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#outhouseAmount").val()).length == 0){
+        layer.msg("请输入出库数量", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if ($.trim(form.$("#outhouseAmount").val()) > $.trim(form.$("#amount").val())){
+        layer.msg("库存不足，请重新输入出库数量", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    if(!number.test($.trim(form.$("#outhouseAmount").val()))){
+        layer.msg("出库数量请输入数字", {time:3000, icon:5, shift:6}, function () {});
+        return false;
+    }
+    return true;
+}

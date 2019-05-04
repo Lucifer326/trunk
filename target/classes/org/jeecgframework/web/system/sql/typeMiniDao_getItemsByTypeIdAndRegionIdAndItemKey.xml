@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select * from t_t_type t  
+where is_deleted = 0 
+and t.typecode = :typecode and is_stop = 0
+and t.typegroupid = :typegroupid 
+and t.id not in 
+(select t1.dictionary_id from t_s_type_unless_region as t1 
+where region_id = :regionId);
+]]></SQL>

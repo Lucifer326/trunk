@@ -1,0 +1,99 @@
+//新建、修改表单验证
+function verificationNew(form) {
+	if ($.trim(form.$("#donationPurposes").val()).length <= 0){
+		layer.msg("请选择捐赠用途", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#txtWareHouse").val()).length <= 0){
+		layer.msg("请选择入库仓库", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#wuzi_resource").val()).length <= 0){
+		layer.msg("请选择物资来源", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#txt1").val()).length <= 0){
+		layer.msg("输入来源对象", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#storagePerson").val()).length <= 0){
+		layer.msg("请输入入库人", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#hello").val()).length <= 0){
+		layer.msg("请输入入库日期", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#area").val()).length <= 0){
+		layer.msg("请选择捐赠区域", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#add_form").find("input[name=sub_name]").val()).length <= 0){
+		layer.msg("请新建入库物资信息", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#add_form").find("input[name=outputAmount]").val()).length <= 0){
+		layer.msg("入库数量不能为空", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#add_form").find("input[name=purchaseDate]").val()).length <= 0){
+		layer.msg("购置日期不能为空", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#add_form").find("input[name=manufactureDate]").val()).length <= 0){
+		layer.msg("生产日期不能为空", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#add_form").find("input[name=overinsuredDate]").val()).length <= 0){
+		layer.msg("过保日期不能为空", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+		
+	// if (CompareDate($.trim(form.$("#add_form").find("input[name=manufactureDate]").val()),$.trim(form.$("#add_form").find("input[name=purchaseDate]").val()))){
+	// 	layer.msg("生产日期不能大于购置日期", {time:2000, icon:7, shift:1}, function () {});
+	// 	return false;
+	// }$(this).parent().parent().find("input[name=overinsuredDate]")
+	// if (CompareDate($.trim(form.$("#add_form").find("input[name=purchaseDate]").val()),$(form.$("#add_form").find("input[name=purchaseDate]")).parent().parent().find("input[name=overinsuredDate]").val())){
+	// 	layer.msg("购置日期不能大于过保日期", {time:2000, icon:7, shift:1}, function () {});
+	// 	return false;
+	// }
+	return true;
+}
+
+//时间比较
+function CompareDate(d1,d2)
+{
+	return ((new Date(d1.replace(/-/g,"\/"))) > (new Date(d2.replace(/-/g,"\/"))));
+}
+
+function verificationUpd(form){
+	if ($.trim(form.$("#donationPurposes").val()).length <= 0){
+		layer.msg("请选择捐赠用途", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#txtWareHouse").val()).length <= 0){
+		layer.msg("请选择入库仓库", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#wuzi_resource").val()).length <= 0){
+		layer.msg("请选择物资来源", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#txt1").val()).length <= 0){
+		layer.msg("输入来源对象", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#storagePerson").val()).length <= 0){
+		layer.msg("请输入入库人", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#hello").val()).length <= 0){
+		layer.msg("请输入入库日期", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(form.$("#area").val()).length <= 0){
+		layer.msg("请选择捐赠区域", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	return true;
+}

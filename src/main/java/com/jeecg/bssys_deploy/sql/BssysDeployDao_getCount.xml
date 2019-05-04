@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select count(dedis.id)
+from bssys_deploydis dedis
+left join bssys_deploy de on dedis.deploy_id = de.id
+left join system_region dis on dedis.dis_id = dis.id
+where  dedis.isdeleted=0 
+${whereStr} 
+]]></SQL>

@@ -1,0 +1,145 @@
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set scope="page" var="url" value="${pageContext.request.contextPath }"/>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="${url}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${url}/css/font-awesome.min.css" rel="stylesheet">
+    <link href="${url}/css/plugins/bootstrap-table/bootstrap-table.css" rel="stylesheet">
+    <link href="${url}/css/animate.css" rel="stylesheet">
+    <link href="${url}/css/style.css" rel="stylesheet">
+    <link href="${url}/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+    <form>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>搜索条件</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content whj-padding">
+                            <div class="form-group">
+                                <ul class="ulist">
+                                    <li>
+                                        <span class="fl labeltext">物品种类：</span>
+                                        <div class="fl">
+                                            <input type="text" class="form-control" name="productCategory" id="productCategory" value="${productCategory}">
+                                        </div>
+                                        <div class="clear"></div>
+                                    </li>
+                                    <li>
+                                        <span class="fl labeltext">时间：</span>
+                                        <input id="hello" class="laydate-icon form-control layer-date fl w-148" name="buyTime" value="<fmt:formatDate value='${buyTime}' pattern="yyyy-MM-dd"></fmt:formatDate> ">
+                                        <div class="clear"></div>
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-primary btnh" id="btnh" onclick="searching()" type="button"><i class="fa fa-search"></i>&nbsp;搜索</button>
+                                    </li>
+                                </ul>
+
+
+                            </div>
+
+                        </div>
+                        <!--ibox-content-->
+                    </div>
+                </div>
+            </div>
+            <!--row-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content">
+                            <div class="example-wrap">
+                                <div class="example">
+                                    <table id="exampleTableEvents" data-mobile-responsive="true">
+                                        <thead>
+                                            <tr>
+                                                <!--<th data-field="state" data-switchable="false">
+                                                    <input name="check_list" type="checkbox" onclick="CheckAll()"/></th>-->
+                                                <th data-field="state" data-checkbox="true"></th>
+                                                <th data-field="id" data-sort-stable="true">序号</th>
+                                                <th data-field="name">物品种类</th>
+                                                <th>数量(个)</th>
+                                                <th>单价(元)</th>
+                                                <th>购买时间</th>
+                                                <th>物资质量</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${list}" var="list" varStatus="status">
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="check_list"></td>
+                                                <td>${status.count}</td>
+                                                <td>${list.productCategory}</td>
+                                                <td>${list.productNumber}</td>
+                                                <td>${list.unitPrice}</td>
+                                                <td><fmt:formatDate value="${list.buyTime}" pattern="yyyy-MM-dd"></fmt:formatDate></td>
+                                                <td>${list.materialQuality}</td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- End Example Events -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--row-->
+        </div>
+
+        <!-- 全局js -->
+        <script src="${url}/js/jquery.min.js"></script>
+        <script src="${url}/js/bootstrap.min.js"></script>
+        <!-- 自定义js -->
+        <script src="${url}/js/content.js"></script>
+        <!-- Bootstrap table -->
+        <script src="${url}/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+        <script src="${url}/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+        <script src="${url}/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+
+        <!-- Peity -->
+        <script src="${url}/js/demo/bootstrap-table-demo.js"></script>
+        <script src="${url}/js/plugins/layer/laydate/laydate.js"></script>
+        <script src="${url}/js/plugins/layer/layer.min.js"></script>
+        <script src="${url}/js/plugins/sweetalert/sweetalert.min.js"></script>
+        <!-- 个人js -->
+        <script src="${url}/js/my.js"></script>
+        <script>
+            //外部js调用
+            laydate({
+                elem: '#hello', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+                event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+            });
+            //条件查询
+            function searching(){
+                window.location.href = "${url}/materialPurchaseRecordController.do?search&productCategory=" + $("#productCategory").val() + "&buyTime=" + $("#hello").val();
+            }
+            $(document).ready(function () {
+
+                $('.summernote').summernote({
+                    lang: 'zh-CN'
+                });
+
+            });
+            $('input[type="file"]').prettyFile();
+            $(".chosen-select").chosen();
+        </script>
+    </form>
+</body>
+</html>

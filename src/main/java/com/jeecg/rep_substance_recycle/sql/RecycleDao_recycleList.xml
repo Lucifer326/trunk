@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT DISTINCT
+	rsr.*
+FROM
+	REP_SUBSTANCE_RECYCLE rsr
+LEFT JOIN T_S_BASE_USER tsbu ON RSR.CREATE_BY = TSBU.USERNAME
+LEFT JOIN T_S_ROLE_USER_BASE tsrub ON tsbu. ID = tsrub.userid
+WHERE
+	tsrub.orgid IN (
+	SELECT DISTINCT
+		ID
+	FROM
+		T_S_DEPART START WITH ID = (
+			SELECT DISTINCT
+				orgid
+			FROM
+				T_S_ROLE_USER_BASE
+			WHERE
+				userid = :uuid
+		) CONNECT BY parentdepartid = PRIOR ID
+)
+AND ISDELETED = 0
+ORDER BY
+	rsr.CREATE_DATE DESC
+]]></SQL>

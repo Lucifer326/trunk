@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SQL><![CDATA[
+select amount from rep_storage_detail a
+where a.messageid =(select messageid from rep_outhouse_detail where uuid = '${uuid}')
+]]>
+</SQL>

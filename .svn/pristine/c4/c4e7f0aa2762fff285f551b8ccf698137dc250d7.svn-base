@@ -1,0 +1,79 @@
+package com.jeecg.system_management.service;
+
+import com.jeecg.system_management.common.WarehouseQueryVo;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+
+import java.util.List;
+
+/**
+ * 仓储机构管理service
+ *
+ * @author 苑希阳
+ */
+public interface WarehouseService {
+
+    /**
+     * 新建仓库
+     *
+     * @param repository 仓库
+     * @return ajaxJson
+     */
+    AjaxJson saveWarehouse(RepAccessRepository repository);
+
+    /**
+     * 查询仓库列表
+     *
+     * @return repositoryList
+     */
+    List<RepAccessRepository> repositoryList();
+
+    /**
+     * 根据条件查询仓库列表
+     *
+     * @param vo 查询条件
+     * @return repositoryList
+     */
+    List<RepAccessRepository> repositoryListByQuery(WarehouseQueryVo vo);
+
+    /**
+     * 根据uuid查询仓库
+     *
+     * @param warehouseId 仓库id
+     * @return repository
+     */
+    RepAccessRepository repositoryFindById(String warehouseId);
+
+    /**
+     * 仓库修改
+     *
+     * @param repository 仓库
+     * @return ajaxJson
+     */
+    AjaxJson repositoryModify(RepAccessRepository repository);
+
+    /**
+     * 删除仓库，支持单个删除和多个删除
+     * 更改isdelete状态为1
+     *
+     * @param ids
+     * @return ajaxJson
+     */
+    AjaxJson repositoryDelete(String ids);
+
+    /**
+     * 校验统一区划下时候存在相同库房名称
+     *
+     * @param repository
+     * @return
+     */
+    AjaxJson checkWarehouseName(RepAccessRepository repository);
+
+    /**
+     * 校验库房编号唯一性
+     *
+     * @param repository
+     * @return
+     */
+    AjaxJson checkWarehouseNum(RepAccessRepository repository);
+}

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+
+select * from t_s_type where is_deleted = 0 and is_stop = 0 and typegroupid = '${typegroupId}'
+]]></SQL>

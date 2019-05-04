@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select *
+from REP_SUBSTANCE_RECYCLE r,
+    REP_STORAGE_DETAIL d
+where r.UUID=d.NUMBERID
+    AND r.ISDELETED NOT IN(1)
+    AND d.ISDELETED NOT IN(1)
+    AND UUID = :uuid
+ORDER BY r.CREATE_DATE DESC
+]]></SQL>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select * from t_s_type  where is_deleted = 0 and is_stop = 0
+and typegroupid = (select id from t_s_typegroup where typegroupcode = :typegroupcode) 
+and id not in (select dictionary_id from t_s_type_unless_region  where region_id = :regionId) order by order_in_level
+]]></SQL>

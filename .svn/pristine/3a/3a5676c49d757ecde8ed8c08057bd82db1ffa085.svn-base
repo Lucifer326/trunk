@@ -1,0 +1,42 @@
+package com.jeecg.MaterialsOutPut.service.impl;
+
+
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.MaterialsOutPut.dao.MaterialsOutPutExamineDao;
+import com.jeecg.MaterialsOutPut.entity.RepOuthouseDetail;
+import com.jeecg.MaterialsOutPut.service.MaterialsOutPutExamineService;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class MaterialsOutPutExamineServiceImpl extends CommonServiceImpl implements MaterialsOutPutExamineService {
+
+    @Autowired
+    private MaterialsOutPutExamineDao materialsOutPutExamineDao;
+
+    /*public  int stock(String uuid){
+        //查询库存量
+        List<Map<String,Object>> store = materialsOutPutExamineDao.selectstockByid(uuid);
+        System.out.print(store);
+        //查询出库量
+        List<Map<String,Object>> list =materialsOutPutExamineDao.selectMaterialStockByid(uuid);
+        System.out.print(list);
+        //进行库存量计算
+
+        return 0;
+    }*/
+
+    /*
+    * 查询调拨单
+    * */
+       public void selectRequisition(String uuid){
+           //查询
+
+
+       }
+
+}

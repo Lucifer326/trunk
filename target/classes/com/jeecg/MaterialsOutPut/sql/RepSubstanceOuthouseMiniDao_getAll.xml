@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT oth.UUID,
+    oth.OUTHOUSE_NUMBER,
+    oth.OUTHOUSE_PERSON,
+    oth.OUTHOUSE_DATE,
+    oth.RECEIVER,
+    oth.REQUISITION,
+    oth.ACCESSORY,
+    oth.REMARK,
+    oth.APPROVAL_STATUS,
+    rep.REPOSITORY_NAME,
+    acc.ACCESSORY_NAME,
+    acc.ACCESSORY_PATH
+FROM REP_SUBSTANCE_OUTHOUSE oth
+LEFT JOIN REP_ACCESS_REPOSITORY rep
+    ON (rep.ISDELETED IS NULL OR rep.ISDELETED = 0)
+        AND rep.UUID IN (SELECT DISTINCT OUTHOUSE_WAREHOUSE
+            FROM REP_OUTHOUSE_DETAIL detil WHERE detil.OUTHOUSEID = oth.UUID)
+LEFT JOIN REP_SUBSTANCE_ACCESSORY acc
+    ON acc.UUID = oth.ACCESSORY
+LEFT JOIN T_S_USERCARDINFO TSU
+    ON oth.CREATE_BY = TSU.USER_NAME
+LEFT JOIN T_S_USER TSUS
+    ON TSU.USER_CARD_ID = TSUS.CARDID
+LEFT JOIN T_S_ROLE_USER_BASE TSRUB
+    ON TSRUB.USERID = TSUS.ID
+WHERE (oth.ISDELETED IS NULL OR oth.ISDELETED = 0)
+    AND oth.UUID IN (SELECT DISTINCT OUTHOUSEID
+        FROM REP_OUTHOUSE_DETAIL detil
+        WHERE detil.OUTHOUSEID = oth.UUID
+            AND (detil.ISDELETED IS NULL OR detil.ISDELETED = 0))
+    <#if outhouseNumber? exists &&outhouseNumber ?length gt 0>
+    and oth.OUTHOUSE_NUMBER like '%' || '${outhouseNumber}' || '%'
+    </#if>
+    <#if repositoryName? exists &&repositoryName ?length gt 0>
+    and rep.REPOSITORY_NAME like '%' || '${repositoryName}' || '%'
+    </#if>
+    <#if outhouseDate? exists &&outhouseDate ?length gt 0>
+    and oth.OUTHOUSE_DATE >= TO_DATE('${outhouseDate}','yyyy-mm-dd')
+    and oth.OUTHOUSE_DATE < to_date(to_char(to_date('${outhouseDate}','yyyy-mm-dd')+1,'yyyy-mm-dd'),'yyyy-mm-dd')
+    </#if>
+    AND TSRUB.ORGID IN
+        (SELECT T.ID
+            FROM T_S_DEPART T
+            START WITH T.ID =
+                (SELECT DISTINCT TSRUB.ORGID
+                FROM T_S_ROLE_USER_BASE TSRUB
+                WHERE TSRUB.USERID = '${userId}')
+            CONNECT BY T.PARENTDEPARTID = PRIOR T.ID)
+ORDER BY oth.CREATE_DATE DESC
+]]></SQL>

@@ -1,0 +1,71 @@
+package com.jeecg.MaterialsOutPut.service;
+
+import com.jeecg.MaterialsOutPut.common.MaterialsOutPutQueryVo;
+import com.jeecg.MaterialsOutPut.entity.RepOuthouseDetail;
+import com.jeecg.MaterialsOutPut.entity.RepSubstanceOuthouse;
+import org.jeecgframework.core.common.service.CommonService;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @version 1.0
+ * @Auther zhenleichao
+ * @Date 2019/4/2
+ * @Description com.jeecg.MaterialsOutPut.service
+ */
+public interface RepSubstanceOuthouseService extends CommonService {
+
+    /**
+     * 根据条件查询物资出库和出库详细信息
+     * @param vo 封住装查询条件
+     * @return 返回查询结果
+     */
+    List<Map<String,Object>> getAllByCondition(MaterialsOutPutQueryVo vo);
+
+    /**
+     * 获取所有未被删除的物资出库和物资详细信息
+     * @return
+     */
+    List<Map<String,Object>> getAll();
+
+    /**
+     *根据物资入库的id获取物资出库和出库详细信息
+     * @param uuid
+     * @return
+     */
+    Map<String,Object> getDetilById(String uuid);
+
+    /**
+     * 修改物资出库信息
+     * @param outhouse 物资出库单信息
+     * @param warehouseId 出库仓库id
+     * @param outhouseAmounts 出库数量
+     * @param subIds 物资信息id
+     */
+    void updOuthouse(RepSubstanceOuthouse outhouse,String warehouseId,Long[] outhouseAmounts, String[] subIds,String[] storageDetails);
+
+    /**
+     *新增出库信息
+     * @param outhouse 物资出库单信息
+     * @param warehouseId 出库仓库id
+     * @param outhouseAmounts 出库数量
+     * @param subIds 物资信息id
+     * @return 是否成功
+     */
+    void addOutHose(RepSubstanceOuthouse outhouse,String warehouseId,Long[] outhouseAmounts, String[] subIds,String[] storageDetails);
+
+    /**
+     * 批量删除
+     * @param uuids 以分隔符号连接的主键字符串
+     * @param regx 分割符号,默认分隔符为逗号
+     */
+    void delOutPut(String uuids,String regx);
+
+    /**
+     * 批量删除
+     * @param uuids 以逗号连接的主键字符串
+     */
+    void delOutPut(String uuids);
+}

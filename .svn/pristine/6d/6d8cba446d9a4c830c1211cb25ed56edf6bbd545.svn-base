@@ -1,0 +1,133 @@
+package com.jeecg.rep_substance_recycle.dao;
+
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.MaterialsOutPut.entity.RepSubstanceOuthouse;
+import com.jeecg.rep_substance_recycle.entity.RepDetailedMaterialRecoveryEntity;
+import com.jeecg.rep_substance_recycle.entity.RepSubstanceRecycleEntity;
+import com.jeecg.rep_substance_recycle.vo.RecycleVo;
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.jeecgframework.minidao.annotation.MiniDao;
+
+import javax.persistence.Id;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author 刘雨泽
+ */
+@MiniDao
+public interface RecycleDao {
+
+    /**
+     * 查询物资回收信息列表
+     * @param uuid id
+     * @return
+     */
+    @Arguments({"uuid"})
+    List<RepSubstanceRecycleEntity> recycleList(String uuid);
+
+    /**
+     * 根据条件查询物资回收信息列表
+     * @param vo 其他查询条件
+     * @param inDate 开始时间
+     * @param outDate 结束时间
+     * @param uuid id
+     * @return
+     */
+    @Arguments({"vo", "inDate", "outDate", "uuid"})
+    List<RepSubstanceRecycleEntity> conditionList(RecycleVo vo, String inDate, String outDate, String uuid);
+
+    /**
+     * 根据uuid查询物资回收信息
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    RepSubstanceRecycleEntity lookRecycle(String uuid);
+
+    /**
+     * 根据uuid查询物资回收信息
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    RepSubstanceRecycleEntity recyclingDetailsGet(String uuid);
+
+    /**
+     * 根据动态出入库条件查询调拨通知列表
+     * @param input 入库
+     * @param output 出库
+     * @param isUse 是否使用
+     * @return
+     */
+    @Arguments({"input", "output", "isUse"})
+    List<Map<String,Object>> seachAllocation(String input, String output, Short isUse);
+
+    /**
+     * 根据uuid查询入库信息
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    List<Map<String, Object>> warehouseInfosGet(String uuid);
+
+    /**
+     * 根据物资信息id查询物资信息列表
+     * @param messageid
+     * @return
+     */
+    @Arguments({"messageid"})
+    Map<String,Object> materialInfosGet(Object messageid);
+
+    /**
+     * 根据uuid查询物资回收信息
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    RepSubstanceRecycleEntity recyclingEdit(String uuid);
+
+    /**
+     * 废弃
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    List<RepDetailedMaterialRecoveryEntity> recoveryEdit(String uuid);
+
+    /**
+     * 查询有效的出库单
+     * @param uuid id
+     * @return
+     */
+    @Arguments({"uuid"})
+    List<Map<String,Object>> getAllOutHouse(String uuid);
+
+    /**
+     * 根据根据出库单id查询出库单
+     * @param outhouseId
+     * @return
+     */
+    @Arguments({"uuid"})
+    RepSubstanceOuthouse searchNumberByUuid(String outhouseId);
+
+    /**
+     * 根据物资类别id查询物资类别名称
+     * @param category
+     * @return
+     */
+    @Arguments({"category"})
+    String searchCategoryById(String category);
+
+    /**
+     * 模糊查询根据出库单获得物资信息
+     * @param subNumber
+     * @param subName
+     * @param subCatagory
+     * @param outHouseId
+     * @param userId
+     * @return
+     */
+    @Arguments({"subNumber", "subName", "subCatagory", "outHouseId", "userId"})
+    List<Map<String,Object>> searchRepSubstanceMessage(String subNumber, String subName, String subCatagory, String outHouseId, String userId);
+}

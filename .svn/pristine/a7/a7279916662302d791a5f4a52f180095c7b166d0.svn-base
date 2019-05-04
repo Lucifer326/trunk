@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT count(1) FROM t_s_typegroup tg 
+WHERE is_deleted = 0 and typegroupcode = '${typeCode}'
+and tg.id <> '${id}'
+]]></SQL>

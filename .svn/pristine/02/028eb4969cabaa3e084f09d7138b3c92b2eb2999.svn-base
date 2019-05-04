@@ -1,0 +1,163 @@
+package com.jeecg.MaterialProducer.controller;
+
+import com.jeecg.MaterialProducer.entity.ScProductEntity;
+import com.jeecg.MaterialProducer.service.MaterialProducerService;
+import com.jeecg.system_management.common.CommonCode;
+import org.jeecgframework.core.common.controller.BaseController;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.web.system.pojo.base.TSType;
+import org.jeecgframework.web.system.service.TypeServiceI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @ClassName MaterialProducerController
+ * @Description 物资生产商名录模块
+ * @Author God
+ * @Date 2019/4/2、14:00
+ * @Version 1.0
+ **/
+@Controller
+@RequestMapping("materialProducerController")
+public class MaterialProducerController extends BaseController {
+    @Autowired
+    private TypeServiceI typeServiceImpl;
+    @Autowired
+    private MaterialProducerService materialProducerService;
+
+    /**
+     * 列表页跳转
+     * @return
+     */
+    @RequestMapping(params = "productList")
+    public String productList(Model model){
+        List<ScProductEntity> productList = materialProducerService.productList();
+        List<TSType> isOrNot = typeServiceImpl.getItems(CommonCode.SF_YN);
+        model.addAttribute("productList",productList);
+        model.addAttribute("isOrNot",isOrNot);
+        return "jzwz/MaterialProducer/MaterialProducerList";
+    }
+
+    /**
+     * 条件查询
+     * @param name 公司名称
+     * @param product 主营产品
+     * @param inPut 是否录入民政部
+     * @return
+     */
+    @RequestMapping(params = "productQuery")
+    public Object querySel(String name,String product,String inPut,Model model){
+        List<ScProductEntity> scProductEntity = materialProducerService.productQuery(name,product,inPut);
+        List<TSType> isOrNot = typeServiceImpl.getItems(CommonCode.SF_YN);
+        model.addAttribute("isOrNot",isOrNot);
+        model.addAttribute("productList",scProductEntity);
+        model.addAttribute("name",name);
+        model.addAttribute("product",product);
+        model.addAttribute("inPut",inPut);
+        return "jzwz/MaterialProducer/MaterialProducerList";
+    }
+
+    /**
+     * 新建页面跳转
+     * @return
+     */
+    @RequestMapping(params = "productAdd")
+    public String productAdd(Model model){
+        List<TSType> addItem = typeServiceImpl.getItems(CommonCode.SF_YN);
+        model.addAttribute("addItem",addItem);
+        return "jzwz/MaterialProducer/MaterialProducerAdd";
+    }
+
+    /**
+     * 新建实现
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "productIns")
+    public Object productIns(ScProductEntity scProductEntity){
+        AjaxJson result = new AjaxJson();
+        if(scProductEntity != null){
+            try{
+                materialProducerService.productIns(scProductEntity);
+            }catch (Exception e){
+                e.printStackTrace();
+                result.setSuccess(false);
+            }
+        }else {
+            result.setSuccess(false);
+        }
+        return result;
+    }
+    /**
+     * 查看
+     * @return
+     */
+    @RequestMapping(params = "productLook")
+    public String productLook(Model model,String uuid){
+        ScProductEntity productById =  materialProducerService.lookProductById(uuid);
+        List<TSType> proIsNot = typeServiceImpl.getItems(CommonCode.SF_YN);
+        model.addAttribute("proIsNot",proIsNot);
+        model.addAttribute("productById",productById);
+        return "jzwz/MaterialProducer/MaterialProducerlook";
+    }
+
+    /**
+     * 修改页面跳转
+     * @return
+     */
+    @RequestMapping(params = "productEdit")
+    public String productEdit(Model model, String uuid){
+        ScProductEntity productEditSel =  materialProducerService.lookProductById(uuid);
+        List<TSType> editIsNot = typeServiceImpl.getItems(CommonCode.SF_YN);
+        model.addAttribute("editIsNot",editIsNot);
+        model.addAttribute("productEditSel",productEditSel);
+        return "jzwz/MaterialProducer/MaterialProducerEdit";
+    }
+
+    /**
+     * 修改实现
+     * @param scProductEntity
+     * @return
+     */
+    @RequestMapping(params = "productUpd")
+    @ResponseBody
+    public Object productUpd(ScProductEntity scProductEntity){
+        AjaxJson result = new AjaxJson();
+        if(scProductEntity != null){
+            try{
+                materialProducerService.productUpd(scProductEntity);
+            }catch (Exception e){
+                e.printStackTrace();
+                result.setSuccess(false);
+            }
+        }else {
+            result.setSuccess(false);
+        }
+        return result;
+    }
+
+    /**
+     * 删除
+     * @param ids
+     * @return
+     */
+  @ResponseBody
+  @RequestMapping(params = "productDels")
+    public Object productDelsTest(String[] ids){
+      AjaxJson result = new AjaxJson();
+      try {
+          materialProducerService.productDel(ids);
+
+      }catch (Exception e){
+          e.printStackTrace();
+          result.setSuccess(false);
+      }
+      return result;
+  }
+}

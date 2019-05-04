@@ -1,0 +1,308 @@
+//WareHouseInformationManageList.jsp页面 相关自定义js
+//@author: 苑希阳 2019年4月7日16:00:02
+
+//新增
+function save(form, index) {
+    //表单验证
+    if (validateForm(form)) {
+        //库房名验证
+        //区划
+        var area = form.$("#txt").val();
+        //库房名
+        var name = form.$("#repositoryName").val();
+        $.ajax({
+            type: "POST",
+            url: "warehouse.do?checkName",
+            //cache缓存，true:缓存；false:不缓存
+            cache: false,
+            data: {"repositoryArea": area, "repositoryName": name},
+            async: false,
+            success: function (data) {
+                //由于json信息中包含中文，需要解析json
+                var da = JSON.parse(data);
+                if (da.success) {
+                    //--------------------------------------------------------------------------------
+                    $.ajax({
+                        type: "POST",
+                        url: "warehouse.do?save",
+                        //cache缓存，true:缓存；false:不缓存
+                        cache: false,
+                        data: form.$('#createRepository').serialize(),
+                        async: false,
+                        success: function (data) {
+                            //由于json信息中包含中文，需要解析json
+                            var da = JSON.parse(data);
+                            if (da.success) {
+                                swal({
+                                    title: "新增成功",
+                                    zIndex: 19891014,
+                                    type: "success",
+                                    confirmButtonText: "确定"
+                                }, function () {
+                                    layer.close(index);
+                                    //添加成功，刷新列表页
+                                    query();
+                                });
+                            } else {
+                                swal({
+                                    title: "新增失败",
+                                    zIndex: 19891014,
+                                    type: "error",
+                                    confirmButtonText: "确定"
+                                });
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            swal({
+                                title: "请检查数据是否填写完整",
+                                zIndex: 19891014,
+                                type: "warning",
+                                confirmButtonText: "确定"
+                            });
+                        }
+                    });
+                    //----------------------------------------------------------------------------------
+                } else {
+                    showErrorMsg("同一区划下不允许存在相同库房名称", form.$("#repositoryName"));
+                    return false;
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                swal({
+                    title: "请检查数据是否填写完整",
+                    zIndex: 19891014,
+                    type: "warning",
+                    confirmButtonText: "确定"
+                });
+            }
+        });
+    }
+}
+
+//删除
+function del(id) {
+    $.ajax({
+        type: "POST",
+        url: "warehouse.do?delete",
+        //cache缓存，true:缓存；false:不缓存
+        cache: false,
+        data: {ids: id},
+        async: false,
+        success: function (data) {
+            //由于json信息中包含中文，需要解析json
+            var da = JSON.parse(data);
+            if (da.success) {
+                swal({
+                    title: '删除成功',
+                    text: "您已经永久删除了这条记录",
+                    zIndex: 19891014,
+                    type: "success",
+                    confirmButtonText: "确定"
+                }, function () {
+                    //调用查询（包含条件），刷新列表
+                    query();
+                });
+            } else {
+                swal("删除失败！", "", "error");
+                $(".sa-button-container .confirm").text("确定");
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            swal("删除失败！", "无法进行删除操作。", "warning");
+            $(".sa-button-container .confirm").text("确定");
+        }
+    });
+}
+
+//修改
+function update(form, index) {
+    //表单验证
+    if (validateForm(form)) {
+        //修改
+        $.ajax({
+            type: "POST",
+            url: "warehouse.do?modify",
+            //cache缓存，true:缓存；false:不缓存
+            cache: false,
+            data: form.$('#modifyRepository').serialize(),
+            async: false,
+            success: function (data) {
+                //由于json信息中包含中文，需要解析json
+                var da = JSON.parse(data);
+                if (da.success) {
+                    swal({
+                        title: "修改成功",
+                        zIndex: 19891014,
+                        type: "success",
+                        confirmButtonText: "确定"
+                    }, function () {
+                        layer.close(index);
+                        query();
+                    });
+                } else {
+                    swal({
+                        title: "修改失败",
+                        zIndex: 19891014,
+                        type: "error",
+                        confirmButtonText: "确定"
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                swal({
+                    title: "请检查数据是否填写完整",
+                    zIndex: 19891014,
+                    type: "warning",
+                    confirmButtonText: "确定"
+                });
+            }
+        });
+    }
+}
+
+//查询
+function query() {
+    var repositoryName = $('#repositoryName').val();
+    var activateTimeStart = $('#hello1').val();
+    var activateTimeEnd = $('#hello2').val();
+    var repositoryCategory = $('#repositoryCategory').val();
+    window.location.href = "warehouse.do?listQuery&repositoryName=" + repositoryName + "&activateTimeStart=" +
+        activateTimeStart + "&activateTimeEnd=" + activateTimeEnd + "&repositoryCategory=" + repositoryCategory;
+}
+
+//表单验证
+function validateForm(form) {
+    //正则：匹配数字
+    var number = /^[0-9]*$/;
+    //正则: 匹配日期
+    var date = /^(\d{1,4})(-)(\d{1,2})\2(\d{1,2})$/;
+    if ($.trim(form.$("#txt").val()).length == 0) {
+        showErrorMsg("请选择库房区划", form.$("#txt"));
+        return false;
+    }
+    if ($.trim(form.$("#organizationClassify").val()).length == 0) {
+        showErrorMsg("请选择机构分类", form.$("#organizationClassify"));
+        return false;
+    }
+    if ($.trim(form.$("#repositoryName").val()).length == 0) {
+        showErrorMsg("请输入库房名称", form.$("#repositoryName"));
+        return false;
+    }
+    if ($.trim(form.$("#repositoryName").val()).length > 50) {
+        showErrorMsg("库房名称最大长度50位", form.$("#repositoryName"));
+        return false;
+    }
+    if ($.trim(form.$("#repositoryNumber").val()).length == 0) {
+        showErrorMsg("请输入库房编号", form.$("#repositoryNumber"));
+        return false;
+    }
+    if ($.trim(form.$("#repositoryNumber").val()).length > 18) {
+        showErrorMsg("库房编号最大长度18位", form.$("#repositoryNumber"));
+        return false;
+    }
+    if ($.trim(form.$("#activateTime").val()).length == 0) {
+        showErrorMsg("请选择建成时间", form.$("#activateTime"));
+        return false;
+    }
+    if (!date.test($.trim(form.$("#activateTime").val()))) {
+        showErrorMsg("请选择正确日期", form.$("#activateTime"));
+        return false;
+    }
+    if ($.trim(form.$("#repositoryCategory").val()).length == 0) {
+        showErrorMsg("请选择库房类别", form.$("#repositoryCategory"));
+        return false;
+    }
+    if ($.trim(form.$("#activateScale").val()).length > 100) {
+        showErrorMsg("建设规模最大长度100位", form.$("#activateScale"));
+        return false;
+    }
+    if (form.$("#investCase").val().length > 200) {
+        showErrorMsg("投资情况最大长度200位", form.$("#investCase"));
+        return false;
+    }
+    if ($.trim(form.$("#storageVolume").val()).length > 14) {
+        showErrorMsg("储存量最大长度14位", form.$("#storageVolume"));
+        return false;
+    }
+    if($.trim(form.$("#storageVolume").val()) != ""){
+        if ($.trim(form.$("#storageVolume").val()) <= 0) {
+            showErrorMsg("储存量必须大于0", form.$("#storageVolume"));
+            return false;
+        }
+    }
+    if ($.trim(form.$("#repositoryAcreage").val()).length > 14) {
+        showErrorMsg("库房面积最大长度14位", form.$("#repositoryAcreage"));
+        return false;
+    }
+    if($.trim(form.$("#repositoryAcreage").val()) != ""){
+        if ($.trim(form.$("#repositoryAcreage").val()) <= 0) {
+            showErrorMsg("库房面积必须大于0", form.$("#repositoryAcreage"));
+            return false;
+        }
+    }
+    if ($.trim(form.$("#personCharge").val()).length > 18) {
+        showErrorMsg("负责人最大长度18位", form.$("#personCharge"));
+        return false;
+    }
+    if ($.trim(form.$("#repositoryAddress").val()).length > 200) {
+        showErrorMsg("库房地址最大长度200位", form.$("#repositoryAddress"));
+        return false;
+    }
+    if(!number.test($.trim(form.$("#phone").val()))){
+        showErrorMsg("联系电话请输入数字", form.$("#phone"));
+        return false;
+    }
+    if ($.trim(form.$("#phone").val()).length > 11) {
+        showErrorMsg("联系电话最大长度11位", form.$("#phone"));
+        return false;
+    }
+    if (form.$("#remark").val().length > 500) {
+        showErrorMsg("备注最大长度500位", form.$("#remark"));
+        return false;
+    }
+    return true;
+}
+//显示错误信息
+function showErrorMsg(msg, seleter) {
+    layer.msg(
+        msg,
+        {
+            time: 2000,
+            icon: 7,
+            shift: 1
+        },
+        function () {
+            seleter.focus();
+        });
+}
+
+//获取所选择行的id
+function getSeletedId() {
+    //定义一个数组，用于存放所选中的id值
+    var ids = [];
+    //遍历所有选中的复选框，并将id值添加到数组中
+    $('#table_content input[type=checkbox]:checked').each(function () {
+        ids.push($(this).attr('values'));
+    });
+    //根据ids数组的长度判断所选择的条数
+    if (ids.length > 1) {
+        layer.alert("只能选择一条记录！");
+        return false;
+    } else if (ids.length == 0) {
+        layer.alert("请选择一条记录！");
+        return false;
+    }
+    //获取所选择的的id
+    var id = ids[0];
+    return id;
+}
+
+
+// $(function(){
+//     $('#table_content input[type=checkbox]').click(
+//         function(){
+//             var val= $(this).attr('values')
+//             console.log('值：',val)
+//         }
+//     )
+// });

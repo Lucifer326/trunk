@@ -1,0 +1,335 @@
+//新建
+function materialsInPutAdd(fileForm, index) {
+	$.ajax({
+		url: "materialsInputController.do?saveOrupdate&ctrl=save",
+		type: "POST",
+		data: fileForm,
+		dataType: "json",
+		cache: false, // 不缓存
+		processData: false, // jQuery不要去处理发送的数据
+		contentType: false, // jQuery不要去设置Content-Type请求头
+		success: function (result) {
+			if (result.success) {
+				swal({
+						title: "添加成功",
+						type: "success",
+						zIndex: 101,
+						confirmButtonText: "确定"
+					},
+					function () {
+						layer.close(index);
+						window.location.href = "materialsInputController.do?queryAll";
+					});
+			} else {
+				swal({
+					title: "添加失败",
+					text: result.msg,
+					type: "error",
+					zIndex: 101,
+					confirmButtonText: "确定"
+				});
+				return false;
+			}
+		}
+	});
+}
+
+//修改
+function materialsInPutEdit(fileForm, index) {
+	$.ajax({
+		url: "materialsInputController.do?saveOrupdate&ctrl=edit",
+		type: "POST",
+		data: fileForm,
+		dataType: "json",
+		cache: false, // 不缓存
+		processData: false, // jQuery不要去处理发送的数据
+		contentType: false, // jQuery不要去设置Content-Type请求头
+		success: function (result) {
+			if (result.success) {
+				swal({
+						title: "修改成功",
+						type: "success",
+						zIndex: 101,
+						confirmButtonText: "确定"
+					},
+					function () {
+						layer.close(index);
+						window.location.href = "materialsInputController.do?queryAll";
+					});
+			} else {
+				swal({
+					title: "修改失败",
+					text: result.msg,
+					type: "error",
+					zIndex: 101,
+					confirmButtonText: "确定"
+				});
+			}
+		}
+	});
+}
+
+//删除
+function materialsInPutdelete(id) {
+	$.ajax({
+		url: "materialsInputController.do?delete",
+		type: "post",
+		data: "uuids=" + id,
+		success: function (result) {
+			swal({
+					title: "删除成功",
+					type: "success",
+					text: "您已经永久删除了这条信息。",
+					confirmButtonText: "确定"
+				},
+				function () {
+					window.location.href = "materialsInputController.do?queryAll";
+				});
+		}
+	});
+}
+
+//查询调拨物资
+function queryAllocation(informid){
+	$.ajax({
+		url: "materialsInputController.do?substance",
+		type: "POST",
+		data: "informid=" + informid,
+		dataType: "json",
+		success: function (result) {
+			//遍历结果获得每一行数据
+			$.each(result, function (index, item) {
+				//构建表格的每一行
+				build(item);
+			});
+		}
+	});
+}
+
+//构建表格
+function build(obj) {
+	var tabObj = document.getElementById("mytab");//获取添加数据的表格
+	var bodyObj = document.getElementById("tab");//获取添加数据的表格
+	var rowsNum = tabObj.rows.length;
+	// i++;
+	var rowsNum2 = bodyObj.rows.length;
+	var colsNum = tabObj.rows[rowsNum - 1].cells.length;//获取行的列数
+	var myNewRow = bodyObj.insertRow(rowsNum2);//插入新行
+	var newTdObj1 = myNewRow.insertCell(0);       //序列
+	newTdObj1.innerHTML = "<input type='checkbox' name='check_list'  id='check_list'" + rowsNum + " style='border:0px' /> ";
+	var newTdObj22 = myNewRow.insertCell(1);     // 物资品名
+	newTdObj22.innerHTML = "<input readonly type='text' value='" + obj.sub_name + "' name='sub_name' class='form-control' />";
+	var newTdObj2 = myNewRow.insertCell(2);      //规格型号
+	newTdObj2.innerHTML = "<input readonly type='text' name='' value='" + obj.specification_type + "' class='form-control' />";
+	var newTdObj3 = myNewRow.insertCell(3);     //物资类别
+	newTdObj3.innerHTML = "<input readonly type='text' name='' value='" + obj.sub_category + "' class='form-control' />";
+	var newTdObj4 = myNewRow.insertCell(4);     //物资单位
+	newTdObj4.innerHTML = "<input readonly type='text' name='' value='" + obj.unit + "' class='form-control' />";//<input id='hi" + rowsNum + "' class='laydate-icon form-control layer-date fl w-148'>
+	var newTdObj5 = myNewRow.insertCell(5);     //入库数量
+	newTdObj5.innerHTML = "<input readonly type='text' name='outputAmount' value='" + obj.allot_amount + "' class='form-control' maxlength='36' required minlength='1'   placeholder='' />";
+	var newTdObj6 = myNewRow.insertCell(6);     //单价
+	newTdObj6.innerHTML = "<input readonly type='text' value='" + obj.price + "' name='price' class='form-control fl' style='width: 65%' />";
+	var newTdObj7 = myNewRow.insertCell(7);     //供应商
+	newTdObj7.innerHTML = "<input readonly type='text' name='' value='" + obj.supplier + "' class='form-control' />";
+	var newTdObj8 = myNewRow.insertCell(8);     //购置日期
+	newTdObj8.innerHTML = "<input id='helloa" + rowsNum + "' name='purchaseDate' class='laydate-icon form-control layer-date'>";
+	var newTdObj9 = myNewRow.insertCell(9);     //生产日期
+	newTdObj9.innerHTML = "<input id='hellob" + rowsNum + "' name='manufactureDate' class='laydate-icon form-control layer-date'>";
+	var newTdObj10 = myNewRow.insertCell(10);   //过保日期 
+	newTdObj10.innerHTML = "<input id='helloc" + rowsNum + "' name='overinsuredDate' class='laydate-icon form-control layer-date'>";
+	var newTdObj11 = myNewRow.insertCell(11);   //总金额
+	newTdObj11.innerHTML = "<input readonly type='text' value='"+ obj.price_total +"' name='totalPrices' class='form-control' placeholder='' />";
+	var newTdObj12 = myNewRow.insertCell(12);   //物资信息uuid
+	newTdObj12.style.display = "none";
+	newTdObj12.innerHTML = "<input readonly type='hidden' name='messageid' value='" + obj.uuid + "' class='form-control' placeholder='' />";
+
+
+	// $("input[name=outputAmount]").change(function () {
+	// 	var num = parseFloat($(this).val()) * parseFloat($("input[name=price]").val());
+	// 	$(this).parent().parent().find("input[name=totalPrices]").val(num);
+	//
+	// });
+	setTimeout(function () {
+		laydate({
+			elem: "#helloa" + rowsNum + "", //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+			event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+		}, 1000);
+		laydate({
+			elem: "#hellob" + rowsNum + "", //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+			event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+		}, 1000);
+		laydate({
+			elem: "#helloc" + rowsNum + "", //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+			event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+		}, 1000);
+	});
+}
+
+//新建、修改表单验证
+function verification(page, formId) {
+	if ($.trim(page.$("#donationPurposes").val()).length <= 0) {
+		layer.msg("请选择使用用途", {time: 2000, icon: 7, shift: 1}, function () {
+		});
+		page.$("#donationPurposes").focus();
+		return false;
+	}
+	if ($.trim(page.$("#txtWareHouse").val()).length <= 0) {
+		layer.msg("请选择入库仓库", {time: 2000, icon: 7, shift: 1}, function () {
+		});
+		page.$("#txtWareHouse").focus();
+		return false;
+	}
+	if ($.trim(page.$("#wuzi_resource").val()).length <= 0) {
+		layer.msg("请选择物资来源", {time: 2000, icon: 7, shift: 1}, function () {
+		});
+		page.$("#wuzi_resource").focus();
+		return false;
+	}
+	if ($.trim(page.$("#txt1").val()).length <= 0 && $.trim(page.$("#txt").val()).length <= 0) {
+		layer.msg("请输入来源对象", {time: 2000, icon: 7, shift: 1}, function () {
+		});
+		page.$("#txt1").focus();
+		return false;
+	}
+	if ($.trim(page.$("#storagePerson").val()).length <= 0) {
+		layer.msg("请输入入库人", {time: 2000, icon: 7, shift: 1}, function () {
+		});
+		page.$("#storagePerson").focus();
+		return false;
+	}
+	if ($.trim(page.$("#hello").val()).length <= 0) {
+		layer.msg("请输入入库日期", {time: 2000, icon: 7, shift: 1}, function () {
+		});
+		page.$("#hello").focus();
+		return false;
+	}
+	if ($.trim(page.$("#area").val()).length <= 0) {
+		layer.msg("请选择使用区域", {time: 2000, icon: 7, shift: 1}, function () {
+		});
+		page.$("#area").focus();
+		return false;
+	}
+	if ($.trim(page.$("#remark").val()).length > 250) {
+		layer.msg("备注最长250个字符", {time: 2000, icon: 7, shift: 1}, function () {
+		});
+		page.$("#remark").focus();
+		return false;
+	}
+	var form = page.document.getElementById(formId);
+	var flag = true;
+	$.each($(form).find("input[name=sub_name]"), function () {
+		if ($.trim($(this).parent().parent().find("input[name=outputAmount]").val()).length <= 0) {
+			layer.msg("入库数量不能为空", {time: 2000, icon: 7, shift: 1}, function () {
+			});
+			page.$($(this).parent().parent().find("input[name=outputAmount]")).focus();
+			flag = false;
+			return false;
+		}
+		if ($.trim($(this).parent().parent().find("input[name=purchaseDate]").val()).length <= 0) {
+			layer.msg("购置日期不能为空", {time: 2000, icon: 7, shift: 1}, function () {
+			});
+			page.$($(this).parent().parent().find("input[name=purchaseDate]")).focus();
+			flag = false;
+			return false;
+		}
+		if ($.trim($(this).parent().parent().find("input[name=manufactureDate]").val()).length <= 0) {
+			layer.msg("生产日期不能为空", {time: 2000, icon: 7, shift: 1}, function () {
+			});
+			page.$($(this).parent().parent().find("input[name=manufactureDate]")).focus();
+			flag = false;
+			return false;
+		}
+		if ($.trim($(this).parent().parent().find("input[name=overinsuredDate]").val()).length <= 0) {
+			layer.msg("过保日期不能为空", {time: 2000, icon: 7, shift: 1}, function () {
+			});
+			page.$($(this).parent().parent().find("input[name=overinsuredDate]")).focus();
+			flag = false;
+			return false;
+		}
+
+		if ($.trim($(this).parent().parent().find("input[name=purchaseDate]").val()) > $(this).parent().parent().find("input[name=overinsuredDate]").val()) {
+			layer.msg("购置日期不能大于过保日期", {time: 2000, icon: 7, shift: 1}, function () {
+			});
+			page.$($(this).parent().parent().find("input[name=purchaseDate]")).focus();
+			flag = false;
+			return false;
+		}
+		if ($.trim($(this).parent().parent().find("input[name=manufactureDate]").val()) > $(this).parent().parent().find("input[name=overinsuredDate]").val()) {
+			layer.msg("生产日期不能大于过保日期", {time: 2000, icon: 7, shift: 1}, function () {
+			});
+			page.$($(this).parent().parent().find("input[name=manufactureDate]")).focus();
+			flag = false;
+			return false;
+		}
+	})
+	return flag;
+}
+
+//时间比较
+// function CompareDate(d1,d2)
+// {
+// 	return ((new Date(d1.replace(/-/g,"\/"))) > (new Date(d2.replace(/-/g,"\/"))));
+// }
+
+/*
+function verificationUpd(page){
+	if ($.trim(page.$("#donationPurposes").val()).length <= 0){
+		layer.msg("请选择捐赠用途", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(page.$("#txtWareHouse").val()).length <= 0){
+		layer.msg("请选择入库仓库", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(page.$("#wuzi_resource").val()).length <= 0){
+		layer.msg("请选择物资来源", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(page.$("#txt1").val()).length <= 0 && $.trim(page.$("#txt").val()).length <= 0){
+		layer.msg("请输入来源对象", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(page.$("#storagePerson").val()).length <= 0){
+		layer.msg("请输入入库人", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(page.$("#hello").val()).length <= 0){
+		layer.msg("请输入入库日期", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(page.$("#area").val()).length <= 0){
+		layer.msg("请选择捐赠区域", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+	if ($.trim(page.$("#remark").val()).length > 250){
+		layer.msg("备注最长250个字符", {time:2000, icon:7, shift:1}, function () {});
+		return false;
+	}
+
+	var form = page.document.getElementById("edit_form");
+	var flag = true;
+	$.each($(form).find("input[name=sub_name]"),function () {
+		if ($.trim($(this).parent().parent().find("input[name=outputAmount]").val()).length <= 0){
+			layer.msg("入库数量不能为空", {time:2000, icon:7, shift:1}, function () {});
+			flag = false;
+			return false;
+		}
+		if ($.trim($(this).parent().parent().find("input[name=purchaseDate]").val()).length <= 0){
+			layer.msg("购置日期不能为空", {time:2000, icon:7, shift:1}, function () {});
+			flag = false;
+			return false;
+		}
+		if ($.trim($(this).parent().parent().find("input[name=manufactureDate]").val()).length <= 0){
+			layer.msg("生产日期不能为空", {time:2000, icon:7, shift:1}, function () {});
+			flag = false;
+			return false;
+		}
+		if ($.trim($(this).parent().parent().find("input[name=overinsuredDate]").val()).length <= 0){
+			layer.msg("过保日期不能为空", {time:2000, icon:7, shift:1}, function () {});
+			flag = false;
+			return false;
+		}
+	})
+	
+	return flag;
+}*/

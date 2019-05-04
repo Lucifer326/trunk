@@ -1,0 +1,178 @@
+package com.jeecg.allocation_notice.service.impl;
+
+import com.jeecg.allocation_notice.dao.AllocationNoticeDao;
+import com.jeecg.allocation_notice.entity.RepAllotInform;
+import com.jeecg.allocation_notice.entity.RepInformDetail;
+import com.jeecg.allocation_notice.service.AllocationNoticeServiceI;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.pojo.RepSubstanceMessage;
+import org.jeecgframework.core.common.dao.impl.CommonDao;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author fuhai_deng
+ * @Description:com.jeecg.allocation_notice.service.impl
+ */
+@Service("allocationNoticeService")
+@Transactional
+public class AllocationNoticeServiceImpl extends CommonServiceImpl implements AllocationNoticeServiceI {
+    private short del=1;
+    private short ke=0;
+    @Autowired
+    private CommonDao commonDao;
+    @Autowired
+    private AllocationNoticeDao allocationNoticeDao;
+
+    /**
+     * 显示调拨通知的页面list显示
+     * @param page
+     * @param rows
+     * @param where
+     * @param order
+     * @return
+     */
+    @Override
+    public List<Map<String,Object>> getList(int page, int rows, String where, String order) {
+        //起始数据
+        rows = page* rows;
+        page = (page-1)*rows;
+        List<Map<String,Object>> list = allocationNoticeDao.listGet(page,rows, where, order);
+        return list;
+    }
+    //获得所有的仓库信息
+    @Override
+    public List<RepAccessRepository> repositoryGet() {
+        
+        String query = "from RepAccessRepository ";
+        List<RepAccessRepository> list = findByQueryString(query);
+        return list;
+    }
+    //获取所有的物资信息
+    @Override
+    public List<RepSubstanceMessage> catagoryGet() {
+        String query = "from RepSubstanceMessage";
+        List<RepSubstanceMessage> list = findByQueryString(query);
+        return list;
+
+    }
+    //获得确定的物资信息
+    @Override
+    public RepSubstanceMessage cateMessageGet(String uuid) {
+        RepSubstanceMessage message = get(RepSubstanceMessage.class, uuid);
+        return message;
+
+    }
+    //添加调拨通知的信息（调拨通知和调拨通知详情表）
+    @Override
+    public AjaxJson noticeSave(RepAllotInform repAllotInform, List<RepInformDetail> list ) {
+        AjaxJson ajaxJson = new AjaxJson();
+        repAllotInform.setIsdeleted(ke);
+        Serializable save = super.save(repAllotInform);
+
+        for (RepInformDetail rep: list){
+            rep.setIsdeleted(ke);
+            Serializable save1 = super.save(rep);
+            if(save==null||save1==null){
+                ajaxJson.setSuccess(false);
+                ajaxJson.setMsg("新增失败");
+                return ajaxJson;
+
+            }
+        }
+        ajaxJson.setMsg("新增成功");
+        return ajaxJson;
+
+    }
+    //据uuid查询调拨详情的对象
+    @Override
+    public RepInformDetail detailGetByid(String uuid) {
+        RepInformDetail uuid1 = findUniqueByProperty(RepInformDetail.class, "uuid", uuid);
+        return uuid1;
+    }
+
+    //根据调拨uuid查出调拨通知的数据
+    @Override
+    public RepAllotInform repAllotInformGetByid(String uuid) {
+        RepAllotInform repInformDetail = findUniqueByProperty(RepAllotInform.class, "uuid", uuid);
+        return repInformDetail;
+    }
+    //根据调拨单据号查出所有的调拨详情的信息
+    @Override
+    public List<RepInformDetail> repInformDetailGetByid(String allotNumber) {
+        List<RepInformDetail> detaiList = findByProperty(RepInformDetail.class, "informid", allotNumber);
+        return detaiList;
+    }
+    //更新调拨
+    @Override
+    public AjaxJson InformDetailupdate(RepAllotInform repAllotInform, List<RepInformDetail> list,List<String> strings) {
+        AjaxJson ajaxJson = new AjaxJson();
+        try {
+            updateEntitie(repAllotInform);
+            for (RepInformDetail rep:list) {
+                //判断uuid是否为空（若为空，保存，不空，更新）
+                if(rep.getUuid()!=null&&!"".equals(rep.getUuid())){
+                    updateEntitie(repAllotInform);
+                }else{
+                    super.save(rep);
+                }
+
+            }
+            //删除调拨详情的信息（修改转台吗）
+            for(String str:strings){
+                RepInformDetail repInformDetail = get(RepInformDetail.class, str);
+                repInformDetail.setIsdeleted(del);
+                updateEntitie(repInformDetail);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            ajaxJson.setSuccess(false);
+            ajaxJson.setMsg("跟新失败");
+            return ajaxJson;
+        }
+
+        return ajaxJson;
+    }
+
+    //删除操作
+    @Override
+    public void InformdelByid(String allotNumber) {
+        //获得调拨单句号
+        //获得要删除的调拨通知的数据
+        RepAllotInform repAllotInform1 = repAllotInformGetByid(allotNumber);
+        repAllotInform1.setIsdeleted(del);
+        updateEntitie(repAllotInform1);
+
+        //根据调拨单据号更改调拨通知的可删除
+        List<RepInformDetail> repInformDetails = repInformDetailGetByid(repAllotInform1.getAllotNumber());
+        for (RepInformDetail rep:repInformDetails) {
+            rep.setIsdeleted(del);
+            updateEntitie(rep);
+
+        }
+    }
+    //查询物资信息by  id
+    @Override
+    public RepSubstanceMessage MessageGet(String bainhao) {
+        RepSubstanceMessage uuid = findUniqueByProperty(RepSubstanceMessage.class, "subNumber", bainhao);
+
+        return uuid;
+    }
+
+    //模糊查询列表集合
+    @Override
+    public List<Map<String, Object>> NoticelistLike(String diaobo, String project, String date) {
+        List<Map<String, Object>> maps = allocationNoticeDao.listLike(diaobo, project, date);
+        return maps;
+    }
+
+
+}

@@ -1,0 +1,107 @@
+package com.jeecg.rep_protocol_store_message.service.impl;
+
+import com.jeecg.MaterialProducer.dao.MaterialProducerDao;
+import com.jeecg.rep_protocol_store_message.dao.ProtocalDao;
+import com.jeecg.rep_protocol_store_message.entity.RepProtocolStoreMessageEntity;
+import com.jeecg.rep_protocol_store_message.service.ProtocalService;
+import com.jeecg.rep_protocol_store_message.vo.ProtocolVo;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.ResourceUtil;
+import org.jeecgframework.web.system.pojo.base.TSUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * @author 刘雨泽
+ */
+@Service
+public class ProtocalServiceImpl extends CommonServiceImpl implements ProtocalService {
+
+    @Autowired
+    private ProtocalDao protocalDao;
+
+    @Override
+    public List<RepProtocolStoreMessageEntity> list() {
+        TSUser tsUser = ResourceUtil.getSessionUserName();
+        String userId = tsUser.getId();
+        return protocalDao.list(userId);
+    }
+
+    @Override
+    public RepProtocolStoreMessageEntity look(String uuid) {
+        return protocalDao.look(uuid);
+    }
+
+    @Override
+    public void saveProtocal(RepProtocolStoreMessageEntity protocol) {
+        // 完善协议表信息
+        // 是否删除 (0存在 1删除)
+        protocol.setIsdeleted("0");
+        // 保存协议
+        super.save(protocol);
+    }
+
+    @Override
+    public RepProtocolStoreMessageEntity edit(String uuid) {
+        return protocalDao.edit(uuid);
+    }
+
+    @Override
+    public void updateProtocal(RepProtocolStoreMessageEntity protocol) {
+
+        // 补全对象属性
+        if (protocol!=null){
+            RepProtocolStoreMessageEntity entity = protocalDao.look(protocol.getUuid());
+            if (entity != null){
+                protocol.setIsdeleted(entity.getIsdeleted());
+                protocol.setCreateBy(entity.getCreateBy());
+                protocol.setCreateDate(entity.getCreateDate());
+                protocol.setCreateName(entity.getCreateName());
+                protocol.setSysCompanyCode(entity.getSysCompanyCode());
+                protocol.setSysOrgCode(entity.getSysOrgCode());
+            }
+        }
+
+        super.saveOrUpdate(protocol);
+    }
+
+    @Override
+    public void deleteProtocolidByIds(String[] protocolid) {
+
+        String param = "";
+        for (int i = 0; i < protocolid.length - 1; i++){
+            param += "?,";
+        }
+        param += "?";
+
+        String sql = "update REP_PROTOCOL_STORE_MESSAGE set ISDELETED = 1 where uuid in (" + param +")";
+        super.executeSql(sql, protocolid);
+    }
+
+    @Override
+    public List<RepProtocolStoreMessageEntity> conditionList(ProtocolVo vo) {
+        TSUser tsUser = ResourceUtil.getSessionUserName();
+        String userId = tsUser.getId();
+        String protocolDate = "";
+        String protocolToDate = "";
+        if (null != vo.getProtocolDate()) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            protocolDate = format.format(vo.getProtocolDate());
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(vo.getProtocolDate());
+            // 今天+1天
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            Date tomorrow = c.getTime();
+            protocolToDate = format.format(tomorrow);
+        }
+        return protocalDao.conditionList(vo.getProtocolNumber(), vo.getProtocolCompany(), vo.getProtocolStorage(), vo.getProtocolYear(), protocolDate, protocolToDate,userId);
+    }
+
+}

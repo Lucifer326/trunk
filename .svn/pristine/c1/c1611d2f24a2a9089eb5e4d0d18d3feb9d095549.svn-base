@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select dedis.id,dedis.deploy_id,dedis.value,de.name,de.description,dedis.dis_id
+,dis.region_code as disCode,dis.region_name,dedis.create_date,de.date_expr,de.control_type
+from bssys_deploydis dedis
+join bssys_deploy de on dedis.deploy_id = de.id
+join system_region dis on dedis.dis_id = dis.id
+where  dedis.isdeleted=0 
+and de.isdeleted=0 
+${whereStr} 
+${orderStr}
+]]></SQL>

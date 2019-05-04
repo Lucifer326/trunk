@@ -1,0 +1,240 @@
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.addCandidateGroup_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.addCandidateGroup_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.addCandidateUser_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.addCandidateUser_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.boundaryEventProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.boundaryEventProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.businessRuleTaskProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.businessRuleTaskProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.candidateGroupsConfig_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.candidateGroupsConfig_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.candidateUsersConfig_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.candidateUsersConfig_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.errorBoundaryEventProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.errorBoundaryEventProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.eventProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.eventProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.flowListenerConfig_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.flowListenerConfig_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.flowProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.flowProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.gatewayProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.gatewayProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.index_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.index_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.listenerList_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.listenerList_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.mailTaskProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.mailTaskProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.processListenerConfig_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.processListenerConfig_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.processpro_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.processpro_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.processProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.processProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.receiveTaskProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.receiveTaskProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.scriptTaskProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.scriptTaskProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.subProcessProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.subProcessProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.taskFormConfig_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.taskFormConfig_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.taskListenerConfig_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.taskListenerConfig_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.taskProperties_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.taskProperties_jsp</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>org.apache.jsp.webpage.designer.taskVariableConfig_jsp</servlet-name>
+        <servlet-class>org.apache.jsp.webpage.designer.taskVariableConfig_jsp</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.addCandidateGroup_jsp</servlet-name>
+        <url-pattern>/webpage/designer/addCandidateGroup.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.addCandidateUser_jsp</servlet-name>
+        <url-pattern>/webpage/designer/addCandidateUser.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.boundaryEventProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/boundaryEventProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.businessRuleTaskProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/businessRuleTaskProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.candidateGroupsConfig_jsp</servlet-name>
+        <url-pattern>/webpage/designer/candidateGroupsConfig.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.candidateUsersConfig_jsp</servlet-name>
+        <url-pattern>/webpage/designer/candidateUsersConfig.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.errorBoundaryEventProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/errorBoundaryEventProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.eventProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/eventProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.flowListenerConfig_jsp</servlet-name>
+        <url-pattern>/webpage/designer/flowListenerConfig.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.flowProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/flowProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.gatewayProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/gatewayProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.index_jsp</servlet-name>
+        <url-pattern>/webpage/designer/index.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.listenerList_jsp</servlet-name>
+        <url-pattern>/webpage/designer/listenerList.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.mailTaskProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/mailTaskProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.processListenerConfig_jsp</servlet-name>
+        <url-pattern>/webpage/designer/processListenerConfig.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.processpro_jsp</servlet-name>
+        <url-pattern>/webpage/designer/processpro.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.processProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/processProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.receiveTaskProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/receiveTaskProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.scriptTaskProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/scriptTaskProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.subProcessProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/subProcessProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.taskFormConfig_jsp</servlet-name>
+        <url-pattern>/webpage/designer/taskFormConfig.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.taskListenerConfig_jsp</servlet-name>
+        <url-pattern>/webpage/designer/taskListenerConfig.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.taskProperties_jsp</servlet-name>
+        <url-pattern>/webpage/designer/taskProperties.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>org.apache.jsp.webpage.designer.taskVariableConfig_jsp</servlet-name>
+        <url-pattern>/webpage/designer/taskVariableConfig.jsp</url-pattern>
+    </servlet-mapping>

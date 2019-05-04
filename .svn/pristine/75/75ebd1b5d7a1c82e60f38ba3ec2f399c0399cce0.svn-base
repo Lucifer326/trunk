@@ -1,0 +1,49 @@
+package com.jeecg.MaterialsOutPut.common;
+
+import java.util.Date;
+
+/**
+ * 封装物资出库相关的查询条件
+ * @version 1.0
+ * @auther 甄磊超
+ * @date 2019/4/5
+ * @Description com.jeecg.MaterialsOutPut.common
+ */
+public class MaterialsOutPutQueryVo {
+    private String outhouseNumber;
+    private String repositoryName;
+    private Date outhouseDate;
+    private String userid;
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getOuthouseNumber() {
+        return outhouseNumber;
+    }
+
+    public void setOuthouseNumber(String outhouseNumber) {
+        this.outhouseNumber = outhouseNumber;
+    }
+
+    public String getRepositoryName() {
+        return repositoryName;
+    }
+
+    public void setRepositoryName(String repositoryName) {
+        this.repositoryName = repositoryName;
+    }
+
+    public Date getOuthouseDate() {
+        return outhouseDate;
+    }
+
+    public void setOuthouseDate(Date outhouseDate) {
+        this.outhouseDate = outhouseDate;
+    }
+}

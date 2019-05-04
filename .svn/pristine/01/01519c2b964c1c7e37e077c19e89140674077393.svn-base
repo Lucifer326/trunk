@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+    SELECT * FROM REP_ACCESS_REPOSITORY WHERE ISDELETED NOT IN(1)
+    <#if repositoryName ?exists && repositoryName ?length gt 0>
+	    and REPOSITORY_NAME like '%' || '${repositoryName}' || '%'
+    </#if>
+    <#if repositoryCategory ?exists && repositoryCategory ?length gt 0>
+	    and REPOSITORY_CATEGORY = '${repositoryCategory}'
+    </#if>
+    <#if activateTimeStart ?exists && activateTimeStart ?length gt 0>
+	    and ACTIVATE_TIME >= TO_DATE('${activateTimeStart}', 'yyyy-MM-dd')
+    </#if>
+    <#if activateTimeEnd ?exists && activateTimeEnd ?length gt 0>
+	    and ACTIVATE_TIME <= TO_DATE('${activateTimeEnd}', 'yyyy-MM-dd')
+    </#if>
+    ORDER BY CREATE_DATE DESC
+]]></SQL>

@@ -1,0 +1,248 @@
+package com.jeecg.allocation_notice.controller;
+
+import com.jeecg.allocation_notice.entity.RepAllotInform;
+import com.jeecg.allocation_notice.entity.RepInformDetail;
+import com.jeecg.allocation_notice.service.AllocationNoticeServiceI;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.pojo.RepSubstanceMessage;
+import org.apache.log4j.Logger;
+import org.jeecgframework.core.common.controller.BaseController;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author fuhai_deng
+ * @Description:com.jeecg.allocation_notice.controller
+ */
+@Scope("prototype")
+@Controller
+@RequestMapping("/allocationNoticeController")
+public class AllocationNoticeController extends BaseController {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = Logger.getLogger(AllocationNoticeController.class);
+    @Autowired
+    private AllocationNoticeServiceI allocationNoticeService;
+    /**
+     * 调拨通知表列表 页面跳转
+     *
+     * @return
+     */
+    @RequestMapping(params = "list")
+    public ModelAndView list(HttpServletRequest request) {
+        String pagestr = request.getParameter("page");
+        int page=1;
+        if(pagestr!=""&&pagestr!=null){
+             page =Integer.parseInt(pagestr);
+        }
+        int rows=10;
+        String rowsstr = request.getParameter("rows");
+        if(rowsstr!=""&&rowsstr!=null){
+             rows =Integer.parseInt(rowsstr);
+        }
+        //不知道是啥
+        String where="";
+        String order="";
+        List<Map<String,Object>> list = allocationNoticeService.getList(page, rows, where, order);
+        System.out.println(list);
+        request.setAttribute("list",list);
+        return new ModelAndView("jzwz/AllocationNotice/AllocationNoticeList");
+    }
+    /**
+     *查看调拨单据号的详细信息(调拨通知的uuid)
+     */
+    @RequestMapping(params = "look")
+    public String chakan(HttpServletRequest request,Model model) {
+
+        String uuid = request.getParameter("uuid");
+        if(uuid==null&&"".equals(uuid)){
+            return "jzwz/AllocationNotice/AllocationNoticeLook";
+        }
+        //根据调拨通知的uuid获得对应的调拨详情中的对象repAllotInformGetByid
+        RepAllotInform repAllotInform1 = allocationNoticeService.repAllotInformGetByid(uuid);
+        List<RepInformDetail> repInformDetails = allocationNoticeService.repInformDetailGetByid(repAllotInform1.getAllotNumber());
+        //根据RepInformDetail中的物资编号得到物资类别
+        List<RepSubstanceMessage> list= new ArrayList<>();
+        for (RepInformDetail detail :repInformDetails) {
+            //根据物资编号查询出物资信息MessageGet
+            RepSubstanceMessage message = allocationNoticeService.MessageGet(detail.getMessageid());
+            list.add(message);
+        }
+
+        model.addAttribute("inform",repAllotInform1);
+        model.addAttribute("delist",repInformDetails);
+        model.addAttribute("list",list);
+
+        return "jzwz/AllocationNotice/AllocationNoticeLook";
+    }
+    /**
+     *添加调拨通知的信息
+     */
+    @RequestMapping(params = "datalist")
+    public String noticeDataParation(Model model) {
+        //获取所有的仓库数据
+        List<RepAccessRepository> list = allocationNoticeService.repositoryGet();
+        //request.setAttribute("repo",list);
+        model.addAttribute("repo",list);
+
+        //获取多有的物资类别的信息
+        List<RepSubstanceMessage> list1 = allocationNoticeService.catagoryGet();
+        //request.setAttribute("cate",list1);
+        model.addAttribute("cate", list1);
+        return "jzwz/AllocationNotice/MaterialAllocationAdd";
+    }
+
+    /**
+     *添加调拨通知的信息
+     */
+    @RequestMapping(params = "add")
+    @ResponseBody
+    public AjaxJson tianjia(RepAllotInform repAllotInform,HttpServletRequest request ) {
+        AjaxJson ajaxJson = new AjaxJson();
+        try {
+        String allotNumber = request.getParameter("reloefProject");
+        String informid = request.getParameter("informid");
+        repAllotInform.setReloefProject(allotNumber);
+        repAllotInform.setAllotNumber(informid);
+
+        String[] messageid = request.getParameterValues("messageid");
+        String[] priceTotal = request.getParameterValues("priceTotal");
+        String[] allotAmount = request.getParameterValues("allotAmount");
+        List<RepInformDetail> objects = new ArrayList<RepInformDetail>();
+        for (int i=0;i<messageid.length;i++) {
+            RepInformDetail repInformDetail =new RepInformDetail();
+            repInformDetail.setInformid(informid);
+            repInformDetail.setMessageid(messageid[i]);
+            repInformDetail.setPriceTotal(new Long(priceTotal[i]));
+            repInformDetail.setAllotAmount(Long.parseLong(allotAmount[i]));
+            objects.add(repInformDetail);
+        }
+
+
+             ajaxJson = allocationNoticeService.noticeSave(repAllotInform, objects);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxJson.setSuccess(false);
+        }
+
+        return ajaxJson;
+
+    }
+    //更新调拨通知的数据 -----------------------------------------
+    /**
+     *修改调拨通知页面的数据准备
+     */
+    @RequestMapping(params = "dataParUpdate")
+    public String dataParUpdate(Model model,HttpServletRequest request) {
+        /*//获取所有的仓库数据
+        List<RepAccessRepository> list = allocationNoticeService.repositoryGet();
+        model.addAttribute("repo",list);
+        //获取多有的物资类别的信息
+        List<RepSubstanceMessage> list1 = allocationNoticeService.catagoryGet();
+        model.addAttribute("cate", list1);*/
+
+        //获得调拨详情中的uuid
+        String uuid = request.getParameter("uuid");
+        if(uuid==null&&"".equals(uuid)){
+            return "jzwz/AllocationNotice/AllocationEdit";
+        }
+        //根据调拨通知的uuid获得对应的调拨详情中的对象repAllotInformGetByid
+        RepAllotInform repAllotInform1 = allocationNoticeService.repAllotInformGetByid(uuid);
+        List<RepInformDetail> repInformDetails = allocationNoticeService.repInformDetailGetByid(repAllotInform1.getAllotNumber());
+
+
+        model.addAttribute("inform",repAllotInform1);
+        model.addAttribute("delist",repInformDetails);
+        return "jzwz/AllocationNotice/AllocationEdit";
+    }
+
+    //更新数据
+    @RequestMapping(params = "updateNotice")
+    @ResponseBody
+    public AjaxJson updateNotice(RepAllotInform repAllotInform,HttpServletRequest request) {
+        AjaxJson ajaxJson = new AjaxJson();
+
+        //获得表单提交的更新的数据
+        String[] uuid = request.getParameterValues("uuid");
+        repAllotInform.setUuid(uuid[0]);
+        String[] messageid = request.getParameterValues("messageid");
+        String[] priceTotal = request.getParameterValues("priceTotal");
+        String[] allotAmount = request.getParameterValues("allotAmount");
+        List<RepInformDetail> objects = new ArrayList<RepInformDetail>();
+        for (int i=0;i<messageid.length;i++) {
+            RepInformDetail repInformDetail =new RepInformDetail();
+            repInformDetail.setUuid(uuid[i+1]);
+            repInformDetail.setInformid(repAllotInform.getAllotNumber());
+            repInformDetail.setMessageid(messageid[i]);
+            repInformDetail.setPriceTotal(new Long(priceTotal[i]));
+            repInformDetail.setAllotAmount(Long.parseLong(allotAmount[i]));
+            objects.add(repInformDetail);
+        }
+        //获得要删除的调拨详情中的uuid
+        String deluuid = request.getParameter("deluuid");
+        String[] split = deluuid.split(",");
+        ArrayList<String> strings = new ArrayList<>();
+        for (String str:split ) {
+            strings.add(str);
+        }
+        System.out.println(strings);
+
+        try {
+             ajaxJson = allocationNoticeService.InformDetailupdate(repAllotInform, objects,strings);
+            ajaxJson.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxJson.setSuccess(false);
+        }
+        return ajaxJson;
+    }
+    //删除调拨通知（根据调拨单据号，把调拨通知表的删除，还有调拨详情的删了）——————————————————————————
+    @RequestMapping(params = "delNotice")
+    @ResponseBody
+    public AjaxJson delNotice(Model model,HttpServletRequest request) {
+        AjaxJson ajaxJson = new AjaxJson();
+        try {
+        String uuid = request.getParameter("uuid");
+        String[] split = uuid.split(",");
+        System.out.println(split);
+
+            for (String informid:split) {
+                allocationNoticeService.InformdelByid(informid);
+            }
+            ajaxJson.setMsg("删除成功");
+            ajaxJson.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxJson.setSuccess(false);
+        }
+        return ajaxJson;
+    }
+    //根据调拨单据号模糊查询列表
+    @RequestMapping(params = "showlikeBydanjuhao")
+    public String show(Model model,HttpServletRequest request) {
+        String diaobodanjuhao = request.getParameter("diaobodanjuhao");
+
+        String project = request.getParameter("project");
+
+        String date = request.getParameter("date");
+        List<Map<String, Object>> maps = allocationNoticeService.NoticelistLike(diaobodanjuhao, project, date);
+        request.setAttribute("list",maps);
+        return "jzwz/AllocationNotice/AllocationNoticeList";
+    }
+
+
+
+}

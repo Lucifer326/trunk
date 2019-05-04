@@ -1,0 +1,215 @@
+package com.jeecg.system_management.pojo;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.Date;
+
+/**
+ * 物资类别管理Pojo
+ *
+ * @author 苑希阳
+ * @table REP_SUBSTANCE_CATEGORY
+ */
+@Entity
+@Table(name = "REP_SUBSTANCE_CATEGORY")
+public class RepSubstanceCategory {
+    /**
+     * 主键id
+     */
+    private String uuid;
+
+    /**
+     * 物资类别编号
+     */
+    private String categoryNumber;
+
+    /**
+     * 物资类别名称
+     */
+    private String categoryName;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 创建人姓名
+     */
+    private String createName;
+
+    /**
+     * 创建人登录名称
+     */
+    private String createBy;
+
+    /**
+     * 创建日期
+     */
+    private Date createDate;
+
+    /**
+     * 更新人姓名
+     */
+    private String updateName;
+
+    /**
+     * 更新人登录名
+     */
+    private String updateBy;
+
+    /**
+     * 更新日期
+     */
+    private Date updateDate;
+
+    /**
+     * 所属公司
+     */
+    private String sysCompanyCode;
+
+    /**
+     * 所属部门
+     */
+    private String sysOrgCode;
+
+    /**
+     * 是否删除
+     */
+    private Short isdeleted;
+
+    /**
+     * 流程状态
+     */
+    private String bpmStatus;
+
+    @Id
+    @GeneratedValue(generator = "paymentableGenerator")
+    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
+    @Column(name = "UUID", length = 36, nullable = false)
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid == null ? null : uuid.trim();
+    }
+
+    @Column(name = "CATEGORY_NUMBER", length = 36, nullable = false)
+    public String getCategoryNumber() {
+        return categoryNumber;
+    }
+
+    public void setCategoryNumber(String categoryNumber) {
+        this.categoryNumber = categoryNumber == null ? null : categoryNumber.trim();
+    }
+
+    @Column(name = "CATEGORY_NAME", length = 100, nullable = false)
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName == null ? null : categoryName.trim();
+    }
+
+    @Column(name = "REMARK", length = 500)
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Column(name = "CREATE_NAME", length = 36)
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName == null ? null : createName.trim();
+    }
+
+    @Column(name = "CREATE_BY ", length = 36)
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy == null ? null : createBy.trim();
+    }
+
+    @Column(name = "CREATE_DATE")
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @Column(name = " UPDATE_NAME", length = 36)
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName == null ? null : updateName.trim();
+    }
+
+    @Column(name = " UPDATE_BY", length = 36)
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy == null ? null : updateBy.trim();
+    }
+
+    @Column(name = "UPDATE_DATE")
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    @Column(name = " SYS_COMPANY_CODE", length = 36)
+    public String getSysCompanyCode() {
+        return sysCompanyCode;
+    }
+
+    public void setSysCompanyCode(String sysCompanyCode) {
+        this.sysCompanyCode = sysCompanyCode == null ? null : sysCompanyCode.trim();
+    }
+
+    @Column(name = " SYS_ORG_CODE", length = 36)
+    public String getSysOrgCode() {
+        return sysOrgCode;
+    }
+
+    public void setSysOrgCode(String sysOrgCode) {
+        this.sysOrgCode = sysOrgCode == null ? null : sysOrgCode.trim();
+    }
+
+    @Column(name = "ISDELETED", length = 1)
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
+    }
+
+    @Column(name = "BPM_STATUS", length = 36)
+    public String getBpmStatus() {
+        return bpmStatus;
+    }
+
+    public void setBpmStatus(String bpmStatus) {
+        this.bpmStatus = bpmStatus == null ? null : bpmStatus.trim();
+    }
+}

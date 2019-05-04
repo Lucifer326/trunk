@@ -1,0 +1,231 @@
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自治区自然灾害救助信息管理系统</title>
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/plugins/bootstrap-table/bootstrap-table.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/animate.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet"/>
+    <link href="${pageContext.request.contextPath}/css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+<form id="form1">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="alert alert-success whj_location"><span class="c6">当前位置：自治区救灾物资信息管理系统 &nbsp > &nbsp 系统管理 &nbsp >  &nbsp</span>
+            物资类别管理
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>搜索条件</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content whj-padding">
+                        <div class="form-group">
+                            <ul class="ulist">
+                                <li>
+                                    <span class="fl labeltext">物资类别编号：</span>
+                                    <div class="fl">
+                                        <input type="text" id="categoryNumber" value="${vo.categoryNumber}" class="form-control" onkeyup="this.value=this.value.replace(/[`~!@·%#$^&*()=|{}':;',\[\].<>/?~！@#￥……&*（）+\\ ——|{}【】‘；：”“'。，、？]/g,'');">
+                                    </div>
+                                    <div class="clear"></div>
+                                </li>
+                                <li>
+                                    <span class="fl labeltext">物资类别名称：</span>
+                                    <div class="fl">
+                                        <input type="text" id="categoryName" value="${vo.categoryName}" class="form-control" onkeyup="this.value=this.value.replace(/[`~!@·%#$^&*()=|{}':;',\[\].<>/?~！@#￥……&*（）+\\ ——|{}【】‘；：”“'。，、？]/g,'');">
+                                    </div>
+
+                                    <div class="clear"></div>
+                                </li>
+                                <li>
+                                    <button class="btn btn-primary btnh" id="Button1" type="button"><i
+                                            class="fa fa-search"></i>&nbsp;搜索
+                                    </button>
+                                    &nbsp;&nbsp;
+                                    <button class="btn btn-warning btnh" id="reset" type="button" style="width: 70px;"><i
+                                            class="fa"></i>&nbsp;重置
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!--ibox-content-->
+                </div>
+            </div>
+        </div>
+        <!--row-->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="example-wrap">
+                            <div class="example">
+                                <div class="btn-fl">
+                                    <button type="button" class="btn btn-outline btn-primary" id="Add">新建</button>
+                                    <button type="button" class="btn btn-outline btn-success" id="Look">查看</button>
+                                    <button type="button" class="btn btn-outline btn-warning" id="Update">修改</button>
+                                    <button type="button" class="btn btn-outline btn-danger" id="del">删除</button>
+                                </div>
+
+                                <table id="exampleTableEvents" data-mobile-responsive="true">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th data-field="number" data-sort-stable="true">序号</th>
+                                        <th data-field="id" data-sort-stable="true">物资类别编号</th>
+                                        <th data-field="name">物资类别名称</th>
+                                        <th data-field="price">备注</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="table_content">
+                                    <c:forEach items="${list}" var="list" varStatus="i">
+                                        <tr>
+                                            <td><input type="checkbox" values="${list.uuid}"></td>
+                                            <input type="hidden" value="${list.uuid}"/>
+                                            <td>${i.count}</td>
+                                            <td>${list.categoryNumber}</td>
+                                            <td>${list.categoryName}</td>
+                                            <td>${list.remark}</td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- End Example Events -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--row-->
+    </div>
+</form>
+
+<!-- 全局js -->
+<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<!-- 自定义js -->
+<script src="${pageContext.request.contextPath}/js/content.js"></script>
+<!-- Bootstrap table -->
+<script src="${pageContext.request.contextPath}/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+
+<!-- Peity -->
+<script src="${pageContext.request.contextPath}/js/demo/bootstrap-table-demo.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/layer/laydate/laydate.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/layer/layer.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/sweetalert/sweetalert.min.js"></script>
+<!-- 个人js -->
+<script src="${pageContext.request.contextPath}/js/my.js"></script>
+<%--materialCategoryList.js--%>
+<script src="${pageContext.request.contextPath}/js/jzwz/system_management/materialCategoryList.js"></script>
+<script>
+
+    //新建
+    $('#Add').on('click', function () {
+        layer.open({
+            type: 2,
+            title: '新建内容',
+            zIndex: 1000,
+            maxmin: true,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['850px', '350px'],
+            content: 'materialCategory.do?showAddMaterialCategoryPage',
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                var form = $(layero).find('iframe')[0].contentWindow;
+                //新增
+                save(form, index);
+            }
+        });
+    });
+    //修改
+    $('#Update').on('click', function () {
+        if(getSeletedId() != false){
+            //获取所选择的的id
+            var id = getSeletedId();
+            layer.open({
+                type: 2,
+                title: '修改内容',
+                maxmin: true,
+                zIndex: 1000,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['850px', '350px'],
+                content: 'materialCategory.do?materialCategoryModify&uuid=' + id,
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var form = $(layero).find('iframe')[0].contentWindow;
+                    //修改
+                    update(form, index);
+                }
+            });
+        }
+    });
+    //查看
+    $('#Look').on('click', function () {
+        if(getSeletedId() != false){
+            //获取所选择的的id
+            var id = getSeletedId();
+            layer.open({
+                type: 2,
+                title: '查看内容',
+                maxmin: true,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['850px', '350px'],
+                content: 'materialCategory.do?materialCategoryLook&uuid=' + id,
+                btn: ['关闭']
+            });
+        }
+    });
+    //删除
+    $('#del').click(function () {
+        if(getSeletedId() != false){
+            //获取所选择的的id
+            var id = getSeletedId();
+            swal({
+                title: "您确定要删除这条信息吗",
+                text: "删除后将无法恢复，请谨慎操作！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "删除",
+                cancelButtonText: "取消",
+                closeOnConfirm: false
+            }, function () {
+                //删除
+                del(id);
+            });
+        }
+    });
+    //条件查询
+    $('#Button1').click(function () {
+        //查询
+       query();
+    });
+    //重置按钮
+    $("#reset").click(function () {
+        $("#categoryNumber").val("");
+        $("#categoryName").val("");
+        //查询
+        query();
+    });
+    //刷新页面
+    $(":button[name='refresh']").click(function () {
+        query();
+    });
+</script>
+</body>
+</html>

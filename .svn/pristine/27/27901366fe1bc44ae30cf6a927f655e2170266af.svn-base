@@ -1,0 +1,371 @@
+package com.jeecg.system_management.pojo;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * 仓储机构信息管理Pojo
+ *
+ * @author 苑希阳
+ * @table REP_ACCESS_REPOSITORY
+ */
+@Entity
+@Table(name = "REP_ACCESS_REPOSITORY")
+public class RepAccessRepository {
+    /**
+     * 主键id
+     */
+    private String uuid;
+
+    /**
+     * 库房区划
+     */
+    private String repositoryArea;
+
+    /**
+     * 库房名称
+     */
+    private String repositoryName;
+
+    /**
+     * 机构分类  0：中央 1:自治区 2:地州 3:县
+     */
+    private BigDecimal organizationClassify;
+
+    /**
+     * 库房编号
+     */
+    private String repositoryNumber;
+
+    /**
+     * 建成时间
+     */
+    private Date activateTime;
+
+    /**
+     * 建成规模
+     */
+    private String activateScale;
+
+    /**
+     * 投资情况
+     */
+    private String investCase;
+
+    /**
+     * 库房类别
+     */
+    private String repositoryCategory;
+
+    /**
+     * 储存量
+     */
+    private Long storageVolume;
+
+    /**
+     * 库房面积
+     */
+    private BigDecimal repositoryAcreage;
+
+    /**
+     * 负责人
+     */
+    private String personCharge;
+
+    /**
+     * 联系电话
+     */
+    private Long phone;
+
+    /**
+     * 库房地址
+     */
+    private String repositoryAddress;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 创建人姓名
+     */
+    private String createName;
+
+    /**
+     * 创建人登录名称
+     */
+    private String createBy;
+
+    /**
+     * 创建日期
+     */
+    private Date createDate;
+
+    /**
+     * 更新人姓名
+     */
+    private String updateName;
+
+    /**
+     * 更新人登录名称
+     */
+    private String updateBy;
+
+    /**
+     * 更新日期
+     */
+    private Date updateDate;
+
+    /**
+     * 所属公司
+     */
+    private String sysCompanyCode;
+
+    /**
+     * 所属部门
+     */
+    private String sysOrgCode;
+
+    /**
+     * 是否删除
+     */
+    private Short isdeleted;
+
+    /**
+     * 流程状态
+     */
+    private String bpmStatus;
+
+    @Id
+    @GeneratedValue(generator = "paymentableGenerator")
+    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
+    @Column(name = "UUID", length = 36)
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid == null ? null : uuid.trim();
+    }
+
+    @Column(name = "REPOSITORY_AREA", length = 36, nullable = false)
+    public String getRepositoryArea() {
+        return repositoryArea;
+    }
+
+    public void setRepositoryArea(String repositoryArea) {
+        this.repositoryArea = repositoryArea == null ? null : repositoryArea.trim();
+    }
+
+    @Column(name = "REPOSITORY_NAME", length = 200, nullable = false)
+    public String getRepositoryName() {
+        return repositoryName;
+    }
+
+    public void setRepositoryName(String repositoryName) {
+        this.repositoryName = repositoryName == null ? null : repositoryName.trim();
+    }
+
+    @Column(name = "ORGANIZATION_CLASSIFY", nullable = false)
+    public BigDecimal getOrganizationClassify() {
+        return organizationClassify;
+    }
+
+    public void setOrganizationClassify(BigDecimal organizationClassify) {
+        this.organizationClassify = organizationClassify;
+    }
+
+    @Column(name = "REPOSITORY_NUMBER", length = 36, nullable = false)
+    public String getRepositoryNumber() {
+        return repositoryNumber;
+    }
+
+    public void setRepositoryNumber(String repositoryNumber) {
+        this.repositoryNumber = repositoryNumber == null ? null : repositoryNumber.trim();
+    }
+
+    @Column(name = "ACTIVATE_TIME", nullable = false)
+    public Date getActivateTime() {
+        return activateTime;
+    }
+
+    public void setActivateTime(Date activateTime) {
+        this.activateTime = activateTime;
+    }
+
+    @Column(name = "ACTIVATE_SCALE", length = 200)
+    public String getActivateScale() {
+        return activateScale;
+    }
+
+    public void setActivateScale(String activateScale) {
+        this.activateScale = activateScale == null ? null : activateScale.trim();
+    }
+
+    @Column(name = "INVEST_CASE ", length = 400)
+    public String getInvestCase() {
+        return investCase;
+    }
+
+    public void setInvestCase(String investCase) {
+        this.investCase = investCase;
+    }
+
+    @Column(name = "REPOSITORY_CATEGORY", length = 36, nullable = false)
+    public String getRepositoryCategory() {
+        return repositoryCategory;
+    }
+
+    public void setRepositoryCategory(String repositoryCategory) {
+        this.repositoryCategory = repositoryCategory == null ? null : repositoryCategory.trim();
+    }
+
+    @Column(name = "STORAGE_VOLUME", length = 18)
+    public Long getStorageVolume() {
+        return storageVolume;
+    }
+
+    public void setStorageVolume(Long storageVolume) {
+        this.storageVolume = storageVolume;
+    }
+
+    @Column(name = "REPOSITORY_ACREAGE", length = 18)
+    public BigDecimal getRepositoryAcreage() {
+        return repositoryAcreage;
+    }
+
+    public void setRepositoryAcreage(BigDecimal repositoryAcreage) {
+        this.repositoryAcreage = repositoryAcreage;
+    }
+
+    @Column(name = "PERSON_CHARGE", length = 36)
+    public String getPersonCharge() {
+        return personCharge;
+    }
+
+    public void setPersonCharge(String personCharge) {
+        this.personCharge = personCharge == null ? null : personCharge.trim();
+    }
+
+    @Column(name = "PHONE", length = 15)
+    public Long getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Long phone) {
+        this.phone = phone;
+    }
+
+    @Column(name = "REPOSITORY_ADDRESS", length = 400)
+    public String getRepositoryAddress() {
+        return repositoryAddress;
+    }
+
+    public void setRepositoryAddress(String repositoryAddress) {
+        this.repositoryAddress = repositoryAddress == null ? null : repositoryAddress.trim();
+    }
+
+    @Column(name = "REMARK ", length = 1000)
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Column(name = "CREATE_NAME ", length = 36)
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName == null ? null : createName.trim();
+    }
+
+    @Column(name = "CREATE_BY ", length = 36)
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy == null ? null : createBy.trim();
+    }
+
+    @Column(name = "CREATE_DATE")
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @Column(name = " UPDATE_NAME", length = 36)
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName == null ? null : updateName.trim();
+    }
+
+    @Column(name = " UPDATE_BY", length = 36)
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy == null ? null : updateBy.trim();
+    }
+
+    @Column(name = "UPDATE_DATE")
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    @Column(name = " SYS_COMPANY_CODE", length = 36)
+    public String getSysCompanyCode() {
+        return sysCompanyCode;
+    }
+
+    public void setSysCompanyCode(String sysCompanyCode) {
+        this.sysCompanyCode = sysCompanyCode == null ? null : sysCompanyCode.trim();
+    }
+
+    @Column(name = " SYS_ORG_CODE", length = 36)
+    public String getSysOrgCode() {
+        return sysOrgCode;
+    }
+
+    public void setSysOrgCode(String sysOrgCode) {
+        this.sysOrgCode = sysOrgCode == null ? null : sysOrgCode.trim();
+    }
+
+    @Column(name = "ISDELETED", length = 1)
+    public Short getIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted(Short isdeleted) {
+        this.isdeleted = isdeleted;
+    }
+
+    @Column(name = "BPM_STATUS", length = 36)
+    public String getBpmStatus() {
+        return bpmStatus;
+    }
+
+    public void setBpmStatus(String bpmStatus) {
+        this.bpmStatus = bpmStatus == null ? null : bpmStatus.trim();
+    }
+
+}

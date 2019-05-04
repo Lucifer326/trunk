@@ -1,0 +1,59 @@
+package com.jeecg.MaterialsOutPut.common;
+
+/**
+ * @author 甄磊超
+ */
+public enum MaterialsOutPutStatusCode {
+	/** 成功 */
+	SUCCESS(200, "成功"),
+	
+	SAVE_FAIL(201, "保存失败"),
+	
+	UPD_FAIL(202, "修改失败"),
+
+	APPROVAL_FAIL(205, "审批失败"),
+
+	SEL_FAIL(203, "查询失败"),
+	
+	DEL_FAIL(204, "删除失败"),
+
+	APPROVAL_STATUS_ERROR(205, "审批状态错误"),
+	
+	/** 没有登录 */
+	NOT_LOGIN(400, "没有登录"),
+
+	/** 发生异常 */
+	EXCEPTION(401, "发生异常"),
+
+	/** 系统错误 */
+	SYS_ERROR(402, "系统错误"),
+
+	/** 参数错误 */
+	PARAMS_ERROR(403, "参数错误 "),
+
+	FORM_ERROR(413, "请填写完整表单数据"),
+
+    OUT_AMOUNT_ERROR(414,"出库数量错误"),
+
+	/** 不支持或已经废弃 */
+	NOT_SUPPORTED(410, "不支持或已经废弃"),
+
+	/** 未知的错误 */
+	UNKNOWN_ERROR(499, "未知错误");
+
+	private int code;
+	private String message;
+
+	private MaterialsOutPutStatusCode(int code, String message) {
+		this.code = code;
+		this.message = message;
+	}
+
+	public int getCode() {
+		return code;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+}

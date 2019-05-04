@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT CATEGORY_NAME
+from REP_SUBSTANCE_CATEGORY
+where UUID=:category
+]]></SQL>

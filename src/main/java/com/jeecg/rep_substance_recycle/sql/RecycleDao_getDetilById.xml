@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT DISTINCT
+	rsr.*
+FROM
+	REP_OUTHOUSE_DETAIL rsr
+LEFT JOIN T_S_BASE_USER tsbu ON RSR.CREATE_BY = TSBU.USERNAME
+LEFT JOIN T_S_ROLE_USER_BASE tsrub ON tsbu. ID = tsrub.userid
+WHERE
+	rsr.ISDELETED NOT IN (1)
+AND
+    tsrub.orgid IN (
+	SELECT DISTINCT
+		ID
+	FROM
+		T_S_DEPART START WITH ID = (
+			SELECT DISTINCT
+				orgid
+			FROM
+				T_S_ROLE_USER_BASE
+			WHERE
+				userid = :userId
+		) CONNECT BY parentdepartid = PRIOR ID
+)
+AND
+    rsr.OUTHOUSEID = :outhouseId
+]]></SQL>

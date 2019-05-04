@@ -1,0 +1,50 @@
+package com.jeecg.mailSendAndReceiving.controller;
+
+import com.jeecg.mailSendAndReceiving.service.SendMailService;
+import com.jeecg.mailSendAndReceiving.service.SendMailUtil;
+import org.jeecgframework.core.common.controller.BaseController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
+
+@Controller
+@RequestMapping("mailController")
+public class mailController extends BaseController {
+    @RequestMapping(params = "send")
+    public String send(String email, String title, String content, HttpServletRequest request) {
+        System.out.println(content);
+//       邮件中的所有图片和附件
+        Map<String, String> mediaMap = new HashMap<String, String>();
+//      从正文(content)中取图片文件路径的起始位置
+        int indexOf = content.indexOf("src");
+        String imgPath = null;
+//        判断正文(content)中是否有图片,如果有，则取出路径
+        if (indexOf > 0) {
+            System.out.println(indexOf);
+//      计算文件名的起始位置
+            int start = indexOf + 14;
+            int end = start + 40;
+            String subpath = content.substring(start, end);
+//      获取文件的绝对路径
+            HttpSession session = request.getSession();
+            imgPath = session.getServletContext().getRealPath(subpath);
+        }
+        mediaMap.put("imgPath1", imgPath);
+
+//      新建邮件发送类
+        SendMailService sendMail = new SendMailService();
+//      设定发件人(测试阶段)
+        String sender = "1441249420@qq.com";
+        try {
+//      发送邮件，传递发件人，正文，收件人，主题，媒体路径
+            sendMail.send(sender, content, email, title, mediaMap);
+        } catch (Exception e) {
+            System.out.println("发送失败");
+        }
+        return "jzwz/MailSendAndReceiving/mailbox";
+    }
+}

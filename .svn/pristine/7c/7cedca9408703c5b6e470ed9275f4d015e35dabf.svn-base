@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select se.*,ry.REPOSITORY_NAME from REP_ACCESS_REPOSITORY ry,REP_SUBSTANCE_STORAGE se where se.UUID = '${uuid}' and ry.UUID(+) = se.STORAGE_WAREHOUSE
+]]></SQL>

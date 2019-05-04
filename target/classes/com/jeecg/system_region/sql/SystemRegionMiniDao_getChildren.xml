@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT * FROM system_region WHERE parent_id = :pid
+]]></SQL>

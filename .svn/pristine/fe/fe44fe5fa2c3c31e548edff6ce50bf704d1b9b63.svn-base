@@ -1,0 +1,65 @@
+function checkForm(form) {
+    //正则：匹配数字
+    var number = /^[0-9]*$/;
+    //正则: 匹配日期
+    var date = /^(\d{1,4})(-)(\d{1,2})\2(\d{1,2})$/;
+    if ($.trim(form.$("#house").val()).length <= 0){
+        layer.msg("请填写入库仓库", {time:2000, icon:7, shift:1}, function () {
+            form.$("#house").focus();
+        });
+        return false;
+    }
+    if ($.trim(form.$("#house").val()).length > 36){
+        layer.msg("入库仓库最大长度36位", {time:2000, icon:7, shift:1}, function () {
+            form.$("#house").focus();
+        });
+        return false;
+    }
+    if ($.trim(form.$("#hello").val()).length <= 0){
+        layer.msg("请填写入库时间", {time:2000, icon:7, shift:1}, function () {
+            form.$("#hello").focus();
+        });
+        return false;
+    }
+    if(!date.test($.trim(form.$("#hello").val()))){
+        layer.msg("请正确填写入库时间", {time:2000, icon:7, shift:1}, function () {
+            form.$("#hello").focus();
+        });
+        return false;
+    }
+    if ($.trim(form.$("#Text2").val()).length <= 0){
+        layer.msg("请填写入库人", {time:2000, icon:7, shift:1}, function () {
+            form.$("#Text2").focus();
+        });
+        return false;
+    }
+    if ($.trim(form.$("#Text2").val()).length > 100){
+        layer.msg("入库人最大长度100位", {time:2000, icon:7, shift:1}, function () {
+            form.$("#Text2").focus();
+        });
+        return false;
+    }
+    return true;
+}
+function checkAddForm(form) {
+
+        if ($.trim(form.$(".bunengweikong").val()).length == 0){
+            layer.msg("请新建或选择物资品名", {time:2000, icon:7, shift:1}, function () {
+                form.$(".bunengweikong").focus();
+            });
+            return false;
+        }
+
+    return true;
+}
+function checkUpdateForm(form) {
+
+/*    if ($.trim(form.$(".buweiong").val()).length == 0){
+        layer.msg("请新建或选择物资品名", {time:2000, icon:7, shift:1}, function () {
+            form.$(".buweiong").focus();
+        });
+        return false;
+    }*/
+
+    return true;
+}

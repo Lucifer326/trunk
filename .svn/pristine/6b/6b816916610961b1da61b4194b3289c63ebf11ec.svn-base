@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+update SC_PRODUCT set del = '1' where UUID = '${id}'
+]]></SQL>

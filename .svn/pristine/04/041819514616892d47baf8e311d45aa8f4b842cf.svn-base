@@ -1,0 +1,211 @@
+//MaterialCategoryList.jsp页面 相关自定义js
+//@author: 苑希阳 2019年4月7日16:46:41
+
+//新增
+function save(form, index){
+    //表单校验
+    if(validateForm(form)){
+        //物资类别名称
+        var name = form.$("#categoryName").val();
+        //物资类别名称唯一性校验
+        $.ajax({
+            type: "POST",
+            url: "materialCategory.do?checkName",
+            //cache缓存，true:缓存；false:不缓存
+            cache: false,
+            data: {"categoryName":name},
+            async: false,
+            success: function (data) {
+                //由于json信息中包含中文，需要解析json
+                var da = JSON.parse(data);
+                if (da.success) {
+                    //-------------------------------------------------
+                    $.ajax({
+                        type: "POST",
+                        url: "materialCategory.do?save",
+                        //cache缓存，true:缓存；false:不缓存
+                        cache: false,
+                        data: form.$('#materialCategoryAdd').serialize(),
+                        async: false,
+                        success: function (data) {
+                            //由于json信息中包含中文，需要解析json
+                            var da = JSON.parse(data);
+                            if (da.success) {
+                                swal({
+                                    title: "新增成功",
+                                    type: "success",
+                                    confirmButtonText: "确定"
+                                }, function () {
+                                    //关闭弹出框的父窗口
+                                    layer.close(index);
+                                    //重新加载列表页
+                                    query();
+                                });
+                            } else {
+                                swal({
+                                    title: "新增失败",
+                                    type: "error",
+                                    confirmButtonText: "确定"
+                                });
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            swal({
+                                title: "请检查数据是否填写完整",
+                                zIndex: 19891014,
+                                type: "warning",
+                                confirmButtonText: "确定"
+                            });
+                        }
+                    });
+                    //-----------------------------------------
+                } else {
+                    showErrorMsg("该物资类别名称已存在",form.$("#categoryName"));
+                }
+            }
+        });
+    }
+}
+//删除
+function del(id){
+    $.ajax({
+        type: "POST",
+        url: "materialCategory.do?delete",
+        //cache缓存，true:缓存；false:不缓存
+        cache: false,
+        data: {ids:id},
+        async:false,
+        success: function (data) {
+            //由于json信息中包含中文，需要解析json
+            var da = JSON.parse(data);
+            if (da.success) {
+                swal({
+                    title: '删除成功',
+                    text: "您已经永久删除了这条记录",
+                    zIndex: 19891014,
+                    type: "success",
+                    confirmButtonText: "确定"
+                }, function () {
+                    //删除成功，刷新页面
+                    query();
+                });
+            } else {
+                swal("删除失败！", "", "error");
+                $(".sa-button-container .confirm").text("确定");
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            swal("删除失败！", "无法进行删除操作。", "warning");
+            $(".sa-button-container .confirm").text("确定");
+        }
+    });
+}
+//修改
+function update(form, index){
+    if(validateForm(form)){
+        $.ajax({
+            type: "POST",
+            url: "materialCategory.do?modify",
+            //cache缓存，true:缓存；false:不缓存
+            cache: false,
+            data: form.$('#materialCategoryModify').serialize(),
+            async: false,
+            success: function (data) {
+                //由于json信息中包含中文，需要解析json
+                var da = JSON.parse(data);
+                if (da.success) {
+                    swal({
+                        title: "修改成功",
+                        type: "success",
+                        confirmButtonText: "确定"
+                    }, function () {
+                        layer.close(index);
+                        //修改成功，刷新页面
+                        query();
+                    });
+                } else {
+                    swal({
+                        title: "修改失败",
+                        zIndex: 19891014,
+                        type: "error",
+                        confirmButtonText: "确定"
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                swal({
+                    title: "请检查数据是否填写完整",
+                    zIndex: 19891014,
+                    type: "warning",
+                    confirmButtonText: "确定"
+                });
+            }
+        });
+    }
+}
+//条件查询
+function query() {
+    var categoryNumber = $('#categoryNumber').val();
+    var categoryName = $('#categoryName').val();
+    window.location.href = "materialCategory.do?listQuery&categoryNumber=" + categoryNumber
+        + "&categoryName=" + categoryName;
+}
+
+//获取id
+function getSeletedId(){
+    //定义一个数组，用于存放所选中的id值
+    var ids = [];
+    //遍历所有选中的复选框，并将id值添加到数组中
+    $('#table_content input[type=checkbox]:checked').each(function () {
+        ids.push($(this).attr('values'));
+    });
+    //根据ids数组的长度判断所选择的条数
+    if (ids.length > 1) {
+        layer.alert("只能选择一条记录！");
+        return false;
+    } else if (ids.length == 0) {
+        layer.alert("请选择一条记录！");
+        return false;
+    }
+    //获取所选择的的id
+    var id = ids[0];
+    return id;
+}
+//表单验证
+function validateForm(form){
+    if($.trim(form.$("#categoryNumber").val()).length == 0){
+        showErrorMsg("请输入物资类别编号", form.$("#categoryNumber"));
+        return false;
+    }
+    if($.trim(form.$("#categoryNumber").val()).length > 18){
+        showErrorMsg("物资类别编号最大长度18位", form.$("#categoryNumber"));
+        return false;
+    }
+    if($.trim(form.$("#categoryName").val()).length == 0){
+        showErrorMsg("请输入物资类别名称", form.$("#categoryName"));
+        return false;
+    }
+    if($.trim(form.$("#categoryName").val()).length > 50){
+        showErrorMsg("物资类别名称最大长度50位", form.$("#categoryName"));
+        return false;
+    }
+    if($.trim(form.$("#remark").val()).length > 250){
+        showErrorMsg("备注最大长度500位", form.$("#remark"));
+        return false;
+    }
+    return true;
+}
+
+//显示错误信息
+function showErrorMsg(msg, seleter){
+    layer.msg(
+        msg,
+        {
+            time:2000,
+            icon:7,
+            shift:1
+        },
+        function () {
+            seleter.focus();
+        });
+}

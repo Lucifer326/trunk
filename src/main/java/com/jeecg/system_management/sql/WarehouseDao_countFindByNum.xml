@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+    SELECT
+            count(*)
+    FROM
+            REP_ACCESS_REPOSITORY
+    WHERE
+            REPOSITORY_NUMBER = '${repository.repositoryNumber}'
+]]></SQL>

@@ -1,0 +1,243 @@
+package com.jeecg.MaterialsInPut.service.impl;
+
+import com.jeecg.MaterialsInPut.dao.MaterialsInputMiniDao;
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.MaterialsInPut.entity.RepSubstanceAccessory;
+import com.jeecg.MaterialsInPut.entity.RepSubstanceStorageEntity;
+import com.jeecg.MaterialsInPut.service.MaterialsInputService;
+import org.apache.commons.lang.StringUtils;
+import org.jeecgframework.core.common.exception.BusinessException;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.DateUtils;
+import org.jeecgframework.core.util.UUIDGenerator;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@Transactional(rollbackFor = java.lang.Exception.class)
+public class MaterialsInputServiceImpl extends CommonServiceImpl implements MaterialsInputService {
+
+	@Resource
+	private MaterialsInputMiniDao materialsInputMiniDao;
+
+	/**
+	 * 物资入库列表
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> queryAll(String storageNumber, String storageWarehouse, String startDate, String endDate) {
+		return materialsInputMiniDao.queryAll(storageNumber, storageWarehouse, startDate, endDate);
+	}
+
+	/**
+	 * 物资入库详细和物资信息
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> inStockLook(String numberid) {
+		List<Map<String, Object>> list = materialsInputMiniDao.inStockLook(numberid);
+		return list;
+	}
+
+	/**
+	 * 根据id查询物资入库
+	 * @param uuid
+	 * @return
+	 */
+	@Override
+	public Map<String, Object> queryOne(String uuid) {
+		return materialsInputMiniDao.queryOne(uuid);
+	}
+
+	/**
+	 * 根据id查询物资入库(返回一个物资入库对象)
+	 *
+	 * @param uuid
+	 * @return
+	 */
+	@Override
+	public RepSubstanceStorageEntity queryOneEntityById(String uuid) {
+		return materialsInputMiniDao.queryOneStorageEntityById(uuid);
+	}
+
+	/**
+	 * 新增物资入库和物资入库详细
+	 */
+	@Override
+	public void saveOrupdateInput(RepSubstanceStorageEntity repSubstanceStorageEntity, String[] minuteids, String[] messageids, String[] prices, String[] outputAmounts,
+	                              String[] purchaseDates, String[] manufactureDates, String[] overinsuredDates,String delUuid, String ctrl) {
+		AjaxJson ajaxJson = new AjaxJson();
+
+		//验证数组长度相同且不为空
+		if (repSubstanceStorageEntity == null || messageids == null || messageids.length != prices.length ||
+				messageids.length != outputAmounts.length || messageids.length != purchaseDates.length ||
+				messageids.length != manufactureDates.length || messageids.length != overinsuredDates.length) {
+			throw new BusinessException("数据输入不完整不能保存");
+		}
+
+		//生成uuid(用于物资入库uuid)
+			String generate = UUIDGenerator.generate();
+		
+		//如果
+		if(StringUtils.isNotBlank(delUuid)){
+			//分割需要删除的uuid放入数组中
+			String[] delUuids = delUuid.split("-");
+			String param = "";
+			for (int i = 0; i < delUuids.length - 1; i++) {
+				param += "?,";
+			}
+			param += "?";
+			String sql = "update REP_STORAGE_DETAIL set ISDELETED = 1 where UUID in (" + param + ")";
+			super.executeSql(sql, delUuids);
+			System.out.println("删除物资入库详细:"+sql+"参数:"+ Arrays.toString(delUuids));
+		}
+		
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		//遍历参数放入物资入库详细对象中
+		for (int i = 0; i < messageids.length; i++) {
+			RepStorageDetailEntity repStorageDetailEntity = new RepStorageDetailEntity();
+			//物资入库详细uuid
+			if (minuteids != null && !(minuteids.length <= i)) {
+				repStorageDetailEntity.setUuid(minuteids[i]);
+			}
+			//物资入库uuid
+			if ("save".equals(ctrl)) {
+				//如果是新增,将新的物资入库uuid保存,
+				repStorageDetailEntity.setNumberid(generate);
+			} else {
+				//如果是修改,
+				repStorageDetailEntity.setNumberid(repSubstanceStorageEntity.getUuid());
+			}
+			//物资信息uuid
+			repStorageDetailEntity.setMessageid(messageids[i]);
+			//入库数量
+			if (StringUtils.isBlank(outputAmounts[i])) {
+				throw new BusinessException("入库数量不能为空");
+			}
+			repStorageDetailEntity.setOutputAmount(new BigDecimal(outputAmounts[i]));
+			//库存量
+			repStorageDetailEntity.setAmount(outputAmounts[i]);
+			//购置日期
+			if (StringUtils.isBlank(purchaseDates[i])) {
+				throw new BusinessException("购置日期不能为空");
+			}
+			repStorageDetailEntity.setPurchaseDate(DateUtils.str2Date(purchaseDates[i], dateFormat));
+			//生产日期
+			if (StringUtils.isBlank(manufactureDates[i])) {
+				throw new BusinessException("生产日期不能为空");
+			}
+			repStorageDetailEntity.setManufactureDate(DateUtils.str2Date(manufactureDates[i], dateFormat));
+			//过保日期
+			if (StringUtils.isBlank(manufactureDates[i])) {
+				throw new BusinessException("过保日期不能为空");
+			}
+			repStorageDetailEntity.setOverinsuredDate(DateUtils.str2Date(overinsuredDates[i], dateFormat));
+			//总价
+			repStorageDetailEntity.setTotalPrices(new BigDecimal(prices[i]).multiply(new BigDecimal(outputAmounts[i])));
+			//是否删除
+			repStorageDetailEntity.setIsdeleted((short) 0);
+			//状态(新:0, 回收:1, 报废2)
+			repStorageDetailEntity.setStatus((short) 0);
+
+			//保存物资入库详细信息
+			super.saveOrUpdate(repStorageDetailEntity);
+			System.out.println("物资入库详细保存:" + repStorageDetailEntity);
+			ajaxJson.setSuccess(true);
+			ajaxJson.setMsg("保存成功");
+		}
+
+		if ("save".equals(ctrl)) {
+			//新增
+			//设置uuid
+			repSubstanceStorageEntity.setUuid(generate);
+			//是否删除
+			repSubstanceStorageEntity.setIsdeleted((short) 0);
+			//保存物资入库信息
+			super.save(repSubstanceStorageEntity);
+			System.out.println("物资入库保存:" + repSubstanceStorageEntity);
+		} else {
+			//修改
+			//是否删除
+			repSubstanceStorageEntity.setIsdeleted((short) 0);
+			//修改物资入库信息
+			super.updateEntitie(repSubstanceStorageEntity);
+			System.out.println("物资入库修改:" + repSubstanceStorageEntity);
+		}
+	}
+
+	@Override
+	public String saveAccessoryMsg(RepSubstanceAccessory accessory) {
+		//新增
+		super.save(accessory);
+		//返回附件信息uuid
+		return accessory.getUuid();
+	}
+
+	/**
+	 * 修改
+	 * @param repSubstanceStorageEntity
+	 */
+	@Override
+	public void updInStock(RepSubstanceStorageEntity repSubstanceStorageEntity) {
+
+	}
+
+	/**
+	 * 批量删除
+	 * @param delUuids
+	 */
+	@Override
+	public void delBatch(String[] delUuids) {
+		for(int i = 0; i < delUuids.length; i++){
+			//修改物资入库信息的isDeleted状态为1，表示未删除
+			RepSubstanceStorageEntity storageEntity = materialsInputMiniDao.queryOneStorageEntityById(delUuids[i]);
+			storageEntity.setIsdeleted((short) 1);
+			super.saveOrUpdate(storageEntity);
+
+			//修改物资入库详情的isDeleted状态为1，表示未删除
+			RepStorageDetailEntity detailEntity = materialsInputMiniDao.queryOneDetailEntityById(delUuids[i]);
+			detailEntity.setIsdeleted((short) 1);
+			super.saveOrUpdate(detailEntity);
+		}
+	}
+
+	/**
+	 * 根据物资入库详细id查询物资入库详细和物资信息
+	 */
+	@Override
+	public Map<String, Object> queryMinute(String uuid) {
+		return materialsInputMiniDao.queryMinute(uuid);
+	}
+
+	/**
+	 * 根据仓库id查询物资入库详细和入库单号
+	 */
+	@Override
+	public List<Map<String, Object>> queryDetail(String warehouseId,String subId){
+		return materialsInputMiniDao.getDetail(warehouseId,subId);
+	}
+
+	@Override
+	public RepSubstanceAccessory findFileById(String uuid) {
+		return materialsInputMiniDao.fileFindById(uuid);
+	}
+
+	/**
+	 * 根据调拨通知id查询调拨单物资
+	 * @param informid
+	 * @return
+	 */
+	@Override
+	public List<Map<String, Object>> querySubstance(String informid) {
+		return materialsInputMiniDao.querySubstance(informid);
+	}
+}

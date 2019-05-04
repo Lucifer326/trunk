@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select * from  REP_SUBSTANCE_CATEGORY WHERE UUID = '${categoryUuid}' and (REP_SUBSTANCE_CATEGORY.ISDELETED IS NULL OR REP_SUBSTANCE_CATEGORY.ISDELETED = 0)
+]]></SQL>

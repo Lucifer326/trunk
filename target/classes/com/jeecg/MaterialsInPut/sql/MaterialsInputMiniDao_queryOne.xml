@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select
+    se.*,ry.REPOSITORY_NAME,ra.UUID as FILEID,ra.ACCESSORY_NAME,ra.ACCESSORY_PATH
+from
+    REP_ACCESS_REPOSITORY ry,REP_SUBSTANCE_STORAGE se,REP_SUBSTANCE_ACCESSORY ra
+where
+    se.UUID = '${uuid}' and ry.UUID(+) = se.STORAGE_WAREHOUSE and se.ACCESSORY = ra.UUID(+)
+]]></SQL>

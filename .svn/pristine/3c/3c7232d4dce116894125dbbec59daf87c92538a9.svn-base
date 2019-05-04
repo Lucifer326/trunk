@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+
+ select distinct rar.*
+  from REP_ALLOT_INFORM rar
+  left join T_S_USERCARDINFO tsu
+    on rar.create_by = tsu.user_name
+  left join t_s_user tsus
+    on tsu.user_card_id = tsus.cardid
+  left join T_S_ROLE_USER_BASE tsrub
+    on tsrub.userid = tsus.id
+ where tsrub.orgid in
+       (select t.id
+          from T_S_DEPART t
+         start with t.id = (select distinct tsrub.orgid
+                              from T_S_ROLE_USER_BASE tsrub
+                             where tsrub.userid = '${uuid}')
+        connect by t.parentdepartid = prior t.id)
+   and (ISDELETED is null or ISDELETED = 0)
+    <#if diaobo? exists &&diaobo ?length gt 0>
+        and allot_number like '%' || '${diaobo}' || '%'
+    </#if>
+    <#if project? exists &&project ?length gt 0>
+        and RELOEF_PROJECT like '%' || '${project}' || '%'
+    </#if>
+   <#if date? exists &&date ?length gt 0>
+        and  ALLOT_DATE = TO_DATE('${date}','yyyy-mm-dd')
+
+    </#if>
+
+ order by CREATE_DATE DESC
+
+
+
+]]></SQL>

@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="trunk:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>trunk</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="jeecg-bpm.war">
+      <element id="artifact" artifact-name="trunk:war exploded" />
+    </root>
+  </artifact>
+</component>

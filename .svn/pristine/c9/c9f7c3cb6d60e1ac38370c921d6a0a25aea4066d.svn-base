@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+    SELECT DISTINCT
+        rsc.*
+    FROM
+        REP_SUBSTANCE_CATEGORY rsc
+    LEFT JOIN T_S_USERCARDINFO tsu ON rsc.create_by = tsu.user_name
+    LEFT JOIN t_s_user tsus ON tsu.user_card_id = tsus.cardid
+    LEFT JOIN T_S_ROLE_USER_BASE tsrub ON tsrub.userid = tsus. ID
+    WHERE
+       tsrub.orgid IN (
+        SELECT
+            T . ID
+        FROM
+            T_S_DEPART T START WITH T . ID = (
+                SELECT DISTINCT
+                    tsrub.orgid
+                FROM
+                    T_S_ROLE_USER_BASE tsrub
+                WHERE
+                    tsrub.userid = '${userId}'
+            ) CONNECT BY T .parentdepartid = PRIOR T . ID
+    )
+    AND rsc.ISDELETED NOT IN (1)
+    <#if vo.categoryNumber ?exists && vo.categoryNumber ?length gt 0>
+	    and CATEGORY_NUMBER like '%' || '${vo.categoryNumber}' || '%'
+    </#if>
+    <#if vo.categoryName ?exists && vo.categoryName ?length gt 0>
+	    and CATEGORY_NAME like '%' || '${vo.categoryName}' || '%'
+    </#if>
+    ORDER BY rsc.CREATE_DATE DESC
+]]></SQL>

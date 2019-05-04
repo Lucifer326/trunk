@@ -1,0 +1,321 @@
+package com.jeecg.material_scrap.service.impl;
+
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.MaterialsInPut.entity.RepSubstanceStorageEntity;
+import com.jeecg.MaterialsOutPut.common.MaterialsOutPutLogicException;
+import com.jeecg.MaterialsOutPut.common.MaterialsOutPutStatusCode;
+import com.jeecg.MaterialsOutPut.entity.RepOuthouseDetail;
+import com.jeecg.material_scrap.dao.ScrapDao;
+import com.jeecg.material_scrap.entity.MessageCount;
+import com.jeecg.material_scrap.entity.Scrap;
+import com.jeecg.material_scrap.entity.ScrapLookTwoInformation;
+import com.jeecg.material_scrap.service.ScrapService;
+import com.jeecg.system_management.common.CommonCode;
+import com.jeecg.system_management.dao.MaterialRepSubstanceMessageDao;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.pojo.RepSubstanceCategory;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.ResourceUtil;
+import org.jeecgframework.web.system.pojo.base.TSType;
+import org.jeecgframework.web.system.pojo.base.TSUser;
+import org.jeecgframework.web.system.service.TypeServiceI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+@Service("ScrapService")
+/**物资报废管理 Service的实现类
+ * @author 任小昆
+ */
+public class ScrapServiceImpl extends CommonServiceImpl implements ScrapService {
+
+    @Autowired
+    public ScrapDao scrapDao;
+    @Autowired
+    private TypeServiceI typeServiceImpl;
+    @Autowired
+    private MaterialRepSubstanceMessageDao materialRepSubstanceMessageDao;
+    /**
+     * 显示报废的物品列表
+     * @return
+     */
+    @Override
+    public List<Scrap> showScrapList() {
+        TSUser tsUser = ResourceUtil.getSessionUserName();
+        return scrapDao.showScrapList(tsUser.getId());
+    }
+
+    /**
+     * 插入数据
+     * @param scrap
+     * @param list
+     */
+    @Override
+    public void insertData(Scrap scrap, List<ScrapLookTwoInformation> list) {
+        super.save(scrap);
+        if (list != null) {
+
+            for (int i = 0; i < list.size(); i++) {
+                // 补全对象属性
+                list.get(i).setRepositoryid(scrap.getUuid());
+                super.save(list.get(i));
+            }
+        }
+    }
+
+    /**
+     * 查询单据
+     * @param scrapNumber
+     * @return
+     */
+    @Override
+    public List<Scrap> selectNumber(String scrapNumber,String wareHouse) {
+        TSUser tsUser = ResourceUtil.getSessionUserName();
+        return scrapDao.selectNumber(scrapNumber,wareHouse,tsUser.getId());
+    }
+
+    /**
+     * 查看数据
+     * @param uuid
+     * @return
+     */
+    @Override
+    public Scrap lookData(String uuid) {
+        return scrapDao.lookData(uuid);
+    }
+
+    @Override
+    public void testUpdateData(Scrap scrap,List<ScrapLookTwoInformation> list) {
+        if (scrap!=null){
+            Scrap scraps = scrapDao.lookData(scrap.getUuid());
+            if (scraps!=null){
+                scrap.setCreateBy(scraps.getCreateBy());
+                scrap.setCreateDate(scraps.getCreateDate());
+                scrap.setCreateName(scraps.getCreateName());
+                scrap.setIsDeleted(scraps.getIsDeleted());
+                scrap.setCompanyCode(scraps.getCompanyCode());
+                scrap.setOrganizationCode(scraps.getOrganizationCode());
+                super.saveOrUpdate(scrap);
+                for(int i = 0 ;i<list.size();i++){
+                    ScrapLookTwoInformation storage = list.get(i);
+                    super.saveOrUpdate(storage);
+                }
+            }
+        }
+    }
+    /**
+     * 编辑数据
+     * @param uuid
+     * @return
+     */
+    @Override
+    public Scrap editData(String uuid) {
+
+        return scrapDao.editData(uuid);
+    }
+
+    /**
+     * 物资信息的回显
+     * @param uuid
+     * @return
+     */
+    @Override
+    public List<Map<String,Object>> scrapTwoLook(String uuid) {
+        return scrapDao.scrapTwoLook(uuid);
+    }
+
+    /**
+     * 删除报废的商品
+     * @param uuid
+     */
+    @Override
+    public void clearData(String[] uuid) {
+        String param = "";
+        for (int i = 0; i < uuid.length - 1; i++) {
+            param += "?,";
+        }
+        param += "?";
+        String sql = "update REP_SUBSTANCE_SCRAP set ISDELETED = 1 where UUID in (" + param + ")";
+        System.out.println("sql1:" + sql);
+        super.executeSql(sql, uuid);
+    }
+
+    /**
+     * 获取对象
+     *
+     * @param uuid
+     */
+    @Override
+    public Scrap readyData(String uuid) {
+        Scrap scrap = findUniqueByProperty(Scrap.class, "uuid", uuid);
+        return scrap;
+    }
+
+    @Override
+    /**
+     * @author wangguoqiang
+     *
+     */
+    public List<Map<String, Object>> repositoryByStorenum(String storenum) {
+        return scrapDao.repositoryByStorenum(storenum);
+    }
+
+    @Override
+    /**
+     * @author wangguoqiang
+     */
+    public List<Map<String, Object>> findRepSubstanceMessageBystorenum(String storenum) {
+        return scrapDao.findRepSubstanceMessageBystorenum(storenum);
+    }
+
+    @Override
+    public List<Map<String,Object>> findScarpDetail(String reviewId) {
+        return scrapDao.findScarpDetail(reviewId);
+    }
+
+    @Override
+    public Scrap findScarpById(String reviewId) {
+        return scrapDao.findScarpById(reviewId);
+    }
+
+    @Override
+    public void updatecount(List<Map<String,Object>> information) {
+        String sql = "UPDATE REP_STORAGE_DETAIL SET AMOUNT=AMOUNT-? WHERE NUMBERID =? AND MESSAGEID=?";
+        if(information.size()>0){
+            for (int i = 0 ;i<information.size();i++){
+                String storageid = (String)information.get(i).get("STORAGEID");
+                Map<String,Object> map = scrapDao.findStorageid(storageid);
+                String  subname = (String)information.get(i).get("SUBNAME");
+                super.executeSql(sql,information.get(i).get("SCRAPTOTAL"),map.get("UUID"),information.get(i).get("MESSAGEID"));
+            }
+        }
+    }
+
+    @Override
+    public void updateScarp(Scrap scrap) {
+        super.saveOrUpdate(scrap);
+    }
+
+    @Override
+    public Map<String, Object> findStoreNum(String uuid) {
+        return scrapDao.findStoreNum(uuid);
+    }
+
+ /*  @Override
+    public Scrap review(String uuid) {
+        return scrapDao.reviewData(uuid);
+    }*/
+
+    /**
+     * 审批
+     */
+   /* @Override
+    public void approval(String uuid) {
+        Scrap scrap=  findUniqueByProperty(Scrap.class,"uuid",uuid);
+        scrap.setReviewStatus("0");//0 通过 1 驳回
+    }*/
+
+    /**
+     *
+     * @param outhoseId 出库主键
+     * @param approvalStatus 审批状态
+     * @param approver 审批人
+     * @param approvalOpinion 审批意见
+     */
+  /*  @Override
+    public void approval(String outhoseId, String approvalStatus, String approver, String approvalOpinion) {
+
+        List<TSType> items = typeServiceImpl.getItems(CommonCode.SP_STATUS);
+
+        //判断审批状态
+        if (items.get(0).getTypecode().equals(approvalStatus)){//审批通过
+            //根据物资回收单的主键查询仓储机构的信息  outhoseId
+            Scrap scrap=  findUniqueByProperty(Scrap.class,"uuid",outhoseId);//回收的对象
+            //scrap.getUuid();回收表中的uuid关联存放物资的repository中的字段
+           List<ScrapLookTwoInformation> list= findByProperty(ScrapLookTwoInformation.class,"repositoryid",scrap.getUuid());//物资回收的详情list
+            for (ScrapLookTwoInformation wuzi:list) {
+
+            }
+            //获得仓储机构的对象
+            RepAccessRepository repAccessRepository= findUniqueByProperty(RepAccessRepository.class,"repositoryName",scrap.getWareHouse());
+            //根据仓储机构对象的name获得入库表的的所有的入库对象    List<RepSubstanceStorageEntity> inReplist=
+            List<RepSubstanceStorageEntity> inReplist= findByProperty(RepSubstanceStorageEntity.class, "storageWarehouse", repAccessRepository.getUuid());//物资入库的list
+            //新建一个存放入库仓库中包含的所有的 MessageCount
+            List<MessageCount> messageCountList=new ArrayList<MessageCount>();
+
+            //获得所有仓储机构name是回收的仓储name的所有的物资入库详情的对象
+            for (RepSubstanceStorageEntity entity:inReplist) {
+                //根据相应的物资入库uuid获得物资入库详情list
+                List<RepStorageDetailEntity> indetaillist= findByProperty(RepStorageDetailEntity.class,"numberid",entity.getUuid());//物资入库详情的list
+                for (RepStorageDetailEntity detailEntity:indetaillist) {
+                    //遍历每个物资入库详情
+                    if(messageCountList==null||messageCountList.size()<=0){
+                        MessageCount messageCount = new MessageCount();
+                        messageCount.setMessuuid(detailEntity.getMessageid());
+                        messageCount.setCount(Long.parseLong(detailEntity.getAmount()));
+                        messageCountList.add(messageCount);
+                    }else{
+                        for (MessageCount messageCount:messageCountList) {
+                            if(messageCount.getMessuuid()==detailEntity.getMessageid()){
+                                messageCount.setCount(messageCount.getCount()+Long.parseLong(detailEntity.getAmount()));
+                            }else{
+                                MessageCount newmessageCount = new MessageCount();
+                                newmessageCount.setMessuuid(detailEntity.getMessageid());
+                                newmessageCount.setCount(Long.parseLong(detailEntity.getAmount()));
+                                messageCountList.add(newmessageCount);
+                            }
+                        }
+                    }
+                }
+            }
+            //messageCountList    入库中的所有物资信息
+
+
+            //修改调拨单的使用状态和出库状态 0表示已使用 1表示未使用
+
+
+        }else if (items.get(1).getTypecode().equals(approvalStatus)){//审批驳回
+
+        }else{//审批状态异常
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.APPROVAL_STATUS_ERROR.getMessage());
+        }
+        //修改出库单的审批状态
+        if (line <= 0 ){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.UPD_FAIL.getMessage());
+        }
+
+        //__________________________________________________________________________________________
+        //判断审批状态
+        if (items.get(0).getTypecode().equals(approvalStatus)){//审批通过
+            //根据物资报废单的主键查询物资报废的详细信息
+            String hql = "FROM Scrap WHERE uuid=?";
+            List<Scrap> scraps = super.findHql(hql, outhoseId);
+            //根据出库详细中的入库详细主键修改入库单的库存量
+            String sql = "UPDATE Scrap SET AMOUNT=AMOUNT-? WHERE UUID =?";
+            for (RepOuthouseDetail detail:details) {
+                super.executeSql(sql, detail.getOuthouseAmount(), detail.getStorageDetail());
+            }
+            //修改调拨单的使用状态和出库状态 0表示已使用 1表示未使用
+            String allotInformSql = "UPDATE REP_ALLOT_INFORM SET ISUSE = ?";
+            Integer allotInformLine = super.executeSql(allotInformSql, 0);
+            if (allotInformLine <= 0){
+                throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.UPD_FAIL.getMessage());
+            }
+
+        }else if (items.get(1).getTypecode().equals(approvalStatus)){//审批驳回
+
+        }else{//审批状态异常
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.APPROVAL_STATUS_ERROR.getMessage());
+        }
+        //修改出库单的审批状态
+        String sql = "UPDATE REP_SUBSTANCE_OUTHOUSE SET APPROVAL_STATUS = ?,APPROVER = ?,APPROVAL_OPINION = ? WHERE UUID = ?";
+        Integer line = super.executeSql(sql, approvalStatus, approver, approvalOpinion,outhoseId);
+        if (line <= 0 ){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.UPD_FAIL.getMessage());
+        }
+    }*/
+}

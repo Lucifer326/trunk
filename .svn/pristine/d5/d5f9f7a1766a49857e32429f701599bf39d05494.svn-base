@@ -1,0 +1,39 @@
+package com.jeecg.MaterialScrap.service;
+
+import com.jeecg.MaterialScrap.entity.Scrap;
+import org.jeecgframework.core.common.service.CommonService;
+
+import java.util.List;
+
+public interface ScrapService extends CommonService {
+    /*
+   显示报废的物品列表
+    */
+    List<Scrap> showScrapList();
+
+    /*
+    删除报废的商品
+     */
+    void clearData(String[] uuid);
+
+    /*
+    插入数据
+     */
+    void InsertData(Scrap scrap);
+
+
+    /*
+    查询单据号
+    */
+    List<Scrap> selectNumber(String scrapNumber);
+
+    Scrap LookData(String uuid);
+
+
+
+    void testUpdateData(Scrap scrap);
+
+
+    Scrap editData(String uuid);
+
+}

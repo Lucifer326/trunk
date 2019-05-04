@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select * from t_s_type_unless_region where type_Id = :typegroupeId and dictionary_id = :typeId
+]]></SQL>

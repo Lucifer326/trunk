@@ -1,0 +1,117 @@
+package com.jeecg.MaterialsInPut.dao;
+
+import com.jeecg.MaterialsInPut.common.MaterialsInPutVo;
+import com.jeecg.MaterialsInPut.common.RepSubstanceMessageVo;
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.MaterialsInPut.entity.RepSubstanceAccessory;
+import com.jeecg.MaterialsInPut.entity.RepSubstanceStorageEntity;
+import com.jeecg.allocation_notice.entity.RepAllotInform;
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.jeecgframework.minidao.annotation.MiniDao;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 物资入库
+ */
+@MiniDao
+public interface MaterialsInputMiniDao {
+    /**
+     * 查询全部
+     *
+     * @return
+     */
+    @Arguments({"vo", "userid"})
+    List<Map<String, Object>> queryAll(MaterialsInPutVo vo, String userid);
+
+    /**
+     * 根据物资入库id查询物资信息和物资入库详细
+     *
+     * @param numberid
+     * @return
+     */
+    @Arguments({"numberid"})
+    List<Map<String, Object>> inStockLook(String numberid);
+
+    /**
+     * 根据id查询物资入库
+     *
+     * @return
+     */
+    @Arguments({"uuid"})
+    Map<String, Object> queryOne(String uuid);
+
+    /**
+     * 根据id查询物资入库(返回一个物资入库对象)
+     *
+     * @return
+     */
+    @Arguments({"uuid"})
+    RepSubstanceStorageEntity queryOneStorageEntityById(String uuid);
+
+    /**
+     * 根据id查询物资入库详情
+     *
+     * @param numberid
+     * @return
+     */
+    @Arguments({"numberid"})
+    List<RepStorageDetailEntity> queryDetailEntityById(String numberid);
+    
+    /**
+     * 根据id查询物资入库详情
+     *
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    RepStorageDetailEntity queryOneDetailEntityById(String uuid);
+
+    /**
+     * 根据物资入库详细id查询物资入库详细和物资信息
+     */
+    @Arguments({"uuid"})
+    Map<String, Object> queryMinute(String uuid);
+
+    @Arguments({"warehouseId", "subId"})
+    List<Map<String, Object>> getDetail(String warehouseId, String subId);
+
+    /**
+     * 根据id查找附件信息
+     * @param uuid
+     * @return
+     */
+    @Arguments("uuid")
+    RepSubstanceAccessory fileFindById(String uuid);
+
+    /**
+     * 根据调拨通知id查询调拨单物资
+     * @param informid
+     * @return
+     */
+    @Arguments("informid")
+    List<Map<String, Object>> querySubstance(String informid);
+
+    /**
+     * 选择调拨单
+     * @param input
+     * @param output
+     * @return
+     */
+    @Arguments({"input", "output"})
+    List<Map<String, Object>> seachAllocation(String input, String output);
+
+    /**
+     * 根据调拨单据号查询调拨单信息
+     */
+    @Arguments("allotNumber")
+    RepAllotInform queryAllocation(String allotNumber);
+
+    /**
+     * 根据条件查询物资信息
+     * @return List
+     */
+    @Arguments({"vo","uuids","userId"})
+    List<Map<String, Object>> searchRepSubstanceMessage(RepSubstanceMessageVo vo, String uuids,String userId);
+}

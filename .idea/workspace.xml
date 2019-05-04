@@ -1,0 +1,1108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="GROUP_BY_SEVERITY" value="true" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="233cd0c0-d59b-4337-a731-8039641246c1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/MaterialsInPut/common/MaterialsInPutVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/MaterialsInPut/common/RepSubstanceMessageVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/MaterialsInPut/sql/MaterialsInputMiniDao_queryOneDetailEntityById.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/MaterialsInPut/sql/MaterialsInputMiniDao_searchRepSubstanceMessage.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/MaterialsOutPut/sql/RepOuthouseDetailMiniDao_getByDetilId.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/controller/ScrapController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/dao/ScrapDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/entity/Scrap.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/entity/ScrapLookTwoInformation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/service/ScrapService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/service/impl/ScrapServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_editData.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_findRepSubstanceMessageBystorenum.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_findScarpById.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_findScarpDetail.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_findStorageid.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_findStoreNum.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_lookData.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_newUpdate.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_repositoryByStorenum.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_reviewData.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_scrapTwoLook.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_selectNumber.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/material_scrap/sql/ScrapDao_showScrapList.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/rep_substance_recycle/sql/RecycleDao_getAllOutHouse.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/rep_substance_recycle/sql/RecycleDao_getDetilById.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/rep_substance_recycle/sql/RecycleDao_searchCategoryById.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/jeecg/rep_substance_recycle/sql/RecycleDao_searchNumberByUuid.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/img/loading.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/img/null.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/img/null.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/extends/datagrid-detailview.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/extends/datagrid-scrollview.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/blue.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/code.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/firstg.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/footerbg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/function_bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_back.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_close.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_flbiao.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_flbiao.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_home.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_local.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_local.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_lower.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_paletitle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_pwd.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_register.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_seeflow.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/icon_subbiao.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/img01.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/img02.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/img03.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/img04.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/img05.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/img06.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/img07.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/img08.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/jian.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/lastg.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_bt01.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_bt02.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_ft_bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_ft_bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_line.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_name.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_title.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_top.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_top_bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/login_wrap.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_bodybg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_fltitlebg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_navbg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_navdefault.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_navdefaultfl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_navdefaultfr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_navdefaultmid.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_navhover.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_navhoverfl.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_navhoverfr.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_navhovermid.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/m_toprbg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/map.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/master_logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/nextg.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/ok.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/pagination_icons.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/passWord.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/person.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/plus.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/prevg.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/search_bt.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/shqm_left_pic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/shqm_right_pic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/sub_layout_arrows.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/sub_lefttitlebg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/tk_del.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/tk_search.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/top_bg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/top_bg1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/treeleftnode.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/type_img01.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/type_img02.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/type_img03.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/type_img04.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/type_img05.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/type_img06.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/type_tab_bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/type_tab_hoverli.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/type_tab_li.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/user.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/userName.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/userYzm.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/userbg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/firstg.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/firstg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/firstg1.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/firstn.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/firstn1.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/lastg.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/lastg2.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/lastn.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/lastn.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/lastn2.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/nextg.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/nextn.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/nextn.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/page_1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/page_2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/page_4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/prevg.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/prevg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/easyui/themes/salvation/societySalvation/images/webdiyer/prevn.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/ichart/css/gallery.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/ichart/images/gallery_bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/ichart/images/gallery_chart.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/ichart/images/gallery_t_bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/ichart/js/ichart-1.0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/img/grab.cur" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/img/hand.cur" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/img/iviewer.rotate_left.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/img/iviewer.rotate_right.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/img/iviewer.zoom_fit.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/img/iviewer.zoom_in.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/img/iviewer.zoom_out.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/img/iviewer.zoom_zero.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/jquery.iviewer.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/jquery.iviewer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/jquery.iviewer.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/jquery.mousewheel.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/iviewer/jqueryui.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jmobile/css/jquery-ui.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jmobile/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jmobile/js/jquery-ui.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-1.11.3.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-1.8.0.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-1.8.3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-1.8.3.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-2.1.1.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-autocomplete/jquery.autocomplete.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-autocomplete/jquery.autocomplete.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-autocomplete/jquery.autocomplete.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-autocomplete/jquery.autocomplete.pack.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-autocomplete/lib/jquery.ajaxQueue.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-autocomplete/lib/jquery.bgiframe.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-autocomplete/lib/thickbox-compressed.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-autocomplete/lib/thickbox.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-ctx.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-migrate-1.4.1.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-migrate.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery-migrate.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery.contextmenu.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery.contextmenu.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery.cookie.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jquery/jquery.jqprint.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/css/32px.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/css/animate.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/css/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/css/font-awesome.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/css/images/32px.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/css/images/throbber.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/css/style.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/css/throbber.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/js/jstree.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/jstree/js/jstree.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/app/images/11.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/app/images/12.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/app/images/13.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/app/js/iscroll.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/css/planeui.basic.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/css/planeui.basic.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/css/planeui.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/css/planeui.logo.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/css/planeui.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/js/planeui.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/js/planeui.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/js/planeui.patch.ie8.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/js/planeui.patch.ie8.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/js/planeui.patch.ie9.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/plug-in/planeui/dist/js/planeui.patch.ie9.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/mailtmp/12_只有附件_SVN地址.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/mailtmp/12_只有附件_软件一班李东升.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MaterialRecycling/SelectOutPutList.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MaterialScrap/SelectStorageScarp.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MaterialsInPut/MaterialInfoManagementSelect.jsp" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="isMigrated" value="true" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>login</find>
+      <find>goaddorupdate</find>
+      <find>mailController</find>
+      <find>upload</find>
+      <find>multipartResolver</find>
+      <find>unUpload</find>
+      <find>rowspacingtop</find>
+      <find>file</find>
+      <find>com</find>
+      <find>mm_text_attachment</find>
+      <find>content</find>
+      <find>System.out.println</find>
+      <find>List&lt;Map&lt;String, Object&gt;&gt;</find>
+      <find>map.put</find>
+      <find>isatt</find>
+      <find>实例化</find>
+      <find>回复</find>
+      <find>放弃</find>
+      <find>System.out</find>
+      <find>open</find>
+      <find>index</find>
+      <find>layer</find>
+      <find>get</find>
+      <find>ajax</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>List&lt;Map&lt;String, List&lt;Object&gt;&gt;&gt;</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/main/resources/spring-mvc.xml" />
+        <option value="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/send.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/jeecg/mailSendAndReceiving/service/SendMailService.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/mail_send.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/ueditor/jsp/config.json" />
+        <option value="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/ueditor/jsp/controller.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/jeecg/mailSendAndReceiving/service/MailParsing.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/mail_detail.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/mailbox.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/jeecg/mailSendAndReceiving/controller/mailController.java" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="F:/apache-maven-3.3.9" />
+        <option name="userSettingsFile" value="F:\apache-maven-3.3.9\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="trunk" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="trunk" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="trunk" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="trunk" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
+          <item name="tomcat7" type="36feed69:MavenProjectsStructure$PluginNode" />
+        </path>
+      </expand>
+      <select />
+    </treeState>
+  </component>
+  <component name="PhpServers">
+    <servers />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="784" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="trunk" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SVN" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="MANAGE_IGNORE_FILES_PROPERTY" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555032072391" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Javawar\IDEA\SVN\src\main\webapp\img" />
+      <recent name="D:\Javawar\IDEA\SVN\src\main\webapp\webpage\jzwz\MailSendAndReceiving" />
+      <recent name="D:\Javawar\IDEA\SVN\src\main\java\com\jeecg\mailSendAndReceiving\service" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="System.out.println(&quot;发送失败&quot;);" />
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="tomcat7:run" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="tomcat7:run" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration" cleanupOnStartRun="true">
+    <configuration>C:\Users\Administrator\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="233cd0c0-d59b-4337-a731-8039641246c1" name="Default Changelist" comment="" />
+      <created>1554708411461</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1554708411461</updated>
+      <workItem from="1554708413854" duration="612000" />
+      <workItem from="1554710866487" duration="912000" />
+      <workItem from="1554722027114" duration="752000" />
+      <workItem from="1554723142887" duration="6497000" />
+      <workItem from="1554730201117" duration="30000" />
+      <workItem from="1554730956238" duration="8686000" />
+      <workItem from="1554780257055" duration="26765000" />
+      <workItem from="1554862013985" duration="33911000" />
+      <workItem from="1554953507306" duration="6798000" />
+      <workItem from="1554986274800" duration="208000" />
+      <workItem from="1555031827084" duration="272000" />
+      <workItem from="1555032193246" duration="1276000" />
+      <workItem from="1555377060396" duration="276000" />
+      <workItem from="1555377857631" duration="173000" />
+      <workItem from="1555463834050" duration="2215000" />
+      <workItem from="1555575966728" duration="8234000" />
+      <workItem from="1555637340753" duration="617000" />
+      <workItem from="1555650541567" duration="1983000" />
+      <workItem from="1556192117048" duration="90000" />
+      <workItem from="1556240380654" duration="112000" />
+      <workItem from="1556959264790" duration="364000" />
+    </task>
+    <task id="LOCAL-00001" summary="多图上传修改中">
+      <created>1554729492393</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1554729492393</updated>
+    </task>
+    <task id="LOCAL-00002" summary="邮件多图发送完成">
+      <created>1554774148194</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1554774148194</updated>
+    </task>
+    <task id="LOCAL-00003" summary="邮件发送页面完成">
+      <created>1554815688535</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1554815688535</updated>
+    </task>
+    <task id="LOCAL-00004" summary="邮件发送功能完成">
+      <created>1554815772728</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1554815772728</updated>
+    </task>
+    <task id="LOCAL-00005" summary="整理文件">
+      <created>1554815954979</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1554815954979</updated>
+    </task>
+    <task id="LOCAL-00006" summary="增加收信方法">
+      <created>1554863914754</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1554863914754</updated>
+    </task>
+    <task id="LOCAL-00007" summary="收件箱页面">
+      <created>1554864210346</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1554864210346</updated>
+    </task>
+    <task id="LOCAL-00008" summary="...">
+      <created>1554879748267</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1554879748268</updated>
+    </task>
+    <task id="LOCAL-00009" summary="...">
+      <created>1554879772147</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1554879772147</updated>
+    </task>
+    <task id="LOCAL-00010" summary="邮件发送功能完成">
+      <created>1554879892570</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1554879892571</updated>
+    </task>
+    <task id="LOCAL-00011" summary="求助">
+      <created>1554889492413</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1554889492413</updated>
+    </task>
+    <task id="LOCAL-00012" summary="接收功能邮箱页面展示">
+      <created>1554902675556</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1554902675556</updated>
+    </task>
+    <task id="LOCAL-00013" summary="ueditor配置更新">
+      <created>1554904023182</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1554904023182</updated>
+    </task>
+    <task id="LOCAL-00014" summary="页面更改">
+      <created>1554904211587</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1554904211587</updated>
+    </task>
+    <task id="LOCAL-00015" summary="邮件页面下班提交">
+      <created>1554905912152</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1554905912152</updated>
+    </task>
+    <task id="LOCAL-00016" summary="邮件代码下班提交">
+      <created>1554905935132</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1554905935132</updated>
+    </task>
+    <task id="LOCAL-00017" summary="数据">
+      <created>1554941790717</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1554941790717</updated>
+    </task>
+    <task id="LOCAL-00018" summary="邮件发送功能完成">
+      <created>1554941822691</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1554941822691</updated>
+    </task>
+    <task id="LOCAL-00019" summary="邮件发送功能完成">
+      <created>1554941841905</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1554941841905</updated>
+    </task>
+    <task id="LOCAL-00020" summary="邮件发送功能完成">
+      <created>1554942092947</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1554942092947</updated>
+    </task>
+    <task id="LOCAL-00021" summary="邮件发送功能完成">
+      <created>1554946761539</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1554946761539</updated>
+    </task>
+    <task id="LOCAL-00022" summary="邮箱完成">
+      <created>1554953622532</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1554953622532</updated>
+    </task>
+    <task id="LOCAL-00023" summary="附件路径重复问题解决">
+      <created>1554964715745</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1554964715745</updated>
+    </task>
+    <task id="LOCAL-00024">
+      <created>1554965663407</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1554965663407</updated>
+    </task>
+    <task id="LOCAL-00025" summary="邮件详情页面更改为弹出层">
+      <created>1555578776365</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1555578776365</updated>
+    </task>
+    <task id="LOCAL-00026" summary="提交页面素材">
+      <created>1555585734437</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1555585734437</updated>
+    </task>
+    <task id="LOCAL-00027" summary="修改页面">
+      <created>1555585777778</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1555585777778</updated>
+    </task>
+    <task id="LOCAL-00028" summary="修改页面BUG">
+      <created>1555587023563</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1555587023563</updated>
+    </task>
+    <task id="LOCAL-00029" summary="改变邮件作用域">
+      <created>1555637869693</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1555637869693</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="100783000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49539876" visible="true" weight="0.3472012" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="UI Designer" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info id="Web" order="7" sideWeight="0.50460124" side_tool="true" weight="0.25718608" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49848714" weight="0.9853229" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.398773" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3297546" />
+      <window_info anchor="bottom" id="Spring" order="7" weight="0.3297546" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3297546" />
+      <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5015129" side_tool="true" weight="0.9539877" />
+      <window_info anchor="bottom" id="Java Enterprise" order="11" />
+      <window_info anchor="bottom" id="Database Changes" order="12" />
+      <window_info anchor="bottom" id="Version Control" order="13" weight="0.3296" />
+      <window_info anchor="bottom" id="Inspection Results" order="14" weight="0.3297546" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.24962178" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24962178" />
+      <window_info anchor="right" id="Maven" order="3" weight="0.32980332" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="5" />
+      <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Theme Preview" order="8" />
+      <window_info anchor="right" id="Bean Validation" order="9" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49539876" visible="true" weight="0.25718608" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="UI Designer" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info id="Web" order="7" sideWeight="0.50460124" side_tool="true" weight="0.25718608" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.9539877" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3297546" />
+      <window_info anchor="bottom" id="Spring" order="7" weight="0.3297546" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Java Enterprise" order="11" />
+      <window_info anchor="bottom" id="Database Changes" order="12" />
+      <window_info anchor="bottom" id="Version Control" order="13" weight="0.3297546" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.24962178" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="3" weight="0.32980332" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="5" />
+      <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Theme Preview" order="8" />
+      <window_info anchor="right" id="Bean Validation" order="9" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="多图上传修改中" />
+    <MESSAGE value="邮件多图发送完成" />
+    <MESSAGE value="邮件发送页面完成" />
+    <MESSAGE value="整理文件" />
+    <MESSAGE value="增加收信方法" />
+    <MESSAGE value="收件箱页面" />
+    <MESSAGE value="..." />
+    <MESSAGE value="求助" />
+    <MESSAGE value="接收功能邮箱页面展示" />
+    <MESSAGE value="ueditor配置更新" />
+    <MESSAGE value="页面更改" />
+    <MESSAGE value="邮件页面下班提交" />
+    <MESSAGE value="邮件代码下班提交" />
+    <MESSAGE value="数据" />
+    <MESSAGE value="邮件发送功能完成" />
+    <MESSAGE value="邮箱完成" />
+    <MESSAGE value="附件路径重复问题解决" />
+    <MESSAGE value="邮件详情页面更改为弹出层" />
+    <MESSAGE value="提交页面素材" />
+    <MESSAGE value="修改页面" />
+    <MESSAGE value="修改页面BUG" />
+    <MESSAGE value="改变邮件作用域" />
+    <option name="LAST_COMMIT_MESSAGE" value="改变邮件作用域" />
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-26901" />
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/mail/mail/1.4.1/mail-1.4.1-sources.jar!/javax/mail/internet/InternetHeaders.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="434" column="16" selection-start-line="434" selection-start-column="16" selection-end-line="434" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/mail/mail/1.4.1/mail-1.4.1-sources.jar!/javax/mail/internet/MimeBodyPart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="919" column="18" lean-forward="true" selection-start-line="919" selection-start-column="18" selection-end-line="919" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/login/login.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-6825" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/main/main.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1500" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/main/left.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="7" column="23" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jeecgframework/web/system/controller/core/LoginController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="717">
+          <caret line="362" column="22" lean-forward="true" selection-start-line="362" selection-start-column="22" selection-end-line="362" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/system/mail/jformInnerMail-update.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1875" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/system/mail/jformInnerMailSendList.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="32" column="19" lean-forward="true" selection-start-line="32" selection-start-column="19" selection-end-line="32" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jeecgframework/web/system/controller/core/JformInnerMailController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="166" column="41" lean-forward="true" selection-start-line="166" selection-start-column="41" selection-end-line="166" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/js/bootstrap.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/upload/mail.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/upload/MacGimp.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/upload/logo.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/upload/Customize.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/jeecgframework/core/util/UUIDGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="19" column="25" selection-start-line="19" selection-start-column="25" selection-end-line="19" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/ueditor/upload/image/20190404/1554366438592083668.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/plug-in/Formdesign/js/ueditor/ueditor.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="42" column="10" selection-start-line="35" selection-start-column="10" selection-end-line="42" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/system/mail/jformInnerMail-detail.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="11" column="89" selection-start-line="11" selection-start-column="89" selection-end-line="11" selection-end-column="89" />
+          <folding>
+            <element signature="n#style#0;n#tr#0;n#table#0;n#td#1;n#tr#2;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/ueditor/ueditor.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5325" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/send.jsp" />
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/mail_detail.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/mail/mail/1.4.1/mail-1.4.1-sources.jar!/javax/mail/Folder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10537">
+          <caret line="935" column="34" selection-start-line="935" selection-start-column="34" selection-end-line="935" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/mail/mail/1.4.1/mail-1.4.1-sources.jar!/javax/mail/Part.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="234" column="18" selection-start-line="234" selection-start-column="18" selection-end-line="234" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/jdk1.8.0_191/src.zip!/java/util/List.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="543" column="6" selection-start-line="543" selection-start-column="6" selection-end-line="543" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jeecg/mailSendAndReceiving/service/SendMailService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="61" selection-start-line="61" selection-end-line="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/mail_send.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="76" column="126" selection-start-line="76" selection-start-column="126" selection-end-line="76" selection-end-column="126" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/ueditor/jsp/controller.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="10" column="33" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/ueditor/jsp/config.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="61" column="24" selection-start-line="61" selection-start-column="24" selection-end-line="61" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jeecg/mailSendAndReceiving/service/MailParsing.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="625">
+          <caret line="54" column="44" selection-start-line="54" selection-start-column="44" selection-end-line="54" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/dbconfig.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/spring-mvc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-393">
+          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jeecg/MaterialProducer/controller/MaterialProducerController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-168">
+          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jeecg/MaterialScrap/controller/ScrapController.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MaterialsOutPut/MaterialsOutPutList.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-10824">
+          <caret line="57" column="190" selection-start-line="57" selection-start-column="185" selection-end-line="57" selection-end-column="190" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MaterialManagement/MaterialCategoryManagement/MaterialCategoryList.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1240">
+          <caret line="180" column="24" selection-start-line="180" selection-start-column="21" selection-end-line="180" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MaterialManagement/MaterialInfoManagement/MaterialInfoManagementList.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="177" column="20" selection-start-line="177" selection-start-column="20" selection-end-line="206" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/img/loading.gif">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/jeecg/mailSendAndReceiving/controller/mailController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="86" column="19" selection-start-line="86" selection-start-column="19" selection-end-line="86" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/mail_detail.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="29" column="28" selection-start-line="29" selection-start-column="28" selection-end-line="29" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/webpage/jzwz/MailSendAndReceiving/mailbox.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="549">
+          <caret line="119" selection-start-line="119" selection-end-line="119" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <last-edited>trunk:war</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Spring</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>trunk</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: ant:ant:1.6.5</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

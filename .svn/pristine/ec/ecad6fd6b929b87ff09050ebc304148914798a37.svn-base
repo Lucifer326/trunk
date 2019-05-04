@@ -1,0 +1,133 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+		 pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>收件箱</title>
+	<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/font-awesome.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/animate.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/css/plugins/iCheck/custom.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+	<div class="row">
+		<div class="col-sm-12 animated fadeInRight">
+			<div class="mail-box-header">
+
+				<h2>
+					收件箱 (${mailTotal })
+				</h2>
+				<div class="mail-tools tooltip-demo m-t-md">
+					<div class="btn-group pull-right">
+						<button class="btn btn-white btn-sm"><i class="fa fa-arrow-left"></i>
+						</button>
+						<button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i>
+						</button>
+
+					</div>
+					<button class="btn btn-white btn-sm" onclick="receiving()" id="refresh" data-toggle="tooltip" data-placement="left" title="刷新邮件列表"><i class="fa fa-refresh"></i> 刷新</button>
+
+				</div>
+			</div>
+			<div class="mail-box">
+
+				<table class="table table-hover table-mail">
+					<tbody>
+
+					<c:forEach var="map" items="${mailList }" varStatus="i">
+
+						<c:if test="${map.isAtt != null }">
+							<tr class="unread">
+								<td class="check-mail">
+									<input type="checkbox" class="i-checks">
+								</td>
+								<td class="mail-ontact">
+									<%--href="${pageContext.request.contextPath}/mailController.do?deatil&index=${i.index}"--%>
+									<a onclick="deatil(${i.index})">${map.sender }</a>
+								</td>
+								<td class="mail-subject">
+									<a onclick="deatil(${i.index})">${map.title }</a>
+								</td>
+
+								<c:if test="${map.isAtt == true }">
+									<td class=""><i class="fa fa-paperclip"></i></td>
+								</c:if>
+
+								<c:if test="${map.isAtt == false }">
+									<td class=""></td>
+								</c:if>
+
+								<td class="text-right mail-date">${map.date }</td>
+							</tr>
+						</c:if>
+
+
+					</c:forEach>
+
+					<!-- <tr class="unread">
+                        <td class="check-mail">
+                            <input type="checkbox" class="i-checks">
+                        </td>
+                        <td class="mail-ontact">
+                            <a href="mail_detail.html">支付宝</a>
+                        </td>
+                        <td class="mail-subject">
+                            <a href="mail_detail.html">支付宝提醒</a>
+                        </td>
+                        <td class=""><i class="fa fa-paperclip"></i>
+                        </td>
+                        <td class="text-right mail-date">昨天 10:20</td>
+                    </tr> -->
+
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 全局js -->
+<script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<!-- 自定义js -->
+<script src="${pageContext.request.contextPath}/js/content.js"></script>
+<!-- layer -->
+<script src="${pageContext.request.contextPath}/js/plugins/layer/laydate/laydate.js"></script>
+<script src="${pageContext.request.contextPath}/js/plugins/layer/layer.min.js"></script>
+<!-- iCheck -->
+<script src="${pageContext.request.contextPath}/js/plugins/iCheck/icheck.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$('.i-checks').iCheck({
+			checkboxClass: 'icheckbox_square-green',
+			radioClass: 'iradio_square-green',
+		});
+	});
+
+	function deatil(index) {
+		layer.open({
+			type: 2,
+			title: '邮件详情',
+			zIndex: 1000,
+			maxmin: true,
+			shadeClose: true, //点击遮罩关闭层
+			area: ['900px', '700px'],
+			content: '${pageContext.request.contextPath}/mailController.do?deatil&index='+index,
+		});
+	}
+
+	function receiving(){
+		window.location.href = "${pageContext.request.contextPath}/mailController.do?receive";
+	}
+
+</script>
+</body>
+
+</html>

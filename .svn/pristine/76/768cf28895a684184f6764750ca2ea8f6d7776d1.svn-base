@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT * FROM REP_SUBSTANCE_RECYCLE WHERE ISDELETED NOT IN(1)
+    <#if vo.recycleNumber ?exists && vo.recycleNumber ?length gt 0>
+	    and RECYCLE_NUMBER like '%' || '${vo.recycleNumber}' || '%'
+    </#if>
+    <#if vo.storageWarehouse ?exists && vo.storageWarehouse ?length gt 0>
+	    and STORAGE_WAREHOUSE like '%' || '${vo.storageWarehouse}' || '%'
+    </#if>
+    <#if inDate ?exists && inDate ?length gt 0>
+	    and STORAGE_DATE >= TO_DATE('${inDate}', 'yyyy-MM-dd')
+    </#if>
+    <#if outDate ?exists && outDate ?length gt 0>
+	    and STORAGE_DATE <= TO_DATE('${outDate}', 'yyyy-MM-dd')
+    </#if>
+    ORDER BY CREATE_DATE DESC
+]]></SQL>

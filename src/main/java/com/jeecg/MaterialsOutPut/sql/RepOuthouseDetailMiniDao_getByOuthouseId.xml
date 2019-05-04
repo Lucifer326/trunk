@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT detil.UUID,
+    detil.OUTHOUSEID,
+    detil.MESSAGEID,
+    detil.OUTHOUSE_AMOUNT,
+    detil.OUTHOUSE_WAREHOUSE,
+    detil.storagedetail,
+    detil.REMARK,
+    sub.SUB_NUMBER,
+    sub.SUB_NAME,
+    sub.SUB_CATEGORY,
+    sub.SPECIFICATION_TYPE,
+    sub.ISRECYCLE,
+    sub.SUPPLIER,
+    sub.PRICE,
+    sub.UNIT,
+    cat.CATEGORY_NAME,
+    rid.ALLOT_AMOUNT,
+    rss.storage_number,
+    rsd.amount
+FROM REP_OUTHOUSE_DETAIL detil
+LEFT JOIN REP_SUBSTANCE_MESSAGE sub
+    ON sub.UUID = detil.MESSAGEID AND (sub.ISDELETED IS NULL OR sub.ISDELETED = 0)
+LEFT JOIN REP_SUBSTANCE_CATEGORY cat
+    ON cat.UUID = sub.SUB_CATEGORY AND (cat.ISDELETED IS NULL OR cat.ISDELETED = 0)
+LEFT JOIN REP_SUBSTANCE_OUTHOUSE out
+    ON out.UUID = detil.OUTHOUSEID AND (out.ISDELETED IS NULL OR out.ISDELETED = 0)
+LEFT JOIN REP_INFORM_DETAIL rid
+    ON rid.informid = out.requisition AND rid.messageid = detil.messageid AND (rid.ISDELETED IS NULL OR rid.ISDELETED = 0)
+LEFT JOIN REP_STORAGE_DETAIL rsd
+    ON rsd.uuid = detil.storagedetail AND (rsd.ISDELETED IS NULL OR rsd.ISDELETED = 0)
+LEFT JOIN REP_SUBSTANCE_STORAGE rss
+    ON rss.uuid = rsd.numberid AND (rss.ISDELETED IS NULL OR rss.ISDELETED = 0)
+WHERE detil.OUTHOUSEID = '${outhouseid}' AND (detil.ISDELETED IS NULL OR detil.ISDELETED = 0)
+ORDER BY detil.CREATE_DATE DESC
+]]></SQL>

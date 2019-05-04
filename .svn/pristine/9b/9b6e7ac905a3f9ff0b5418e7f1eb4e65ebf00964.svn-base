@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select se.*,ry.REPOSITORY_NAME 
+from REP_SUBSTANCE_STORAGE se,REP_ACCESS_REPOSITORY ry 
+where se.STORAGE_WAREHOUSE = ry.UUID(+) 
+and se.ISDELETED = 0
+<#if storageNumber? exists &&storageNumber ?length gt 0>
+	and se.STORAGE_NUMBER like '%' || '${storageNumber}' || '%'
+</#if>
+<#if storageWarehouse? exists &&storageWarehouse ?length gt 0>
+	and ry.REPOSITORY_NAME = '${storageWarehouse}'
+</#if>
+<#if startDate? exists &&startDate ?length gt 0>
+	and se.STORAGE_DATE >= to_date('${startDate}','yyyy-MM-dd')
+</#if>
+<#if endDate? exists &&endDate ?length gt 0>
+	and se.STORAGE_DATE <= to_date('${endDate}','yyyy-MM-dd')
+</#if>
+order by se.CREATE_DATE desc
+]]></SQL>

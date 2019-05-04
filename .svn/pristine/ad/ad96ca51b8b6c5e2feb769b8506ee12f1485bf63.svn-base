@@ -1,0 +1,91 @@
+package com.jeecg.rep_substance_recycle.dao;
+
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.rep_substance_recycle.entity.RepDetailedMaterialRecoveryEntity;
+import com.jeecg.rep_substance_recycle.entity.RepSubstanceRecycleEntity;
+import com.jeecg.rep_substance_recycle.vo.RecycleVo;
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.jeecgframework.minidao.annotation.MiniDao;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author 刘雨泽
+ */
+@MiniDao
+public interface RecycleDao {
+
+    /**
+     * 查询物资回收信息列表
+     * @return
+     */
+    List<RepSubstanceRecycleEntity> recycleList();
+
+    /**
+     * 根据条件查询物资回收信息列表
+     * @param vo 其他查询条件
+     * @param inDate 开始时间
+     * @param outDate 结束时间
+     * @return
+     */
+    @Arguments({"vo", "inDate", "outDate"})
+    List<RepSubstanceRecycleEntity> conditionList(RecycleVo vo, String inDate, String outDate);
+
+    /**
+     * 根据uuid查询物资回收信息
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    RepSubstanceRecycleEntity lookRecycle(String uuid);
+
+    /**
+     * 根据uuid查询物资回收信息
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    RepSubstanceRecycleEntity recyclingDetailsGet(String uuid);
+
+    /**
+     * 根据动态出入库条件查询调拨通知列表
+     * @param input
+     * @param output
+     * @return
+     */
+    @Arguments({"input", "output", "isUse"})
+    List<Map<String,Object>> seachAllocation(String input, String output, Short isUse);
+
+    /**
+     * 根据uuid查询入库信息
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    List<Map<String, Object>> warehouseInfosGet(String uuid);
+
+    /**
+     * 根据物资信息id查询物资信息列表
+     * @param messageid
+     * @return
+     */
+    @Arguments({"messageid"})
+    Map<String,Object> materialInfosGet(Object messageid);
+
+    /**
+     * 根据uuid查询物资回收信息
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    RepSubstanceRecycleEntity recyclingEdit(String uuid);
+
+    /**
+     * 废弃
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    List<RepDetailedMaterialRecoveryEntity> recoveryEdit(String uuid);
+}

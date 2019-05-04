@@ -1,0 +1,44 @@
+package com.jeecg.MaterialsInPut.dao;
+
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.jeecgframework.minidao.annotation.MiniDao;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 物资入库
+ */
+@MiniDao
+public interface MaterialsInputMiniDao {
+	/**
+	 * 查询全部
+	 * @return
+	 */
+	@Arguments({"storageNumber", "storageWarehouse", "startDate", "endDate"})
+	List<Map<String, Object>> queryAll(String storageNumber, String storageWarehouse, String startDate, String endDate);
+
+	/**
+	 * 根据物资入库id查询物资信息和物资入库详细
+	 * @param numberid
+	 * @return
+	 */
+	@Arguments({"numberid"})
+	List<Map<String, Object>> inStockLook(String numberid);
+
+	/**
+	 * 根据id查询物资入库
+	 * @return
+	 */
+	@Arguments({"uuid"})
+	Map<String, Object> queryOne(String uuid);
+
+	/**
+	 * 根据物资入库详细id查询物资入库详细和物资信息
+	 */
+	@Arguments({"uuid"})
+	Map<String, Object> queryMinute(String uuid);
+
+	@Arguments({"numberid"})
+	List<Map<String, Object>> getDetail(String numberid);
+}

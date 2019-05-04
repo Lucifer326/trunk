@@ -1,0 +1,43 @@
+package com.jeecg.MaterialScrap.dao;
+
+import com.jeecg.MaterialScrap.entity.Scrap;
+import com.jeecg.MaterialScrap.entity.ScrapLookTwoInformation;
+import com.jeecg.rep_substance_recycle.entity.RepDetailedMaterialRecoveryEntity;
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ScrapDao {
+    /*
+    显示报废的物品列表
+     */
+    List<Scrap> showScrapList();
+
+    /*
+    查询单据号
+     */
+    @Arguments({"scrapNumber"})
+    List<Scrap> selectNumber(String scrapNumber);
+    /*
+    查看数据
+    */
+    @Arguments({"uuid"})
+    Scrap LookData(String uuid);
+
+
+    /*
+    编辑数据
+     */
+    @Arguments({"uuid"})
+    Scrap editData(String uuid);
+    /* *//*
+    删除数据
+     *//*
+    @Arguments({"uuid"})
+    int clearData(String uuid);*/
+
+    @Arguments({"uuid"})
+    List<ScrapLookTwoInformation> scrapTwoLook(String uuid);
+}

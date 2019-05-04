@@ -1,0 +1,447 @@
+package com.jeecg.material_scrap.controller;
+
+import com.jeecg.MaterialsInPut.common.MaterialsInPutVo;
+import com.jeecg.MaterialsInPut.dao.MaterialsInputMiniDao;
+import com.jeecg.MaterialsOutPut.service.RepSubstanceOuthouseService;
+import com.jeecg.material_scrap.entity.Scrap;
+import com.jeecg.material_scrap.entity.ScrapLookTwoInformation;
+import com.jeecg.material_scrap.service.ScrapService;
+import com.jeecg.system_management.common.CommonCode;
+import com.jeecg.system_management.common.MaterialCategoryVo;
+import com.jeecg.system_management.common.WarehouseQueryVo;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.pojo.RepSubstanceCategory;
+import com.jeecg.system_management.pojo.RepSubstanceMessage;
+import com.jeecg.system_management.service.MaterialCategoryService;
+import com.jeecg.system_management.service.MaterialRepSubstanceMessageService;
+import com.jeecg.system_management.service.WarehouseService;
+import org.apache.commons.lang3.StringUtils;
+import org.jeecgframework.core.common.controller.BaseController;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.core.util.ResourceUtil;
+import org.jeecgframework.web.system.pojo.base.TSType;
+import org.jeecgframework.web.system.pojo.base.TSUser;
+import org.jeecgframework.web.system.service.TypeServiceI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * 物资报废管理 Controller
+ *
+ * @author 任小昆
+ */
+@Controller
+@RequestMapping("ScrapController")
+public class ScrapController extends BaseController {
+
+    @Autowired
+    private ScrapService scrapService;
+
+    @Autowired
+    private MaterialRepSubstanceMessageService materialRepSubstanceMessageService;
+
+    @Autowired
+    private MaterialCategoryService materialCategoryServiceImpl;
+
+    @Autowired
+    private WarehouseService warehouseServiceImpl;
+    @Autowired
+    private TypeServiceI typeServiceImpl;
+    @Autowired
+    private RepSubstanceOuthouseService repSubstanceOuthouseService;
+    @Autowired
+    private MaterialsInputMiniDao materialsInputDao;
+
+    /**
+     * 显示报废的物品列表
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "showScrapList")
+    public String scrapList(Model model) {
+        List<Scrap> scrapList = scrapService.showScrapList();
+        model.addAttribute("scrapList", scrapList);
+        return "jzwz/MaterialScrap/MaterialScrapList";
+    }
+
+    /**
+     * 插入数据
+     *
+     * @param scrap
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "InsertMaterial")
+    public Object insertData(Scrap scrap, HttpServletRequest request) {
+        AjaxJson result = new AjaxJson();
+        if(scrap!=null){
+            scrap.setReviewStatus("");
+        }
+        String storeNum = request.getParameter("StoreNum");
+        String[] subName = request.getParameterValues("subName");
+        String[] unit = request.getParameterValues("unit");
+        String[] messageIds = request.getParameterValues("messageId");
+        String[] scrapTotal = request.getParameterValues("scrapTotal");
+        String[] scrapCause = request.getParameterValues("scrapCause");
+        List<ScrapLookTwoInformation> list = new ArrayList<ScrapLookTwoInformation>();
+        try {
+            if (subName != null) {
+                for (int i = 0; i < subName.length; i++) {
+                    ScrapLookTwoInformation information = new ScrapLookTwoInformation();
+                    information.setSubName(subName[i] == null ? "" : subName[i]);
+                    information.setUnit(unit[i] == null ? "" : unit[i]);
+                    information.setScrapTotal(scrapTotal[i] == null ? "" : scrapTotal[i]);
+                    information.setScrapCause(scrapCause[i] == null ? "" : scrapCause[i]);
+                    information.setMessageId(messageIds[i] == null ? "" : messageIds[i]);
+                    information.setStorageId(storeNum);
+                    list.add(information);
+                }
+            }
+            scrapService.insertData(scrap, list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    /**
+     * 查询单据号
+     *
+     * @param scrapNumber
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "selectNumbers")
+
+    public String selectNumber(String scrapNumber,String wareHouse,Model model) {
+        System.out.println(scrapNumber+"......."+wareHouse);
+        List<Scrap> scrapList = scrapService.selectNumber(scrapNumber,wareHouse);
+
+        model.addAttribute("scrapList", scrapList);
+        model.addAttribute("scrapNumber",scrapNumber);
+        model.addAttribute("wareHouse",wareHouse);
+        return "jzwz/MaterialScrap/MaterialScrapList";
+    }
+
+    /**
+     * 查看数据
+     *
+     * @param uuid
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "search")
+    public String lookData(String uuid, Model model) {
+
+        Scrap scrap = scrapService.lookData(uuid);
+        if (scrap != null) {
+            List<Map<String,Object>> scrapDetails = scrapService.scrapTwoLook(scrap.getUuid());
+            model.addAttribute("scrapDetails", scrapDetails);
+        }
+        model.addAttribute("scrap", scrap);
+        return "jzwz/MaterialScrap/MaterialScrapLook";
+
+    }
+
+    /**
+     * 编辑数据
+     *
+     * @param model
+     * @param uuid
+     * @return
+     */
+    @RequestMapping(params = "toEditData")
+    public String editData(Model model, String uuid) {
+        Scrap scraps = scrapService.editData(uuid);
+        //获得出库单去回显
+        Map<String,Object> map = scrapService.findStoreNum(uuid);
+        if (scraps != null) {
+            List<Map<String,Object>> scrapDetails = scrapService.scrapTwoLook(scraps.getUuid());
+            model.addAttribute("scrapDetails", scrapDetails);
+        }
+        model.addAttribute("scraps", scraps);
+        model.addAttribute("storeNum", map);
+        return "jzwz/MaterialScrap/MaterialScrapUpdate";
+    }
+
+    /**
+     * 更新数据
+     *
+     * @param scrap
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "updateData")
+    public Object updateData(Scrap scrap, HttpServletRequest request) {
+        AjaxJson result = new AjaxJson();
+        // 单据号ID
+        String uuid = request.getParameter("uuid");
+        String storeNum = request.getParameter("StoreNum");
+        //物资详情ID
+        String[] uuids = request.getParameterValues("scrapDetailsUUID");
+        //物资名称
+        String[] subNames = request.getParameterValues("subName");
+        String[] messageIds = request.getParameterValues("messageId");
+        //计量单位
+        String[] units = request.getParameterValues("unit");
+        // 报废数量
+        String[] scrapTotal = request.getParameterValues("scrapTotal");
+        //报废原因
+        String[] scrapCause = request.getParameterValues("scrapCause");
+        List<ScrapLookTwoInformation> list = new ArrayList<ScrapLookTwoInformation>();
+        try {
+            if (uuid != null) {
+                for (int i = 0; i < uuids.length; i++) {
+                    ScrapLookTwoInformation storage = new ScrapLookTwoInformation();
+                    storage.setUuid(uuids[i]);
+                    storage.setStorageId(storeNum);
+                    storage.setRepositoryid(uuid);
+                    storage.setSubName(String.valueOf("".equals(subNames[i]) ? "0" : subNames[i]));
+                    storage.setUnit(String.valueOf("".equals(units[i]) ? "0" : units[i]));
+                    storage.setScrapTotal(String.valueOf("".equals(scrapTotal[i]) ? "0" : scrapTotal[i]));
+                    storage.setScrapCause(String.valueOf("".equals(scrapCause[i]) ? "0" : scrapCause[i]));
+                    storage.setMessageId(String.valueOf("".equals(messageIds[i]) ? "0" : messageIds[i]));
+                    list.add(storage);
+                }
+            }
+            scrapService.testUpdateData(scrap, list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    @RequestMapping(params = "findRepository")
+    public String warehouseList(Model model) {
+        List<TSType> items = typeServiceImpl.getItems(CommonCode.WAREHOUSE_TYPE);
+        //列表查询
+        List<RepAccessRepository> list = warehouseServiceImpl.repositoryList();
+        //放入域中
+        model.addAttribute("items", items);
+        model.addAttribute("list", list);
+        return "jzwz/MaterialScrap/SelectWareHouseList";
+    }
+    /**
+     * 删除数据
+     *
+     * @param ids
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "deleteData")
+    public Object clearData(String[] ids) {
+        AjaxJson result = new AjaxJson();
+        try {
+            scrapService.clearData(ids);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+    /**
+     * 物资信息的列表页
+     *
+     * @param model
+     * @return
+     */
+
+    @RequestMapping(params = "MaterialInfoManagement")
+    public String materialInfoManagementList(Model model,HttpServletRequest request) {
+        String storenum = request.getParameter("storenum");
+        List<Map<String, Object>> list = scrapService.findRepSubstanceMessageBystorenum(storenum);
+        model.addAttribute("repSubstanceMessage", list);
+        return "jzwz/MaterialScrap/SelectMaterialInformationList";
+    }
+
+    /**
+     * 根据条件搜索物资信息 物资编号 物资品名 物资类别名称
+     *
+     * @param model
+     * @param repSubstanceMessage
+     * @return
+     */
+    @RequestMapping(params = "searchRepSubstanceMessage")
+    public String searchRepSubstanceMessage(Model model, RepSubstanceMessage repSubstanceMessage) {
+        String subCategory = repSubstanceMessage.getSubCategory();
+        String subName = repSubstanceMessage.getSubName();
+        String subNumber = repSubstanceMessage.getSubNumber();
+        System.out.println(subNumber + subName + subCategory);
+        RepSubstanceCategory repSubstanceCategory = materialRepSubstanceMessageService.findRepSubstanceCategoryByName(subCategory);
+        String subCatagory = "";
+        if (repSubstanceCategory != null) {
+            subCatagory = repSubstanceCategory.getUuid();
+        }
+        System.out.println(subNumber + subName + subCatagory);
+        List<Map<String, Object>> list = materialRepSubstanceMessageService.searchRepSubstanceMessage(subNumber, subName, subCatagory);
+        model.addAttribute("repSubstanceMessage", list);
+        model.addAttribute("subCategory", subCategory);
+        model.addAttribute("subName", subName);
+        model.addAttribute("subNumber", subNumber);
+        return "jzwz/MaterialScrap/SelectMaterialInformationList";
+    }
+
+    /*
+     * 物资类别列表页
+     * @return
+     * @param model
+     */
+
+    @RequestMapping(params = "list")
+    public String materialCategoryList(Model model) {
+        //查询物资类别列表
+        List<RepSubstanceCategory> list = materialCategoryServiceImpl.materialCategoryList();
+        model.addAttribute("list", list);
+        return "jzwz/MaterialScrap/SelectMaterialCategory";
+    }
+
+    @RequestMapping(params = "listQuery")
+    public String materialCategoryListByQuery(MaterialCategoryVo vo, Model model) {
+        //查询条件vo非空判断
+        if (null != vo) {
+            //执行条件查询
+            List<RepSubstanceCategory> list = materialCategoryServiceImpl.materialCategoryByQuery(vo);
+            model.addAttribute("list", list);
+            //条件回显
+            model.addAttribute("vo", vo);
+            return "jzwz/MaterialScrap/MaterialCategoryList";
+        }
+        //查询条件vo为空，直接返回
+        return "jzwz/MaterialScrap/MaterialCategoryList";
+    }
+
+    /**
+     * 选择仓库
+     *
+     * @param model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "listRepository")
+    public Object warehouseList(Model model,HttpServletRequest request) {
+        AjaxJson json = new AjaxJson();
+        String storenum = request.getParameter("storenum");
+        List<Map<String,Object>> list = scrapService.repositoryByStorenum(storenum);
+        return list.get(0);
+    }
+
+
+    /**
+     * 根据条件查询仓库
+     *
+     * @param model
+     * @param vo
+     * @return
+     */
+    @RequestMapping(params = "listQueryRepository")
+    public String warehouseListByQueryVo(WarehouseQueryVo vo, Model model) {
+        //查询条件vo非空验证
+        if (null == vo) {
+            return "jzwz/MaterialScrap/SelectWareHouseList";
+        }
+        //日期非空验证
+        if (vo.getActivateTimeStart() != null && vo.getActivateTimeEnd() != null) {
+            //日期验证（开始时间大于结束时间）
+            if (vo.getActivateTimeStart().compareTo(vo.getActivateTimeEnd()) > 0) {
+                return "jzwz/MaterialScrap/SelectWareHouseList";
+            }
+        }
+        //执行查询
+        List<RepAccessRepository> list = warehouseServiceImpl.repositoryListByQuery(vo);
+        model.addAttribute("vo", vo);
+        model.addAttribute("list", list);
+        return "jzwz/MaterialScrap/SelectWareHouseList";
+    }
+
+    /**
+     * 物资信息的回显
+     *
+     * @param uuid
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "scrapTwoLook")
+    public String scrapTwoLook(String uuid, Model model) {
+        Scrap scraps = scrapService.editData(uuid);
+        model.addAttribute("scrap", scraps);
+        if (scraps != null) {
+            List<Map<String,Object>> scrapLookTwoInformation = scrapService.scrapTwoLook(scraps.getUuid());
+            model.addAttribute("scrapLookTwoInformation", scrapLookTwoInformation);
+        }
+        return "jzwz/MaterialScrap/MaterialsLook";
+    }
+
+    /**
+     * 审批前的数据字典准备
+     *
+     * @return
+     */
+    @RequestMapping(params = "approvalReady")
+    public String toAllocateValidPage(Model model) {
+        List<TSType> items = typeServiceImpl.getItems(CommonCode.SP_STATUS);
+        model.addAttribute("approval_status", items);
+        return "jzwz/MaterialScrap/MaterialScrapReview";
+    }
+
+    @ResponseBody
+    @RequestMapping(params = "approval")
+    public AjaxJson approval(Model model, HttpServletRequest request, String reviewId) {
+        AjaxJson json = new AjaxJson();
+        String approvalStatus = request.getParameter("approvalStatus");
+        String approvalOpinion = request.getParameter("approvalOpinion");
+        TSUser tsUser = ResourceUtil.getSessionUserName();
+        String name = tsUser.getUserName();
+        Scrap scrap = scrapService.findScarpById(reviewId);
+        if (StringUtils.isBlank(approvalStatus) || "0".equals(approvalStatus)){
+            json.setSuccess(false);
+            json.setMsg("请选择审批状态");
+            return json;
+        }
+        if ("2".equals(approvalStatus)){
+            String[] messageIds = request.getParameterValues("messageId");
+            scrap.setReviewStatus("2");
+            scrap.setReviewer(name);
+            scrap.setReviewReason(approvalOpinion);
+            scrapService.updateScarp(scrap);
+            json.setSuccess(true);
+            json.setMsg("驳回报废请求！");
+            return json;
+        }
+        //修改审批人审批状态审批意见
+        String[] messageIds = request.getParameterValues("messageId");
+        scrap.setReviewStatus(approvalStatus);
+        scrap.setReviewer(name);
+        scrap.setReviewReason(approvalOpinion);
+        scrapService.updateScarp(scrap);
+        List<Map<String,Object>> information = scrapService.findScarpDetail(reviewId);
+        //获取物资ID
+        scrapService.updatecount(information);
+        json.setMsg("审批成功！");
+        return json;
+    }
+
+    /**
+     * @author wangguoqiang
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "showStoreScarp")
+    public String showStoreScarp(Model model){
+        MaterialsInPutVo vo = new MaterialsInPutVo();
+        TSUser tsUser = ResourceUtil.getSessionUserName();
+        List<Map<String, Object>> mapList = materialsInputDao.queryAll(vo, tsUser.getId());
+        model.addAttribute("mapList",mapList);
+        return "jzwz/MaterialScrap/SelectStorageScarp";
+    }
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select *
+from REP_PROTOCOL_STORE_MESSAGE
+where ISDELETED = 0
+    <#if protocolNumber? exists &&protocolNumber ?length gt 0>
+        and PROTOCOL_NUMBER like '%' || '${protocolNumber}' || '%'
+    </#if>
+    <#if protocolCompany? exists &&protocolCompany ?length gt 0>
+        and PROTOCOL_COMPANY like '%' || '${protocolCompany}' || '%'
+    </#if>
+    <#if protocolStorage? exists &&protocolStorage ?length gt 0>
+        and PROTOCOL_STORAGE like '%' || '${protocolStorage}' || '%'
+    </#if>
+    <#if protocolYear? exists &&protocolYear ?length gt 0>
+        and PROTOCOL_YEAR like '%' || '${protocolYear}' || '%'
+    </#if>
+    <#if protocolDate? exists &&protocolDate ?length gt 0>
+        and PROTOCOL_DATE >= TO_DATE('${protocolDate}','yyyy-mm-dd')
+        and PROTOCOL_DATE < TO_DATE('${protocolToDate}','yyyy-mm-dd')
+    </#if>
+ORDER BY CREATE_DATE DESC
+]]></SQL>

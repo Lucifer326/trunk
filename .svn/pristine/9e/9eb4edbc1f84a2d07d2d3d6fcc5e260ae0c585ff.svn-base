@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select * from SC_PRODUCT where
+DEL = 0
+    <#if name? exists && name ?length gt 0>
+        and NAME like '%' || '${name}' || '%'
+    </#if>
+    <#if product? exists &&product ?length gt 0>
+        and PRODUCT like '%' || '${product}' || '%'
+    </#if>
+    <#if inPut? exists &&inPut ?length gt 0>
+        and INPUT =  '${inPut}'
+    </#if>
+   order by CREATE_DATE desc
+]]></SQL>

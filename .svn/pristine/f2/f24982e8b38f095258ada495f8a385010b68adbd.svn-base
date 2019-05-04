@@ -1,0 +1,178 @@
+package com.jeecg.MaterialsOutPut.service.impl;
+
+import com.jeecg.MaterialsInPut.entity.RepSubstanceAccessory;
+import com.jeecg.MaterialsOutPut.common.MaterialsOutPutLogicException;
+import com.jeecg.MaterialsOutPut.common.MaterialsOutPutQueryVo;
+import com.jeecg.MaterialsOutPut.common.MaterialsOutPutStatusCode;
+import com.jeecg.MaterialsOutPut.dao.RepSubstanceOuthouseMiniDao;
+import com.jeecg.MaterialsOutPut.entity.RepOuthouseDetail;
+import com.jeecg.MaterialsOutPut.entity.RepSubstanceOuthouse;
+import com.jeecg.MaterialsOutPut.service.RepSubstanceOuthouseService;
+import com.jeecg.system_management.pojo.RepSubstanceMessage;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.DateUtils;
+import org.jeecgframework.core.util.UUIDGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @version 1.0
+ * @Auther zhenleichao
+ * @Date 2019/4/2
+ * @Description com.jeecg.MaterialsOutPut.service.impl
+ */
+@Service("repSubstanceOuthouseService")
+@Transactional(rollbackFor = {java.lang.Exception.class})
+public class RepSubstanceOuthouseServiceImpl extends CommonServiceImpl implements RepSubstanceOuthouseService {
+
+    @Autowired
+    private RepSubstanceOuthouseMiniDao repSubstanceOuthouseMiniDao;
+
+    private static Logger logger = Logger.getLogger(RepSubstanceOuthouseServiceImpl.class);
+
+
+    @Override
+    public List<Map<String,Object>> getAllByCondition(MaterialsOutPutQueryVo vo) {
+        if (vo == null){
+            vo = new MaterialsOutPutQueryVo();
+        }
+        if (StringUtils.isNotBlank(vo.getOuthouseNumber())){
+            vo.setOuthouseNumber(vo.getOuthouseNumber().trim());
+        }
+
+        if (StringUtils.isNotBlank(vo.getRepositoryName())){
+            vo.setRepositoryName(vo.getRepositoryName().trim());
+        }
+        String date2Str = "";
+        if (vo.getOuthouseDate() != null){
+            date2Str = DateUtils.date2Str(vo.getOuthouseDate(), new SimpleDateFormat("yyyy-MM-dd"));
+        }
+
+        return repSubstanceOuthouseMiniDao.getAll(vo.getOuthouseNumber(),vo.getRepositoryName(),date2Str);
+    }
+
+    @Override
+    public List<Map<String, Object>> getAll() {
+        return repSubstanceOuthouseMiniDao.getAll(null,null,null);
+    }
+
+    @Override
+    public Map<String, Object> getDetilById(String uuid) {
+        if (StringUtils.isBlank(uuid)){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.PARAMS_ERROR.getMessage());
+        }
+        uuid = uuid.trim();
+        return repSubstanceOuthouseMiniDao.getDetilById(uuid);
+    }
+
+    @Override
+    public void updOuthouse(RepSubstanceOuthouse outhouse,String warehouseId,Long[] outhouseAmounts, String[] subIds,String[] storageDetails,String filename,String path){
+        if (outhouse == null || StringUtils.isBlank(outhouse.getUuid()) || subIds == null || StringUtils.isBlank(warehouseId) || outhouseAmounts == null || subIds.length != outhouseAmounts.length){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.PARAMS_ERROR.getMessage());
+        }
+        super.saveOrUpdate(outhouse);
+        //删除所有指定出库单的出库详细信息
+        String sql = "DELETE FROM REP_OUTHOUSE_DETAIL d WHERE OUTHOUSEID = ? AND (d.ISDELETED IS NULL OR d.ISDELETED = 0)";
+        executeSql(sql, outhouse.getUuid());
+        //保存出库详细信息
+        for (int i = 0;i<subIds.length;i++) {
+            RepOuthouseDetail detail = new RepOuthouseDetail();
+            detail.setOuthouseid(outhouse.getUuid());
+            detail.setMessageid(subIds[i]);
+            detail.setOuthouseAmount(outhouseAmounts[i]);
+            detail.setOuthouseWarehouse(warehouseId);
+            detail.setStorageDetail(storageDetails[i]);
+            if(super.save(detail) == null){
+                throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.SAVE_FAIL.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void addOutHose(RepSubstanceOuthouse outhouse,String warehouseId,Long[] outhouseAmounts, String[] subIds,String[] storageDetails,String filename,String path) {
+        if (outhouse == null || subIds == null || StringUtils.isBlank(warehouseId) || outhouseAmounts == null || subIds.length != outhouseAmounts.length
+                || storageDetails == null || storageDetails.length !=subIds.length){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.PARAMS_ERROR.getMessage());
+        }
+        //保存出库信息
+        RepSubstanceAccessory accessory = new RepSubstanceAccessory();
+        String uuid = UUIDGenerator.generate();
+        //添加入库id
+        outhouse.setUuid(uuid);
+        //增加附件信息
+        accessory.setAccessoryName(filename);
+        accessory.setAccessoryPath(path);
+        Serializable save = super.save(accessory);
+        //outhouse.setAccessory(save);
+        if (super.save(outhouse) == null ){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.SAVE_FAIL.getMessage());
+        }
+        for (int i = 0;i<subIds.length;i++) {
+            RepOuthouseDetail detail = new RepOuthouseDetail();
+            detail.setOuthouseid(uuid);
+            detail.setMessageid(subIds[i]);
+            detail.setOuthouseAmount(outhouseAmounts[i]);
+            detail.setOuthouseWarehouse(warehouseId);
+            detail.setStorageDetail(storageDetails[i]);
+            if(super.save(detail) == null){
+                throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.SAVE_FAIL.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void delOutPut(String uuid,String regx) {
+        if (StringUtils.isBlank(uuid)){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.PARAMS_ERROR.getMessage());
+        }
+        //默认使用逗号分隔
+        if(StringUtils.isEmpty(regx)){
+            regx = ",";
+        }
+        String[] split = uuid.split(regx);
+        if(split.length <= 0){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.PARAMS_ERROR.getMessage());
+        }
+        StringBuffer sb = new StringBuffer(1024);
+        sb.append("UPDATE REP_SUBSTANCE_OUTHOUSE SET ISDELETED = 1 WHERE UUID IN (");
+        for (int i = 0; i<split.length;i++) {
+            sb.append("?,");
+        }
+        sb.deleteCharAt(sb.lastIndexOf(","));
+        sb.append(")");
+        //调试打印sql
+        logger.debug(sb.toString());
+        //删除物资出库
+        if(super.executeSql(sb.toString(), split) <= 0){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.DEL_FAIL.getMessage());
+        }
+        //删除物资出库详细
+        StringBuffer sb1 = new StringBuffer(1024);
+        sb1.append("UPDATE REP_OUTHOUSE_DETAIL SET ISDELETED = 1 WHERE OUTHOUSEID IN (");
+        for (int i = 0; i<split.length;i++) {
+            sb1.append("?,");
+        }
+        sb1.deleteCharAt(sb1.lastIndexOf(","));
+        sb1.append(")");
+        logger.debug(sb1.toString());
+        if(super.executeSql(sb1.toString(), split) <= 0){
+            throw new MaterialsOutPutLogicException(MaterialsOutPutStatusCode.DEL_FAIL.getMessage());
+        }
+
+    }
+
+    @Override
+    public void delOutPut(String uuid) {
+        delOutPut(uuid,null);
+    }
+
+}

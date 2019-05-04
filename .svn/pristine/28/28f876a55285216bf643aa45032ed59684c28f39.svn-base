@@ -1,0 +1,25 @@
+function checkForm(form) {
+    //正则：匹配数字
+    var number = /^[0-9]*$/;
+    //正则: 匹配日期
+    var date = /^(\d{1,4})(-)(\d{1,2})\2(\d{1,2})$/;
+    if ($.trim(form.$("#scrapNumber").val()).length == 0){
+        layer.msg("请填写单据号", {time:2000, icon:12, shift:1},function () {
+            form.$("#scrapNumber").focus();
+        });
+        return false;
+    }
+    if ($.trim(form.$("#wareHouse").val()).length <= 0){
+        layer.msg("请选择仓库", {time:2000, icon:7, shift:1}, function () {
+            form.$("#wareHouse").focus();
+        });
+        return false;
+    }
+    if ($.trim(form.$("#information").val()).length == 0){
+        layer.msg("请选择物资品名", {time:2000, icon:7, shift:1}, function () {
+            form.$("#information").focus();
+        });
+        return false;
+    }
+    return true;
+}

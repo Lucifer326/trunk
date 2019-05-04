@@ -1,0 +1,329 @@
+package com.jeecg.rep_substance_recycle.controller;
+
+import com.jeecg.rep_substance_recycle.entity.RepDetailedMaterialRecoveryEntity;
+import com.jeecg.rep_substance_recycle.entity.RepSubstanceRecycleEntity;
+import com.jeecg.rep_substance_recycle.service.RecycleService;
+import com.jeecg.rep_substance_recycle.vo.RecycleVo;
+import com.jeecg.system_management.common.MaterialCategoryVo;
+import com.jeecg.system_management.common.WarehouseQueryVo;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.pojo.RepSubstanceCategory;
+import com.jeecg.system_management.service.MaterialCategoryService;
+import com.jeecg.system_management.service.MaterialRepSubstanceMessageService;
+import com.jeecg.system_management.service.WarehouseService;
+import org.jeecgframework.core.common.controller.BaseController;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 物资回收管理
+ *
+ * @author 刘雨泽
+ */
+@Scope("prototype")
+@Controller
+@RequestMapping("/recycleController")
+public class RecycleController extends BaseController {
+
+    /**
+     * 物资回收 接口
+     */
+    @Autowired
+    private RecycleService recycleService;
+
+    /**
+     * 库房 接口
+     */
+    @Autowired
+    private WarehouseService warehouseService;
+
+    /**
+     * 物资详细 接口
+     */
+    @Autowired
+    private MaterialRepSubstanceMessageService materialRepSubstanceMessageService;
+
+    /**
+     * 库房类别 接口
+     */
+    @Autowired
+    private MaterialCategoryService materialCategoryService;
+
+    /**
+     * 查询物资回收结果集
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "recycleList")
+    public String recycleList(Model model){
+        List<RepSubstanceRecycleEntity> list = recycleService.recycleList();
+        model.addAttribute("list", list);
+        return "jzwz/MaterialRecycling/MaterialRecyclingList";
+    }
+
+    /**
+     * 查询物资回收结果集 模糊查询
+     * @param model
+     * @param vo 查询条件
+     * @return
+     */
+    @RequestMapping(params = "conditionList")
+    public String conditionList(Model model, RecycleVo vo){
+        List<RepSubstanceRecycleEntity> list = recycleService.conditionList(vo);
+        model.addAttribute("list", list);
+        model.addAttribute("vo", vo);
+        return "jzwz/MaterialRecycling/MaterialRecyclingList";
+    }
+
+    /**
+     * 显示物资回收页面 及页面展示
+     * @param uuid
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "showMaterialRecyclingEdit")
+    public String showMaterialRecyclingEdit(String uuid, Model model){
+        RepSubstanceRecycleEntity recycleEntity = recycleService.recyclingEdit(uuid);
+        model.addAttribute("recycle", recycleEntity);
+        if (recycleEntity != null){
+            List<RepDetailedMaterialRecoveryEntity> recoveryEntities = recycleService.recoveryEdit(recycleEntity.getUuid());
+            model.addAttribute("recyclingDetails", recoveryEntities);
+        }
+        return "jzwz/MaterialRecycling/MaterialRecyclingEdit";
+    }
+
+    /**
+     * 修改物资回收
+     * @param recycle
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "updateRecycle")
+    public AjaxJson updateRecycle(RepSubstanceRecycleEntity recycle, HttpServletRequest request){
+        AjaxJson ajaxJson = new AjaxJson();
+
+        // 物资id
+        String[] uuids = request.getParameterValues("id");
+        // 物资品名
+        String[] subNames = request.getParameterValues("subName");
+        // 物资型号
+        String[] specificationType = request.getParameterValues("specificationType");
+        // 物资类别
+        String[] subCategory = request.getParameterValues("subCategory");
+        // 计量单位
+        String[] unit = request.getParameterValues("unit");
+        // 回收数量
+        String[] backNum = request.getParameterValues("backNum");
+
+        List<RepDetailedMaterialRecoveryEntity> list = new ArrayList<RepDetailedMaterialRecoveryEntity>();
+
+        try {
+            if (subNames != null){
+                for (int i = 0; i < subNames.length; i++){
+                    RepDetailedMaterialRecoveryEntity recovery = new RepDetailedMaterialRecoveryEntity();
+                    // 添加对象属性 并 排除null
+                    if (i < uuids.length){
+                        recovery.setUuid(uuids[i] == null ? "" : uuids[i]);
+                    }
+                    recovery.setSubName(subNames[i] == null ? "" : subNames[i]);
+                    recovery.setSpecificationType(specificationType[i] == null ? "" : specificationType[i]);
+                    recovery.setSubCategory(subCategory[i] == null ? "" :subCategory[i]);
+                    recovery.setUnit(unit[i] == null ? "" : unit[i]);
+                    recovery.setBackNum(BigDecimal.valueOf(Double.valueOf("".equals(backNum[i]) ? "0" : backNum[i])));
+                    list.add(recovery);
+                }
+            }
+            recycleService.updateRecycleAndMaterialRecovery(recycle, list);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxJson.setSuccess(false);
+        }
+        return ajaxJson;
+    }
+
+    /**
+     * 显示物资回收添加页面
+     * @return
+     */
+    @RequestMapping(params = "showAdd")
+    public String showAdd(){
+        return "jzwz/MaterialRecycling/MaterialRecyclingAdd";
+    }
+
+    /**
+     * 添加物资回收数据
+     * @param recycle
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "addRecycle")
+    public AjaxJson addRecycle(RepSubstanceRecycleEntity recycle, HttpServletRequest request){
+        AjaxJson ajaxJson = new AjaxJson();
+
+        // 物资品名
+        String[] subNames = request.getParameterValues("subName");
+        // 物资型号
+        String[] specificationType = request.getParameterValues("specificationType");
+        // 物资类别
+        String[] subCategory = request.getParameterValues("subCategory");
+        // 计量单位
+        String[] unit = request.getParameterValues("unit");
+        // 回收数量
+        String[] backNum = request.getParameterValues("backNum");
+
+        List<RepDetailedMaterialRecoveryEntity> list = new ArrayList<RepDetailedMaterialRecoveryEntity>();
+
+        try {
+            if (subNames != null){
+                for (int i = 0; i < subNames.length; i++){
+                    RepDetailedMaterialRecoveryEntity recovery = new RepDetailedMaterialRecoveryEntity();
+                    // 添加对象属性 并 排除null
+                    recovery.setSubName(subNames[i] == null ? "" : subNames[i]);
+                    recovery.setSpecificationType(specificationType[i] == null ? "" : specificationType[i]);
+                    recovery.setSubCategory(subCategory[i] == null ? "" :subCategory[i]);
+                    recovery.setUnit(unit[i] == null ? "" : unit[i]);
+                    recovery.setBackNum(BigDecimal.valueOf(Double.valueOf("".equals(backNum[i]) ? "0" : backNum[i])));
+                    list.add(recovery);
+                }
+            }
+            recycleService.addRecycleAndMaterialRecovery(recycle, list);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxJson.setSuccess(false);
+        }
+        return ajaxJson;
+    }
+
+    /**
+     * 查看物资回收
+     * @param model
+     * @param uuid 根据uuid查询
+     * @return
+     */
+    @RequestMapping(params = "lookRecycle")
+    public String lookRecycle(Model model, String uuid){
+        RepSubstanceRecycleEntity recycle = recycleService.lookRecycle(uuid);
+        if (recycle != null){
+            List<RepDetailedMaterialRecoveryEntity> recyclingDetails = recycleService.recyclingDetailsGet(recycle.getUuid());
+            model.addAttribute("recyclingDetails", recyclingDetails);
+        }
+        model.addAttribute("recycle", recycle);
+
+
+        return "jzwz/MaterialRecycling/MaterialRecyclingLook";
+    }
+
+    /**
+     * 删除物资回收
+     * @param uuid 根据uuid删除
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "deleteRecycles")
+    public AjaxJson deleteRecycles(String[] uuid){
+        AjaxJson ajaxJson = new AjaxJson();
+        try {
+            recycleService.deleteRecycles(uuid);
+        //    ajaxJson.setMsg("删除成功,一共删除" + uuid.length +"条数据");
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxJson.setSuccess(false);
+        }
+        return ajaxJson;
+    }
+
+    /**
+     * 查询仓库结果集
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "selectWarehouse")
+    public String selectWarehouse(Model model){
+        List<RepAccessRepository> repositories = warehouseService.repositoryList();
+        model.addAttribute("list", repositories);
+        return "jzwz/MaterialRecycling/SelectWarehouse";
+    }
+
+    /**
+     * 查询仓库结果集 模糊查询
+     * @param vo
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "listQuery")
+    public String listQuery(WarehouseQueryVo vo, Model model){
+        List<RepAccessRepository> repositories = warehouseService.repositoryListByQuery(vo);
+        model.addAttribute("list", repositories);
+        model.addAttribute("vo", vo);
+        return "jzwz/MaterialRecycling/SelectWarehouse";
+    }
+
+    /**
+     * 查询物资信息结果集
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "materialInfoSelect")
+    public String materialInfoSelect(Model model){
+        List<Map<String, Object>> allRepSubstanceMessage = materialRepSubstanceMessageService.findAllRepSubstanceMessage();
+        model.addAttribute("substanceMessages", allRepSubstanceMessage);
+        return "jzwz/MaterialRecycling/MaterialInfoManagementSelect";
+    }
+
+    /**
+     * 查询物资信息结果集 模糊搜索
+     * @param model
+     * @param subNumber
+     * @param subName
+     * @param subCategory
+     * @return
+     */
+    @RequestMapping(params = "searchRepSubstanceMessage")
+    public String searchRepSubstanceMessage(Model model, String subNumber, String subName, String subCategory){
+        List<Map<String, Object>> allRepSubstanceMessage = materialRepSubstanceMessageService.searchRepSubstanceMessage(subNumber, subName, subCategory);
+        model.addAttribute("substanceMessages", allRepSubstanceMessage);
+        model.addAttribute("subNumber", subNumber);
+        model.addAttribute("subName",subName);
+        model.addAttribute("subCategory",subCategory);
+        return "jzwz/MaterialRecycling/MaterialInfoManagementSelect";
+    }
+
+    /**
+     * 查询物资类别结果集
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "materialCategoryList")
+    public String materialCategoryList(Model model){
+        List<RepSubstanceCategory> repSubstanceCategories = materialCategoryService.materialCategoryList();
+        model.addAttribute("categoryList", repSubstanceCategories);
+        return "jzwz/MaterialRecycling/SelectMaterialCategory";
+    }
+
+    /**
+     * 查询物资类别结果集 模糊搜索
+     * @param model
+     * @param vo
+     * @return
+     */
+    @RequestMapping(params = "searchCategoryByNumAndName")
+    public String searchCategoryByNumAndName(Model model, MaterialCategoryVo vo){
+        List<RepSubstanceCategory> repSubstanceCategories = materialCategoryService.materialCategoryByQuery(vo);
+        model.addAttribute("categoryList", repSubstanceCategories);
+        model.addAttribute("vo", vo);
+        return "jzwz/MaterialRecycling/SelectMaterialCategory";
+    }
+}

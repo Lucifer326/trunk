@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select *
+    from REP_ALLOT_INFORM
+ where (ISDELETED is null
+    or ISDELETED = 0)
+
+     <#if diaobo? exists &&diaobo ?length gt 0>
+        and allot_number like '%' || '${diaobo}' || '%'
+    </#if>
+    <#if project? exists &&project ?length gt 0>
+        and RELOEF_PROJECT like '%' || '${project}' || '%'
+    </#if>
+   <#if date? exists &&date ?length gt 0>
+        and  ALLOT_DATE = TO_DATE('${date}','yyyy-mm-dd')
+
+    </#if>
+order by CREATE_DATE DESC
+
+
+
+]]></SQL>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select * from REP_SUBSTANCE_MESSAGE sm,REP_STORAGE_DETAIL sd 
+where sd.NUMBERID = '${numberid}' and sd.MESSAGEID = sm.UUID(+) and sd.ISDELETED = 0
+]]></SQL>

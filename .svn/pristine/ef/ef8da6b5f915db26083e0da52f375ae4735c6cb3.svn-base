@@ -1,0 +1,97 @@
+package com.jeecg.MaterialScrap.service.Impl;
+
+import com.jeecg.MaterialScrap.dao.ScrapDao;
+import com.jeecg.MaterialScrap.entity.Scrap;
+import com.jeecg.MaterialScrap.entity.ScrapLookTwoInformation;
+import com.jeecg.MaterialScrap.service.ScrapService;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service("ScrapService")
+public class ScrapServiceImpl extends CommonServiceImpl implements ScrapService {
+
+    @Autowired
+    public ScrapDao scrapDao;
+
+    /*
+     显示报废的物品列表
+     */
+    @Override
+    public List<Scrap> showScrapList() {
+        return scrapDao.showScrapList();
+    }
+
+    /*
+     插入数据
+    */
+    @Override
+    public void InsertData(Scrap scrap, List<ScrapLookTwoInformation> list) {
+        super.save(scrap);
+        if (list != null) {
+
+            for (int i = 0; i < list.size(); i++) {
+                // 补全对象属性
+                list.get(i).setRepositoryid(scrap.getUuid());
+                super.save(list.get(i));
+            }
+        }
+    }
+
+    /*
+   查询单据号
+   */
+    @Override
+    public List<Scrap> selectNumber(String scrapNumber) {
+        return scrapDao.selectNumber(scrapNumber);
+    }
+
+    /*
+     查看数据
+    */
+    @Override
+    public Scrap LookData(String uuid) {
+        return scrapDao.LookData(uuid);
+    }
+
+    /*
+   更新数据
+   */
+    @Override
+    public void testUpdateData(Scrap scrap) {
+        super.saveOrUpdate(scrap);
+    }
+
+    /*
+    编辑数据
+     */
+    @Override
+    public Scrap editData(String uuid) {
+        return scrapDao.editData(uuid);
+    }
+
+    /*
+    物资信息的回显
+     */
+    @Override
+    public List<ScrapLookTwoInformation> scrapTwoLook(String uuid) {
+        return scrapDao.scrapTwoLook(uuid);
+    }
+
+    /*
+    删除数据
+     */
+    @Override
+    public void clearData(String[] uuid) {
+        String param = "";
+        for (int i = 0; i < uuid.length - 1; i++) {
+            param += "?,";
+        }
+        param += "?";
+        String sql = "update SCRAP set ISDELETED = 1 where UUID in (" + param + ")";
+        System.out.println("sql1:" + sql);
+        super.executeSql(sql, uuid);
+    }
+}

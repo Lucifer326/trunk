@@ -1,0 +1,191 @@
+package com.jeecg.system_management.service.impl;
+
+import com.jeecg.system_management.common.WarehouseQueryVo;
+import com.jeecg.system_management.dao.WarehouseDao;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.service.WarehouseService;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.StringUtil;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * 仓储机构ServcieImpl
+ *
+ * @author 苑希阳
+ */
+@Service
+@Transactional(rollbackFor = {Exception.class})
+public class WarehouseServiceImpl extends CommonServiceImpl implements WarehouseService {
+
+    @Resource
+    private WarehouseDao warehouseDao;
+
+    /**
+     * 新增仓库
+     *
+     * @param repository 仓库
+     * @return ajaxJson
+     */
+    @Override
+    public AjaxJson saveWarehouse(RepAccessRepository repository) {
+        AjaxJson ajaxJson = new AjaxJson();
+        //iddeleted默认为0，表示未删除
+        repository.setIsdeleted((short) 0);
+        //执行新增
+        Serializable save = super.save(repository);
+        if (null != save) {
+            //新增成功
+            return ajaxJson;
+        }
+        //新增失败
+        ajaxJson.setSuccess(false);
+        return ajaxJson;
+    }
+
+    /**
+     * 查询仓库列表
+     *
+     * @return repositoryList
+     */
+    @Override
+    public List<RepAccessRepository> repositoryList() {
+        //执行列表查询
+        List<RepAccessRepository> repositoryList = warehouseDao.repositoryList();
+        return repositoryList;
+    }
+
+    /**
+     * 根据条件查询仓库列表
+     *
+     * @param vo 查询条件
+     * @return repositoryList
+     */
+    @Override
+    public List<RepAccessRepository> repositoryListByQuery(WarehouseQueryVo vo) {
+        String repositoryName = "";
+        //仓库名非空验证
+        if (!StringUtil.isEmpty(vo.getRepositoryName().trim())) {
+            repositoryName = vo.getRepositoryName().trim();
+        }
+        String repositoryCategory = "";
+        //仓库类别非空验证
+        if (!StringUtil.isEmpty(vo.getRepositoryCategory().trim())) {
+            repositoryCategory = vo.getRepositoryCategory();
+        }
+        //日期验证
+        if (vo.getActivateTimeStart() != null && vo.getActivateTimeEnd() != null) {
+            if (vo.getActivateTimeStart().compareTo(vo.getActivateTimeEnd()) > 0) {
+                //开始时间大于结束时间时返回null
+                return null;
+            }
+        }
+        String start = "";
+        //开始日期非空验证
+        if (null != vo.getActivateTimeStart()) {
+            //开始日期转换成字符串
+            start = DateFormatUtils.format(vo.getActivateTimeStart(), "yyyy-MM-dd").trim();
+        }
+        String end = "";
+        //结束日期非空验证
+        if (null != vo.getActivateTimeEnd()) {
+            //结束日期转换成字符串
+            end = DateFormatUtils.format(vo.getActivateTimeEnd(), "yyyy-MM-dd").trim();
+        }
+        //执行查询
+        List<RepAccessRepository> repositoryList = warehouseDao.repositoryListByQuery(repositoryName, start, end, repositoryCategory);
+        return repositoryList;
+    }
+
+    /**
+     * 根据id查询指定仓库
+     *
+     * @param warehouseId 仓库id
+     * @return repository
+     */
+    @Override
+    public RepAccessRepository repositoryFindById(String warehouseId) {
+        return warehouseDao.repositoryFindById(warehouseId);
+    }
+
+    /**
+     * 修改仓库
+     *
+     * @param repository 仓库
+     * @return ajaxJson
+     */
+    @Override
+    public AjaxJson repositoryModify(RepAccessRepository repository) {
+        AjaxJson ajaxJson = new AjaxJson();
+        //修复更新操作覆盖不相关字段问题
+        repository = this.solutionCoverage(repository);
+        //执行修改
+        super.saveOrUpdate(repository);
+        return ajaxJson;
+    }
+
+    /**
+     * 修复更新操作覆盖不相关字段问题 例如:创建人姓名 创建人时间等
+     * 执行修改前，通过uuid查出该仓库，将该仓库对象与即将修改的仓库对象合并
+     *
+     * @param repository 即将修改的仓库对象
+     * @return 填充数据后的仓库对象
+     */
+    private RepAccessRepository solutionCoverage(RepAccessRepository repository) {
+        //通过uuid查询仓库
+        RepAccessRepository rar = this.repositoryFindById(repository.getUuid());
+        //填充信息
+        //创建人姓名
+        repository.setCreateName(rar.getCreateName());
+        //创建人
+        repository.setCreateBy(rar.getCreateBy());
+        //创建日期
+        repository.setCreateDate(rar.getCreateDate());
+        //所属公司
+        repository.setSysCompanyCode(rar.getSysCompanyCode());
+        //所属部门
+        repository.setSysOrgCode(rar.getSysOrgCode());
+        //是否删除
+        repository.setIsdeleted(rar.getIsdeleted());
+        //返回填充数据后的repository对象
+        return repository;
+    }
+
+    /**
+     * 删除仓库（支持多个）
+     *
+     * @param ids
+     * @return ajaxJson
+     */
+    @Override
+    public AjaxJson repositoryDelete(String ids) {
+        AjaxJson ajaxJson = new AjaxJson();
+        //拆分ids
+        String[] split = ids.split(",");
+        Integer num = 0;
+        //删除（修改isdeleted字段的状态为1）
+        for (int i = 0; i < split.length; i++) {
+            //查找uuid对应的仓库
+            RepAccessRepository repository = this.repositoryFindById(split[i]);
+            //修改isDeleted状态
+            repository.setIsdeleted((short) 1);
+            //执行删除
+            super.saveOrUpdate(repository);
+            num++;
+        }
+        if (num == split.length) {
+            //删除成功
+            return ajaxJson;
+        }
+        //删除失败
+        ajaxJson.setSuccess(false);
+        return ajaxJson;
+    }
+}
+

@@ -1,0 +1,34 @@
+package com.jeecg.material_scrap.entity;
+
+/**
+ * 临时的某个仓储机构的物资数量对象
+ */
+public class MessageCount {
+    private String messuuid;
+    private Long count;
+
+    public String getMessuuid() {
+        return messuuid;
+    }
+
+    public void setMessuuid(String messuuid) {
+        this.messuuid = messuuid;
+    }
+
+    public Long getCount() {
+        return count;
+    }
+
+    public void setCount(Long count) {
+        this.count = count;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageCount{" +
+                "messuuid='" + messuuid + '\'' +
+                ", count=" + count +
+                '}';
+    }
+}
+

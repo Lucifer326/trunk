@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+    select distinct 
+            se.*, ry.REPOSITORY_NAME
+    from 
+        REP_SUBSTANCE_STORAGE se
+    left join REP_ACCESS_REPOSITORY ry
+        on se.STORAGE_WAREHOUSE = ry.UUID
+    left join T_S_USERCARDINFO tsu
+        on se.create_by = tsu.user_name
+    left join t_s_user tsus
+        on tsu.user_card_id = tsus.cardid
+    left join T_S_ROLE_USER_BASE tsrub
+        on tsrub.userid = tsus.id
+    WHERE
+        tsrub.orgid IN (
+        SELECT
+            T . ID
+        FROM
+            T_S_DEPART T START WITH T . ID = (
+                SELECT DISTINCT
+                    tsrub.orgid
+                FROM
+                    T_S_ROLE_USER_BASE tsrub
+                WHERE
+                    tsrub.userid = '${userid}'
+            ) CONNECT BY T .parentdepartid = PRIOR T . ID
+        )
+        and se.ISDELETED != 1
+    <#if vo.storageNumber? exists && vo.storageNumber ?length gt 0>
+        and se.STORAGE_NUMBER like '%' || :vo.storageNumber || '%'
+    </#if>
+    <#if vo.repositoryName? exists && vo.repositoryName ?length gt 0>
+        and ry.REPOSITORY_NAME like '%' || :vo.repositoryName || '%'
+    </#if>
+    <#if vo.startDate? exists && vo.startDate ?length gt 0>
+        and se.STORAGE_DATE >= to_date(:vo.startDate,'yyyy-MM-dd')
+    </#if>
+    <#if vo.endDate? exists && vo.endDate ?length gt 0>
+        and se.STORAGE_DATE <= to_date(:vo.endDate,'yyyy-MM-dd')
+    </#if>
+    order by se.CREATE_DATE desc
+]]></SQL>

@@ -1,0 +1,92 @@
+package com.jeecg.MaterialScrap.controller;
+
+import com.jeecg.MaterialScrap.entity.Scrap;
+import com.jeecg.MaterialScrap.service.ScrapService;
+import org.jeecgframework.core.common.controller.BaseController;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+
+@Controller
+@RequestMapping("/ScrapController")
+public class ScrapController {
+
+    @Autowired
+    private ScrapService scrapService;
+
+    @RequestMapping(params = "showScrapList")
+    public String ScrapList(Model model) {
+        List<Scrap> scrapList = scrapService.showScrapList();
+        model.addAttribute("scrapList", scrapList);
+        return "jzwz/MaterialScrap/MaterialScrapList";
+    }
+
+    @ResponseBody
+    @RequestMapping(params = "InsertMaterial")
+    public Object InsertData(Scrap scrap) {
+        AjaxJson result = new AjaxJson();
+        try {
+            scrapService.InsertData(scrap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @RequestMapping(params = "selectNumbers")
+    public String selectNumber(String scrapNumber, Model model) {
+
+        System.out.println(scrapNumber);
+        List<Scrap> numberList = scrapService.selectNumber(scrapNumber);
+
+        model.addAttribute("scrapList", numberList);
+        return "jzwz/MaterialScrap/MaterialScrapList";
+    }
+
+    @RequestMapping(params = "search")
+    public String LookData(String uuid, Model model) {
+
+        Scrap scrap = scrapService.LookData(uuid);
+        model.addAttribute("scrap", scrap);
+        return "jzwz/MaterialScrap/MaterialScrapLook";
+    }
+
+    @RequestMapping(params = "toEditData")
+    public String updateData(Model model, Scrap scrap, String uuid, HttpServletResponse response, HttpServletRequest request) {
+        System.out.println(request.getParameter(uuid));
+        Scrap scraps = scrapService.editData(uuid);
+        model.addAttribute("scraps", scraps);
+        return "jzwz/MaterialScrap/MaterialScrapUpdate";
+    }
+
+    @ResponseBody
+    @RequestMapping(params = "updateData")
+    public Object updateData(Scrap scrap) {
+        AjaxJson result = new AjaxJson();
+        try {
+            scrapService.testUpdateData(scrap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+   @ResponseBody
+    @RequestMapping(params = "deleteData")
+    public Object clearData(String  uuid) {
+        AjaxJson result = new AjaxJson();
+        try {
+            scrapService.clearData(uuid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+}

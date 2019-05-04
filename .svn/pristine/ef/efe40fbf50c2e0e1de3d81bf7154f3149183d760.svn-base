@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select * from SC_PRODUCT where UUID = '${uuid}'
+]]></SQL>

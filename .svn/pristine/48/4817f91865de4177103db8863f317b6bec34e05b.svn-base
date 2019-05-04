@@ -1,0 +1,51 @@
+function checkForm(form, form1) {
+    //正则：匹配数字
+    var number = /^[0-9]*$/;
+    //正则: 匹配日期
+    var date = /^(\d{1,4})(-)(\d{1,2})\2(\d{1,2})$/;
+
+
+
+    if ($.trim(form.$("#StoreNum").val()).length <= 0){
+        layer.msg("请选择入库单", {time:2000, icon:7, shift:1}, function () {
+            form.$("#StoreNum").focus();
+        });
+        return false;
+    }
+    if ($.trim(form.$("#information").val()).length <= 0){
+        layer.msg("请选择物资品名", {time:2000, icon:7, shift:1}, function () {
+            form.$("#information").focus();
+        });
+        return false;
+    }
+
+    var flag = true;
+    $.each($(form1).find("input[name=scrapTotal]"),function(){
+
+        if ($.trim($(this).parent().prev().find("input[name=count]").val()).length <= 0){
+            layer.msg("请选择物资品名", {time:2000, icon:7, shift:1}, function () { });
+            flag = false;
+            return false;
+        }
+        if ($.trim($(this).val()).length == 0){
+            layer.msg("请输入报废数量", {time:3000, icon:5, shift:6}, function () {});
+            flag = false;
+            return false;
+        }
+        if ($.trim($(this).val()) >$(this).parent().prev().find("input[name=count]").val()){
+            layer.msg("报废数量不能大于库存量", {time:3000, icon:5, shift:6}, function () {});
+            flag = false;
+            return false;
+        }
+
+    });
+    return flag;
+}
+
+
+
+
+
+
+
+

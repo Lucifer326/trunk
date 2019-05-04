@@ -1,0 +1,251 @@
+package com.jeecg.allocation_notice.service.impl;
+
+import com.jeecg.allocation_notice.dao.NoticeAllocationDao;
+import com.jeecg.allocation_notice.entity.RepAllotInform;
+import com.jeecg.allocation_notice.entity.RepInformDetail;
+import com.jeecg.allocation_notice.service.NoticeAllocationServiceI;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.pojo.RepSubstanceMessage;
+import org.jeecgframework.core.common.dao.impl.CommonDao;
+import org.jeecgframework.core.common.exception.BusinessException;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author fuhai_deng
+ * @Description:com.jeecg.allocation_notice.service.impl
+ */
+@Service("noticeAllocationService")
+@Transactional
+public class NoticeAllocationServiceImpl extends CommonServiceImpl implements NoticeAllocationServiceI {
+    private short del=1;
+    private short ke=0;
+    @Autowired
+    private CommonDao commonDao;
+    @Autowired
+    private NoticeAllocationDao noticeAllocationDao;
+
+    /**
+     * 显示调拨通知的页面list显示
+     * @param page
+     * @param rows
+     * @param where
+     * @param order
+     * @return
+     */
+    public List<RepAllotInform> getList(int page, int rows, String where, String order) {
+        //起始数据
+        rows = page* rows;
+        page = (page-1)*rows;
+        List<RepAllotInform> list = noticeAllocationDao.listGet(page,rows, where, order);
+        return list;
+    }
+    //查询调拨单的调拨详情
+    @Override
+    public List<Map<String, Object>> detailGet(String uuid) {
+        List<Map<String, Object>> maps = noticeAllocationDao.detailGet(uuid);
+        return maps;
+    }
+
+
+    //获得确定的物资信息
+    public RepSubstanceMessage cateMessageGet(String uuid) {
+        RepSubstanceMessage message = get(RepSubstanceMessage.class, uuid);
+        return message;
+
+    }
+    //添加调拨通知的信息（调拨通知和调拨通知详情表）
+    @Transactional(rollbackFor = Exception.class)
+    public AjaxJson noticeSave(RepAllotInform repAllotInform, List<RepInformDetail> list ) {
+
+        AjaxJson ajaxJson = new AjaxJson();
+        Serializable save = null;
+        if (repAllotInform != null){
+            // 	是否删除( 0 :未删除 1 ： 已删除)
+            repAllotInform.setIsdeleted(ke);
+            // 	是否已使用（0：使用，1：未使用）
+            repAllotInform.setIsuse((short) 0);
+            // 	调拨单状态  1:未出库  2:已出库
+            repAllotInform.setAllotStatus("1");
+        }
+        save = super.save(repAllotInform);
+        //更具调拨单据号查找相应的调拨通知的对象
+        RepAllotInform repAllotInform1 = noticeGetBydanjuhao(repAllotInform.getAllotNumber());
+
+        if(list!=null&&list.size()>0){
+            for (RepInformDetail rep: list){
+                if (StringUtil.isEmpty(rep.getMessageid())){
+                    throw new BusinessException("请选择物资");
+                }
+                if ("0".equals(rep.getAllotAmount().toString())){
+                    throw new BusinessException("请正确输入调拨数量");
+                }
+                rep.setIsdeleted(ke);
+                rep.setInformid(repAllotInform1.getUuid());
+                Serializable save1 = super.save(rep);
+                if(save==null||save1==null){
+                    ajaxJson.setSuccess(false);
+                    ajaxJson.setMsg("新增失败");
+                    return ajaxJson;
+
+                }
+            }
+        }else{
+            throw new BusinessException("请选择物资");
+            /*RepInformDetail repInformDetail =new RepInformDetail();
+
+            repInformDetail.setInformid(repAllotInform.getUuid());
+            repInformDetail.setPriceTotal(new Long(0));
+            repInformDetail.setAllotAmount(new Long(0));
+            Serializable save1 = super.save(repInformDetail);
+            if(save==null||save1==null){
+                ajaxJson.setSuccess(false);
+                ajaxJson.setMsg("新增失败");
+                return ajaxJson;
+
+            }else{
+
+                ajaxJson.setMsg("新增成功");
+                ajaxJson.setSuccess(true);
+            }*/
+
+        }
+
+
+        return ajaxJson;
+
+    }
+    //据uuid查询调拨详情的对象
+    public RepInformDetail detailGetByid(String uuid) {
+        RepInformDetail uuid1 = findUniqueByProperty(RepInformDetail.class, "uuid", uuid);
+        return uuid1;
+    }
+    //据调拨单据号查询调拨通知的对象
+    public RepAllotInform noticeGetBydanjuhao(String allotNumber) {
+        RepAllotInform repAllotInform = findUniqueByProperty(RepAllotInform.class, "allotNumber", allotNumber);
+        return repAllotInform;
+    }
+
+    //根据调拨uuid查出调拨通知的数据
+    public RepAllotInform repAllotInformGetByid(String uuid) {
+        RepAllotInform repInformDetail = findUniqueByProperty(RepAllotInform.class, "uuid", uuid);
+        return repInformDetail;
+    }
+    //根据调拨uuid查出所有的调拨详情的信息
+    public List<RepInformDetail> repInformDetailGetByid(String uuid) {
+        List<RepInformDetail> detaiList = findByProperty(RepInformDetail.class, "informid", uuid);
+        return detaiList;
+    }
+    //更新调拨
+    @Transactional(rollbackFor = Exception.class)
+    public AjaxJson InformDetailupdate(RepAllotInform repAllotInform, List<RepInformDetail> list,List<RepInformDetail> list1,List<String> list2) {
+        AjaxJson ajaxJson = new AjaxJson();
+
+        if(list.size()==0&&list1.size()==0){
+            throw new BusinessException("物资信息不能为空");
+        }
+
+        RepAllotInform allotInform = repAllotInformGetByid(repAllotInform.getUuid());
+        if (repAllotInform != null){
+            if (allotInform != null){
+                // 救灾项目
+                allotInform.setReloefProject(repAllotInform.getReloefProject());
+                // 	调出部门
+                allotInform.setCalloutDepartment(repAllotInform.getCalloutDepartment());
+                // 	调入部门
+                allotInform.setCallinDepartment(repAllotInform.getCallinDepartment());
+                // 	调拨日期
+                allotInform.setAllotDate(repAllotInform.getAllotDate());
+                // 	物资用途
+                allotInform.setStorageUse(repAllotInform.getStorageUse());
+            }
+        }
+
+        updateEntitie(allotInform);
+        //更新
+        if(list!=null&&list.size()>0){
+
+
+        for (RepInformDetail rep:list) {
+            if (StringUtil.isEmpty(rep.getMessageid())){
+                throw new BusinessException("请选择物资");
+            }
+            if ("0".equals(rep.getAllotAmount().toString())){
+                throw new BusinessException("请正确输入调拨数量");
+            }
+            //判断uuid是否为空（若为空，保存，不空，更新）
+            if(rep.getUuid()!=null&&!"".equals(rep.getUuid())){
+                updateEntitie(rep);
+            }else{
+                super.save(rep);
+            }
+
+        } }
+        //添加
+        if(list1!=null&&list1.size()>0){
+
+        for (RepInformDetail rep:list1) {
+                super.save(rep);
+        }}
+        //删除调拨详情的信息（修改转台吗）
+        if(list2!=null&&list2.size()>0) {
+            for (String str : list2) {
+                RepInformDetail repInformDetail = get(RepInformDetail.class, str);
+                repInformDetail.setIsdeleted(del);
+                updateEntitie(repInformDetail);
+            }
+        }
+
+
+
+        return ajaxJson;
+    }
+    //获得仓储机构信息byid
+    @Override
+    public RepAccessRepository respoityGet(String uuid) {
+        RepAccessRepository repository=null;
+        if(uuid!=null&&!"".equals(uuid)){
+             repository = findUniqueByProperty(RepAccessRepository.class, "uuid", uuid);
+        }
+        return repository;
+    }
+
+    //删除操作
+    @Transactional(rollbackFor = Exception.class)
+    public void InformdelByid(String uuid) {
+
+        //获得要删除的调拨通知的数据
+        RepAllotInform repAllotInform1 = repAllotInformGetByid(uuid);
+        repAllotInform1.setIsdeleted(del);
+        updateEntitie(repAllotInform1);
+
+        //根据调拨通知的uuid查找调拨详情中信息  更改调拨通知的可删除
+        List<RepInformDetail> repInformDetails = repInformDetailGetByid(repAllotInform1.getUuid());
+        for (RepInformDetail rep:repInformDetails) {
+            rep.setIsdeleted(del);
+            updateEntitie(rep);
+        }
+
+    }
+    //查询物资信息by  id
+    public RepSubstanceMessage MessageGet(String bainhao) {
+        RepSubstanceMessage uuid = findUniqueByProperty(RepSubstanceMessage.class, "uuid", bainhao);
+
+        return uuid;
+    }
+
+    //模糊查询列表集合
+
+    public List<Map<String, Object>> NoticelistLike(String diaobo, String project, String date) {
+        List<Map<String, Object>> maps = noticeAllocationDao.listLike(diaobo, project, date);
+        return maps;
+    }
+}

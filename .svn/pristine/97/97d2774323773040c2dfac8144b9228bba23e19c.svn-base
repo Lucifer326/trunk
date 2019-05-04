@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select
+      d.allot_number,
+      x.sub_number,
+       diao.ALLOT_AMOUNT,
+       diao.PRICE_TOTAL,
+       d.uuid,
+       d.RELOEF_PROJECT,
+       d.CALLOUT_DEPARTMENT,
+       d.CALLIN_DEPARTMENT,
+       d.ALLOT_DATE,
+       x.SUB_NAME,
+       x.sub_category,
+       x.specification_type,
+       x.unit
+  from REP_INFORM_DETAIL diao
+  LEFT JOIN REP_ALLOT_INFORM d
+    on diao.INFORMID = d.uuid
+  LEFT JOIN REP_SUBSTANCE_MESSAGE x
+    on diao.MESSAGEID = x.uuid
+
+ where (diao.isdeleted is null
+    or diao.isdeleted = 0)
+
+     <#if diaobo? exists &&diaobo ?length gt 0>
+        and d.allot_number like '%' || '${diaobo}' || '%'
+    </#if>
+    <#if project? exists &&project ?length gt 0>
+        and d.RELOEF_PROJECT like '%' || '${project}' || '%'
+    </#if>
+   <#if date? exists &&date ?length gt 0>
+        and  d.ALLOT_DATE = TO_DATE('${date}','yyyy-mm-dd')
+
+    </#if>
+ order by diao.informid
+
+
+
+]]></SQL>

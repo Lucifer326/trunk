@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+    SELECT DISTINCT
+        rar.*
+    FROM
+        REP_ACCESS_REPOSITORY rar
+    LEFT JOIN T_S_USERCARDINFO tsu ON rar.create_by = tsu.user_name
+    LEFT JOIN t_s_user tsus ON tsu.user_card_id = tsus.cardid
+    LEFT JOIN T_S_ROLE_USER_BASE tsrub ON tsrub.userid = tsus. ID
+    WHERE
+       tsrub.orgid IN (
+        SELECT
+            T . ID
+        FROM
+            T_S_DEPART T START WITH T . ID = (
+                SELECT DISTINCT
+                    tsrub.orgid
+                FROM
+                    T_S_ROLE_USER_BASE tsrub
+                WHERE
+                    tsrub.userid = '${userId}'
+            ) CONNECT BY T .parentdepartid = PRIOR T . ID
+    )
+    <#if repositoryName ?exists && repositoryName ?length gt 0>
+	    and rar.REPOSITORY_NAME like '%' || '${repositoryName}' || '%'
+    </#if>
+    <#if repositoryCategory ?exists && repositoryCategory ?length gt 0>
+	    and rar.REPOSITORY_CATEGORY = '${repositoryCategory}'
+    </#if>
+    <#if activateTimeStart ?exists && activateTimeStart ?length gt 0>
+	    and rar.ACTIVATE_TIME >= TO_DATE('${activateTimeStart}', 'yyyy-MM-dd')
+    </#if>
+    <#if activateTimeEnd ?exists && activateTimeEnd ?length gt 0>
+	    and rar.ACTIVATE_TIME <= TO_DATE('${activateTimeEnd}', 'yyyy-MM-dd')
+    </#if>
+    and rar.ISDELETED NOT IN (1)
+    ORDER BY rar.CREATE_DATE DESC
+]]></SQL>

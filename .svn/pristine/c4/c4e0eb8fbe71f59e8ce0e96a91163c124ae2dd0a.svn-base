@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SQL><![CDATA[
+    select outhouseAmount from rep_outhouse_detail where uuid='${uuid}';
+
+]]>
+</SQL>

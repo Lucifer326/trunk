@@ -1,0 +1,180 @@
+package com.jeecg.system_management.service.impl;
+
+import com.jeecg.system_management.common.MaterialCategoryVo;
+import com.jeecg.system_management.dao.MaterialCategoryDao;
+import com.jeecg.system_management.pojo.RepSubstanceCategory;
+import com.jeecg.system_management.service.MaterialCategoryService;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.ResourceUtil;
+import org.jeecgframework.web.system.pojo.base.TSUser;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * 物资类别管理service impl
+ *
+ * @author 苑希阳
+ */
+@Service
+@Transactional(rollbackFor = {Exception.class})
+public class MaterialCategoryServiceImpl extends CommonServiceImpl implements MaterialCategoryService {
+
+    @Resource
+    private MaterialCategoryDao materialCategoryDao;
+
+    /**
+     * 获取物资类别列表
+     *
+     * @return categoryList
+     */
+    @Override
+    public List<RepSubstanceCategory> materialCategoryList() {
+        TSUser tsUser = ResourceUtil.getSessionUserName();
+        return materialCategoryDao.materialCategoryList(tsUser.getId());
+    }
+
+    /**
+     * 新增物资类别
+     *
+     * @param category 物资类别
+     * @return ajaxJson
+     */
+    @Override
+    public AjaxJson materialCategorySave(RepSubstanceCategory category) {
+        AjaxJson ajaxJson = new AjaxJson();
+        //设置是否删除状态为0（未删除）
+        category.setIsdeleted((short) 0);
+        //插入
+        Serializable save = super.save(category);
+        if (save != null) {
+            //新增成功
+            return ajaxJson;
+        }
+        //新增失败
+        ajaxJson.setSuccess(false);
+        return ajaxJson;
+    }
+
+    /**
+     * 查找uuid对应的物资类别
+     *
+     * @param uuid
+     * @return category
+     */
+    @Override
+    public RepSubstanceCategory materialCategorySee(String uuid) {
+        return materialCategoryDao.materialCategorySee(uuid);
+    }
+
+    /**
+     * 物资类别修改
+     *
+     * @param category 物资类别
+     * @return ajaxJson
+     */
+    @Override
+    public AjaxJson materialCategoryModify(RepSubstanceCategory category) {
+        AjaxJson ajaxJson = new AjaxJson();
+        //修复覆盖不相关字段问题
+        category = this.solutionCoverage(category);
+        //执行修改
+        super.saveOrUpdate(category);
+        return ajaxJson;
+    }
+
+    /**
+     * 修复更新操作覆盖不相关字段问题 例如:创建人姓名 创建人时间等
+     * 执行修改前，通过uuid查出该物资类别，将该物资类别对象与即将修改的物资类别对象合并
+     *
+     * @param category 即将修改的物资类别对象
+     * @return 合并信息后的物资类别对象
+     */
+    private RepSubstanceCategory solutionCoverage(RepSubstanceCategory category) {
+        //通过uuid查询物资类别
+        RepSubstanceCategory rc = this.materialCategorySee(category.getUuid());
+        //填充信息
+        //创建人姓名
+        category.setCreateName(rc.getCreateName());
+        //创建人
+        category.setCreateBy(rc.getCreateBy());
+        //创建日期
+        category.setCreateDate(rc.getCreateDate());
+        //所属公司
+        category.setSysCompanyCode(rc.getSysCompanyCode());
+        //所属部门
+        category.setSysOrgCode(rc.getSysOrgCode());
+        //是否删除
+        category.setIsdeleted(rc.getIsdeleted());
+        //返回填充数据后的category对象
+        return category;
+    }
+
+    /**
+     * 物资类别删除，支持批量删除
+     *
+     * @param ids
+     * @return ajaxJson
+     */
+    @Override
+    public AjaxJson materialCategoryDelete(String ids) {
+        AjaxJson ajaxJson = new AjaxJson();
+        //拆分ids
+        String[] split = ids.split(",");
+        Integer num = 0;
+        //删除（修改isdeleted字段的状态为1）
+        for (int i = 0; i < split.length; i++) {
+            //查找uuid对应的物资类别
+            RepSubstanceCategory category = this.materialCategorySee(split[i]);
+            //更改isDeleted状态
+            category.setIsdeleted((short) 1);
+            //执行删除
+            super.saveOrUpdate(category);
+            num++;
+        }
+        if (num == split.length) {
+            //删除成功
+            return ajaxJson;
+        }
+        //删除失败
+        ajaxJson.setSuccess(false);
+        return ajaxJson;
+    }
+
+    /**
+     * 条件查询
+     *
+     * @param vo 查询条件
+     * @return categoryList
+     */
+    @Override
+    public List<RepSubstanceCategory> materialCategoryByQuery(MaterialCategoryVo vo) {
+        TSUser tsUser = ResourceUtil.getSessionUserName();
+        return materialCategoryDao.materialCategoryByQuery(vo, tsUser.getId());
+    }
+
+    /**
+     * 检查是否存在相同类别名称
+     *
+     * @param categoryName
+     * @return
+     */
+    @Override
+    public AjaxJson checkCategoryName(String categoryName) {
+        AjaxJson ajaxJson = new AjaxJson();
+        TSUser tsUser = ResourceUtil.getSessionUserName();
+        int i = materialCategoryDao.countCategoryByName(categoryName, tsUser.getId());
+        //大于零表示此名称已存在
+        if (i > 0) {
+            //失败返回
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //成功返回
+        return ajaxJson;
+    }
+}

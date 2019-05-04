@@ -1,0 +1,532 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自治区自然灾害救助信息管理系统</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="css/plugins/bootstrap-table/bootstrap-table.css" rel="stylesheet"/>
+    <link href="css/animate.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="css/plugins/sweetalert/sweetalert.css" rel="stylesheet"/>
+    <script>
+
+        function SelectInformation(data){
+            alert(data.id)
+            var id = data.id;
+            parent.layer.open({
+                type: 2,
+                title: '选择物资品名',
+                maxmin: true,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['800px', '520px'],
+                content: '${pageContext.request.contextPath}/ScrapController.do?MaterialInfoManagement',
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var data = $(layero).find("iframe")[0].contentWindow;
+                    var result = data.checkeds();
+                    var together = new Array();
+                    together = result.split(",");
+                    if (result != false) {
+                        var text = together[0];
+                        var address = together[1];
+                        alert(result);
+                        $("#" + id).prev().val(text)
+                        $("#" + id).parent().next().children("input").val(address);
+
+                        parent.layer.close(index);
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body class="gray-bg">
+<form id="form1">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="alert alert-success whj_location"><span class="c6">当前位置：自治区救灾物资信息管理系统 &nbsp > &nbsp</span> 物资报废
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>搜索条件</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="ibox-content whj-padding">
+                        <div class="form-group">
+                            <ul class="ulist">
+                                <li>
+                                    <span class="fl labeltext">单据号：</span>
+                                    <div class="fl">
+                                        <input type="text" class="form-control" name="scrapNumber" id="scrapNumber"
+                                               value="${scrapNumber}"  onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" onkeyup="this.value=this.value.replace(/[`~!@·%#$^&*()=|{}':;',\[\].<>/?~！@#￥……&*（）_+——|{}【】‘；：”“'。，、？]/g,'');">
+                                    </div>
+                                    <div class="clear"></div>
+                                </li>
+                                <li>
+                                    <span class="fl labeltext">仓库：</span>
+                                    <div class="fl">
+                                        <div id="Div1">
+                                            <input type="text" id="text" name="wareHouse" readonly="readonly"
+                                                   class="form-control fl" style="width: 70%" value="${wareHouse}"/>
+                                            <button class="btn btn-primary btnh" id="btn" style="width: 30%"
+                                                    type="button" onclick="SelectStorehouse(this)"><i
+                                                    class="fa fa-search"></i>&nbsp;选择
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </li>
+                                <li>
+                                    <button class="btn btn-primary btnh" id="Button1" type="button"><i
+                                            class="fa fa-search"></i>&nbsp;搜索
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="btn btn-warning btnh" id="reset" type="button">重置</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--ibox-content-->
+                </div>
+            </div>
+        </div>
+        <!--row-->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div class="example-wrap">
+                            <div class="example">
+                                <div class="btn-fl">
+                                    <button type="button" class="btn btn-outline btn-primary" id="Add">新建</button>
+                                    <button type="button" class="btn btn-outline btn-success" id="Look">查看</button>
+                                    <button type="button" class="btn btn-outline btn-warning" id="Update">修改</button>
+                                    <button type="button" class="btn btn-outline btn-danger" id="del">删除</button>
+                                    <button type="button" class="btn btn-outline btn-appro" id="Review">审批</button>
+                                </div>
+                                <table id="exampleTableEvents" data-mobile-responsive="true">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th data-field="order" data-sort-stable="true">序号</th>
+                                        <th data-field="number">单据号</th>
+                                        <th data-field="family">仓库</th>
+                                        <th data-field="remark">备注</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="table_content">
+                                    <c:forEach items="${scrapList}" var="list" varStatus="str">
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" name="choose" value="${list.uuid}" approval_status="${list.reviewStatus}"/>
+
+                                            </td>
+                                            <td>${str.count}</td>
+                                            <td>${list.scrapNumber}</td>
+                                            <td>${list.wareHouse}</td>
+                                            <td>${list.remark}</td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- End Example Events -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--row-->
+    </div>
+</form>
+
+<!-- 全局js -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- 自定义js -->
+<script src="js/content.js"></script>
+<!-- Bootstrap table -->
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+
+<!-- Peity -->
+<script src="js/demo/bootstrap-table-demo.js"></script>
+<script src="js/plugins/layer/laydate/laydate.js"></script>
+<script src="js/plugins/layer/layer.min.js"></script>
+<script src="js/plugins/sweetalert/sweetalert.min.js"></script>
+<!-- 个人js -->
+<script src="js/my.js"></script>
+<script src="js\jzwz\material_scrap\checkForm.js"></script>
+<script>
+    //外部js调用
+    //laydate({
+    //    elem: '#hello1', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+    //    event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+    //});
+    $("#reset").click(function(){
+        $("#form1 input").val("");
+    });
+    $("input[name=btSelectAll]").on('click', function () {
+
+        if ($("input[name='btSelectAll']").is(':checked')) {
+
+            $("#exampleTableEvents").children('tbody').children('tr').each(function () {
+                if (!$(this).hasClass("selected")) {
+                    $(this).addClass("selected");
+                }
+            })
+        } else {
+
+            $("#exampleTableEvents").children('tbody').children('tr').each(function () {
+                $(this).removeClass("selected");
+            })
+        }
+    });
+
+    /**
+     * 选择仓库
+     * @param data
+     * @constructor
+     */
+    function SelectStorehouse(data) {
+        var id = data.id;
+        parent.layer.open({
+            type: 2,
+            title: '选择仓库',
+            maxmin: true,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['800px', '520px'],
+            content: '${pageContext.request.contextPath}/ScrapController.do?findRepository',
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                var data = $(layero).find("iframe")[0].contentWindow;
+                var result = data.selectHouse();
+                var together = new Array();
+                together = result.split(",");
+                if (result != false) {
+                    var text = together[0];
+                    $("#" + id).prev().val(text);
+                    parent.layer.close(index);
+                }
+            }
+        });
+    }
+
+
+    $('#Button1').on('click', function () {
+        var scrapNumber = $("#scrapNumber").val();
+        var wareHouse = $("#text").val();
+        window.location.href = "${pageContext.request.contextPath}/ScrapController.do?selectNumbers&scrapNumber="+scrapNumber+"&wareHouse="+wareHouse;
+    });
+
+  /*  $('#btn').on('click', function () {
+
+        parent.layer.open({
+            type: 2,
+            title: '走访对象',
+            maxmin: true,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['840px', '520px'],
+            zIndex: 101,
+            content: '/ScrapController.do?listRepository',
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                $("#txt").val("张三");
+                parent.layer.close(index);
+            }
+
+        });
+    });*/
+
+    $('#Add').on('click', function () {
+        layer.open({
+            type: 2,
+            title: '新建内容',
+            maxmin: true,
+            zIndex: 1000,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['800px', '500px'],
+            content: '${pageContext.request.contextPath}/webpage/jzwz/MaterialScrap/MaterialScrapAdd.jsp',
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                var form = $(layero).find("iframe")[0].contentWindow.document.getElementById("myForm");
+               // alert($(form).find("input[name=scrapTotal]").val());
+                var check = checkForm($(layero).find('iframe')[0].contentWindow,form);
+                if (!check) {
+                    return;
+                }
+                $.ajax({
+                    type: "post",
+                    dataType: "JSON",
+                    url: "${pageContext.request.contextPath}/ScrapController.do?InsertMaterial",
+                    data: layero.find("iframe")[0].contentWindow.$("#myForm").serialize(),
+                    async: false,
+                    success: function (result) {
+                        if (result.success) {
+                            swal({
+                                title: "添加成功！",
+                                zIndex: 19891014,
+                                confirmButtonText: "确定",
+                                type: "success",
+                            }, function () {
+                                layer.close(index);
+                                window.location.href = "${pageContext.request.contextPath}/ScrapController.do?showScrapList";
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $('#Update').on('click', function () {
+        var ids = [];
+        var reviewStatus=[];
+        $('#table_content input[type=checkbox]:checked').each(function () {
+            ids.push($(this).attr('value'));
+            reviewStatus.push($(this).attr('approval_status'));
+        })
+        if (ids.length <= 0) {
+            layer.msg("请选择一条记录！",{icon: 2,time:2000});
+            return false;
+        } else if (ids.length > 1) {
+            layer.msg("只能选择一条记录！",{icon: 2,time:2000});
+            return false;
+        }
+        var reviewStatu = reviewStatus[0];
+        if(reviewStatu != ''){
+            swal({
+                title: "已审批该报废单,无法进行修改",
+                zIndex: 19891014,
+                confirmButtonText: "确定",
+                type: "warning",
+            }, function () {
+            });
+            return false;
+        }
+        var id = ids[0];
+        layer.open({
+            type: 2,
+            title: '修改内容',
+            maxmin: true,
+            zIndex: 1000,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['800px', '500px'],
+            content: '${pageContext.request.contextPath}/ScrapController.do?toEditData&uuid='+id,
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                var form = $(layero).find("iframe")[0].contentWindow.document.getElementById("myFormUpdate");
+                $.ajax({
+                    type: "post",
+                    data:$(form).serialize(),
+                    dataType: "JSON",
+                    url: "${pageContext.request.contextPath}/ScrapController.do?updateData",
+                    success: function (result) {
+                        if (result.success) {
+                            swal({
+                                    title: "修改成功！",
+                                    type: "success",
+                                    confirmButtonText: "确定"
+                                },
+                                function () {
+                                    window.location.href = "${pageContext.request.contextPath}/ScrapController.do?showScrapList";
+                                }
+                            );
+                        }else{
+                            swal({
+                                title: "修改成功！",
+                                type: "error",
+                                confirmButtonText: "确定"
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $('#Look').on('click', function () {
+        var ids = [];
+        $('#table_content input[type=checkbox]:checked').each(function () {
+            ids.push($(this).attr('value'));
+        })
+        if (ids.length == 0) {
+            layer.msg("请选择一条记录！",{icon: 2,time:2000});
+            return false;
+        } else if (ids.length > 1) {
+            layer.msg("只能选择一条记录！",{icon: 2,time:2000});
+            return false;
+        }
+        var id = ids[0];
+        /*var selectedCount = 0;
+        $("#exampleTableEvents").find('tr').each(function () {
+            if ($(this).hasClass('selected')) {
+                selectedCount++
+            }
+        })
+        if (selectedCount > 1) {
+            alert("只能选择一条记录！");
+            return false;
+        } else if (selectedCount < 1) {
+            alert("请选择一条记录！");
+            return false;
+        }*/
+        layer.open({
+            type: 2,
+            title: '查看内容',
+            maxmin: true,
+            zIndex: 1000,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['800px', '500px'],
+            content: 'ScrapController.do?search&uuid=' + id,
+            btn: ['关闭']
+        });
+    });
+    $('#del').click(function () {
+        var selectedCount = 0;
+        $("#exampleTableEvents").find('tr').each(function () {
+            if ($(this).hasClass('selected')) {
+                selectedCount++
+            }
+        })
+        /*   if (selectedCount == 0) {
+               alert("请至少选择一条记录！");
+               return false;
+           }*/
+        var ids = [];
+        $('#table_content input[type=checkbox]:checked').each(function () {
+            ids.push($(this).attr('value'));
+        })
+        if (ids.length == 0) {
+            layer.alert("请选择一条记录！");
+            return false;
+        } else {
+            swal({
+                title: "您确定要删除这条信息吗",
+                text: "删除后将无法恢复，请谨慎操作！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "删除",
+                cancelButtonText: "取消",
+                closeOnConfirm: false
+            }, function (index, layero) {
+                $.ajax({
+                    type: "post",
+                    dataType: "JSON",
+                    url: "${pageContext.request.contextPath}/ScrapController.do?deleteData",
+                    cache: false,
+                    traditional: true,
+                    data: {ids: ids},
+                    success: function (result) {
+                        if (result.success) {
+                            swal({title: "删除成功！", text: "您已经永久删除了这条信息。", type: "success", confirmButtonText: "确定"},
+                                function () {
+                                    window.location.href = "ScrapController.do?showScrapList";
+                                }
+                            );
+                        }
+                    }
+                });
+
+            });
+        }
+    });
+
+
+    $('#Review').click(function () {
+        var ids = [];
+        var reviewStatus=[];
+        $('#table_content input[type=checkbox]:checked').each(function () {
+            ids.push($(this).attr('value'));
+            reviewStatus.push($(this).attr('approval_status'));
+        })
+        if (ids.length <= 0) {
+            layer.msg("请选择一条记录！",{icon: 2,time:2000});
+            return false;
+        } else if (ids.length > 1) {
+            layer.msg("只能选择一条记录！",{icon: 2,time:2000});
+            return false;
+        }
+        var reviewStatu = reviewStatus[0];
+        if(reviewStatu != ''){
+            swal({
+                title: "已审批过该报废单,无法再次进行审批",
+                zIndex: 19891014,
+                confirmButtonText: "确定",
+                type: "warning",
+            }, function () {
+            });
+            return false;
+        }
+        var id = ids[0];
+         layer.open({
+            type: 2,
+            title: '审批内容',
+            maxmin: true,
+            zIndex: 1000,
+            shadeClose: true, //点击遮罩关闭层
+            area: ['800px', '350px'],
+            content: '${pageContext.request.contextPath}/ScrapController.do?approvalReady',
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {
+                //获取子页面的信息
+                var form = $(layero).find("iframe")[0].contentWindow.document.getElementById("forms");
+                //发送ajax请求
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/ScrapController.do?approval&reviewId=" + id,
+                    data: $(form).serialize(),
+                    type: "GET",
+                    dataType: "JSON",
+                    error: function () {
+                        swal({
+                            title: "服务器没有响应",
+                            zIndex: 19891014,
+                            confirmButtonText: "确定",
+                            type: "warning",
+                        }, function () {
+                        });
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            //审批成功
+                            swal({
+                                title: data.msg,
+                                zIndex: 19891014,
+                                confirmButtonText: "确定",
+                                type: "success",
+                            }, function () {
+                                layer.close(index);
+                                window.location.href = "ScrapController.do?showScrapList";
+                            });
+                        } else {
+                            //审批失败
+                            swal({
+                                title: data.msg,
+                                zIndex: 19891014,
+                                confirmButtonText: "确定",
+                                type: "warning",
+                            }, function () {
+                            });
+                        }
+                    }
+                });
+            }
+
+        });
+    });
+</script>
+</body>
+</html>

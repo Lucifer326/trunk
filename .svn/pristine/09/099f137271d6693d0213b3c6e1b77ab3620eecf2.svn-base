@@ -1,0 +1,71 @@
+package com.jeecg.MaterialsInPut.service;
+
+import com.jeecg.MaterialsInPut.entity.RepSubstanceStorageEntity;
+import org.jeecgframework.core.common.service.CommonService;
+
+import java.util.List;
+import java.util.Map;
+
+public interface MaterialsInputService extends CommonService {
+	/**
+	 * 查询全部
+	 * @return
+	 */
+	List<Map<String, Object>> queryAll(String storageNumber, String storageWarehouse, String startDate, String endDate);
+
+	/**
+	 * 查询物资入库详细和物资信息
+	 * @param numberid
+	 * @return
+	 */
+	List<Map<String, Object>> inStockLook(String numberid);
+
+	/**
+	 * 根据id查询物资入库
+	 * @return
+	 */
+	Map<String, Object> queryOne(String uuid);
+
+	/**
+	 * 根据id查询物资入库(返回一个物资入库对象)
+	 *
+	 * @param uuid
+	 * @return
+	 */
+	RepSubstanceStorageEntity queryOneEntityById(String uuid);
+
+	/**
+	 * 新建物资入库
+	 * @return
+	 */
+    void saveOrupdateInput(RepSubstanceStorageEntity repSubstanceStorageEntity, String[] minuteids, String[] messageids, String[] prices, String[] outputAmounts,
+                           String[] purchaseDates, String[] manufactureDates, String[] overinsuredDates, String delUuid, String ctrl) throws Exception;
+
+	/**
+	 * 修改
+	 * @param repSubstanceStorageEntity
+	 */
+	void updInStock(RepSubstanceStorageEntity repSubstanceStorageEntity);
+
+	/**
+	 * 批量删除
+	 * @param del_uuids
+	 */
+	void delBatch(String[] del_uuids);
+
+	/**
+	 * 单个删除
+	 * @param uuids
+	 */
+	//void delInStock(String uuids);
+
+	/**
+	 * 根据物资入库详细id查询物资入库详细和物资信息
+	 */
+	Map<String, Object> queryMinute(String uuid);
+
+	/**
+	 * 根据仓库id查询物资入库详细和入库单号
+	 */
+	List<Map<String, Object>> queryDetail(String numberid);
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select dedis.value
+from bssys_deploydis dedis
+where dedis.isdeleted=0  
+and dedis.deploy_id = ${deployId}
+and dedis.dis_code like ${disCode}
+]]></SQL>

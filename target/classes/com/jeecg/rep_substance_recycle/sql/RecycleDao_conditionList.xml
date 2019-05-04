@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT DISTINCT
+	rsr.*
+FROM
+	REP_SUBSTANCE_RECYCLE rsr
+LEFT JOIN T_S_BASE_USER tsbu ON RSR.CREATE_BY = TSBU.USERNAME
+LEFT JOIN T_S_ROLE_USER_BASE tsrub ON tsbu. ID = tsrub.userid
+WHERE
+	ISDELETED NOT IN (1)
+AND
+    tsrub.orgid IN (
+	SELECT DISTINCT
+		ID
+	FROM
+		T_S_DEPART START WITH ID = (
+			SELECT DISTINCT
+				orgid
+			FROM
+				T_S_ROLE_USER_BASE
+			WHERE
+				userid = :uuid
+		) CONNECT BY parentdepartid = PRIOR ID
+)
+    <#if vo.recycleNumber ?exists && vo.recycleNumber ?length gt 0>
+	    and rsr.RECYCLE_NUMBER like '%' || '${vo.recycleNumber}' || '%'
+    </#if>
+    <#if vo.storageWarehouse ?exists && vo.storageWarehouse ?length gt 0>
+	    and rsr.STORAGE_WAREHOUSE like '%' || '${vo.storageWarehouse}' || '%'
+    </#if>
+    <#if inDate ?exists && inDate ?length gt 0>
+	    and rsr.STORAGE_DATE >= TO_DATE('${inDate}', 'yyyy-MM-dd')
+    </#if>
+    <#if outDate ?exists && outDate ?length gt 0>
+	    and rsr.STORAGE_DATE <= TO_DATE('${outDate}', 'yyyy-MM-dd')
+    </#if>
+ORDER BY
+	rsr.CREATE_DATE DESC
+]]></SQL>

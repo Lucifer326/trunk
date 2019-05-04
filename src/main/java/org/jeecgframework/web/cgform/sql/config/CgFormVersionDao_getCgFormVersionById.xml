@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select 
+jform_version 
+from cgform_head  
+where id = '${id}'
+]]></SQL>

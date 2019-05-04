@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select *
+from REP_PROTOCOL_STORE_MESSAGE
+where ISDELETED = 0
+ORDER BY CREATE_DATE DESC
+]]></SQL>

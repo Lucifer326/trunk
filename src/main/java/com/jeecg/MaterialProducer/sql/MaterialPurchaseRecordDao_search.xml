@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select * from MATERIAL_PURCHASE_RECORD
+where 1=1
+    <#if productCategory? exists && productCategory ?length gt 0>
+        and PRODUCT_CATEGORY like '%' || '${productCategory}' || '%'
+    </#if>
+    <#if buyFromTime? exists &&buyFromTime ?length gt 0>
+        and BUY_TIME >= TO_DATE('${buyFromTime}','yyyy-mm-dd')
+        and BUY_TIME < TO_DATE('${buyToTime}','yyyy-mm-dd')
+    </#if>
+   order by CREATE_DATE desc
+]]></SQL>

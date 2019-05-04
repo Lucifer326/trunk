@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT * FROM t_s_typegroup WHERE is_deleted = 0 and parent_id is null
+]]></SQL>

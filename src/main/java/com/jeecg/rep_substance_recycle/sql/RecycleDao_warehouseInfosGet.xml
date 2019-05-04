@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select *
+from REP_STORAGE_DETAIL
+where ISDELETED NOT IN(1)
+AND NUMBERID = :uuid
+ORDER BY CREATE_DATE DESC
+]]></SQL>

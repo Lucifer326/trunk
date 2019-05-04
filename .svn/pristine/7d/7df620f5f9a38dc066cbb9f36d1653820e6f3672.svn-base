@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select sm.*,sd.*,cy.CATEGORY_NAME 
+from REP_SUBSTANCE_MESSAGE sm,REP_STORAGE_DETAIL sd,REP_SUBSTANCE_CATEGORY cy  
+where sd.NUMBERID = '${numberid}' and sd.MESSAGEID = sm.UUID(+) and sm.SUB_CATEGORY = cy.UUID(+) and sd.ISDELETED != 1
+]]></SQL>

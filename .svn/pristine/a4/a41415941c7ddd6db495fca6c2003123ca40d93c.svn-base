@@ -1,0 +1,143 @@
+package com.jeecg.rep_substance_recycle.service.impl;
+
+import com.jeecg.rep_substance_recycle.dao.RecycleDao;
+import com.jeecg.rep_substance_recycle.entity.RepDetailedMaterialRecoveryEntity;
+import com.jeecg.rep_substance_recycle.entity.RepSubstanceRecycleEntity;
+import com.jeecg.rep_substance_recycle.service.RecycleService;
+import com.jeecg.rep_substance_recycle.vo.RecycleVo;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.apache.log4j.Logger;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+@Service
+public class RecycleServiceImpl extends CommonServiceImpl implements RecycleService {
+
+    @Autowired
+    private RecycleDao recycleDao;
+
+
+    @Override
+    public List<RepSubstanceRecycleEntity> recycleList() {
+        return recycleDao.recycleList();
+    }
+
+    @Override
+    public List<RepSubstanceRecycleEntity> conditionList(RecycleVo vo) {
+        String inDate = "";
+        String outDate = "";
+        if (vo != null){
+            if (vo.getRecycleNumber() != null && !"".equals(vo.getRecycleNumber())){
+                vo.setRecycleNumber(vo.getRecycleNumber().trim());
+            }
+            if (vo.getStorageWarehouse() != null && !"".equals(vo.getRecycleNumber())){
+                vo.setStorageWarehouse(vo.getStorageWarehouse().trim());
+            }
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            if (vo.getInDate() != null){
+                inDate = format.format(vo.getInDate());
+            }
+            if (vo.getOutDate() != null){
+                outDate = format.format(vo.getOutDate());
+            }
+        }
+        return recycleDao.conditionList(vo, inDate, outDate);
+    }
+
+    @Override
+    public RepSubstanceRecycleEntity lookRecycle(String uuid) {
+        return recycleDao.lookRecycle(uuid);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteRecycles(String[] uuid) {
+
+        // 取到该id下有多少个物资回收详细物资 物资从表
+        for(int i = 0; i < uuid.length; i++){
+            String id = uuid[i];
+            String sql = "update REP_DETAILED_MATERIAL_RECOVERY set ISDELETED = 1 where REPOSITORYID = ?";
+            super.executeSql(sql, id);
+        }
+
+        // 修改物资回收表isdelete 物资主表
+        String param = "";
+        for (int i = 0; i < uuid.length - 1; i++){
+            param += "?,";
+        }
+        param += "?";
+
+        String sql = "update REP_SUBSTANCE_RECYCLE set ISDELETED = 1 where uuid in (" + param +")";
+        super.executeSql(sql, uuid);
+
+
+    }
+
+    @Override
+    public List<RepDetailedMaterialRecoveryEntity> recyclingDetailsGet(String uuid) {
+        return recycleDao.recyclingDetailsGet(uuid);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addRecycleAndMaterialRecovery(RepSubstanceRecycleEntity recycle, List<RepDetailedMaterialRecoveryEntity> list) {
+        super.save(recycle);
+
+        if (list != null){
+
+            for (int i = 0; i < list.size(); i++){
+                // 补全对象属性
+                list.get(i).setRepositoryid(recycle.getUuid());
+                super.save(list.get(i));
+            }
+        }
+    }
+
+    @Override
+    public RepSubstanceRecycleEntity recyclingEdit(String uuid) {
+        return recycleDao.recyclingEdit(uuid);
+    }
+
+    @Override
+    public List<RepDetailedMaterialRecoveryEntity> recoveryEdit(String uuid) {
+        return recycleDao.recyclingDetailsGet(uuid);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateRecycleAndMaterialRecovery(RepSubstanceRecycleEntity recycle, List<RepDetailedMaterialRecoveryEntity> list) {
+
+        if (recycle!=null){
+            RepSubstanceRecycleEntity entity = recycleDao.lookRecycle(recycle.getUuid());
+            if (entity!=null){
+                recycle.setCreateBy(entity.getCreateBy());
+                recycle.setCreateDate(entity.getCreateDate());
+                recycle.setCreateName(entity.getCreateName());
+                recycle.setIsdeleted(entity.getIsdeleted());
+                recycle.setSysCompanyCode(entity.getSysCompanyCode());
+                recycle.setSysOrgCode(entity.getSysOrgCode());
+            }
+        }
+
+        super.saveOrUpdate(recycle);
+
+        // 删除回收详细表字段Repositoryid为uuid所有的数据  从新添加
+        String sql = "update REP_DETAILED_MATERIAL_RECOVERY set ISDELETED = 1 where REPOSITORYID = ?";
+        super.executeSql(sql, recycle.getUuid());
+
+        if (list != null){
+
+            // 从新添加回收详细表数据
+            for (int i = 0; i < list.size(); i++){
+                // 补全对象属性
+                list.get(i).setRepositoryid(recycle.getUuid());
+                super.saveOrUpdate(list.get(i));
+            }
+        }
+    }
+}

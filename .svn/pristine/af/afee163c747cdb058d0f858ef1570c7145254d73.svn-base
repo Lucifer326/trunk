@@ -1,0 +1,41 @@
+package com.jeecg.rep_substance_recycle.dao;
+
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.rep_substance_recycle.entity.RepDetailedMaterialRecoveryEntity;
+import com.jeecg.rep_substance_recycle.entity.RepSubstanceRecycleEntity;
+import com.jeecg.rep_substance_recycle.vo.RecycleVo;
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.jeecgframework.minidao.annotation.MiniDao;
+
+import java.util.List;
+import java.util.Map;
+
+@MiniDao
+public interface RecycleDao {
+
+    List<RepSubstanceRecycleEntity> recycleList();
+
+    @Arguments({"vo", "inDate", "outDate"})
+    List<RepSubstanceRecycleEntity> conditionList(RecycleVo vo, String inDate, String outDate);
+
+    @Arguments({"uuid"})
+    RepSubstanceRecycleEntity lookRecycle(String uuid);
+
+    @Arguments({"uuid"})
+    RepSubstanceRecycleEntity recyclingDetailsGet(String uuid);
+
+    @Arguments({"input", "output"})
+    List<Map<String,Object>> seachAllocation(String input, String output);
+
+    @Arguments({"uuid"})
+    List<Map<String, Object>> warehouseInfosGet(String uuid);
+
+    @Arguments({"messageid"})
+    Map<String,Object> materialInfosGet(Object messageid);
+
+    @Arguments({"uuid"})
+    RepSubstanceRecycleEntity recyclingEdit(String uuid);
+
+    @Arguments({"uuid"})
+    List<RepDetailedMaterialRecoveryEntity> recoveryEdit(String uuid);
+}

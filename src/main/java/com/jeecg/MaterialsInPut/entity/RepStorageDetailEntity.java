@@ -1,0 +1,369 @@
+package com.jeecg.MaterialsInPut.entity;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * 物资入库详细Pojo
+ * @table REP_STORAGE_DETAIL
+ */
+@Entity
+@Table(name = "REP_STORAGE_DETAIL", schema = "")
+public class RepStorageDetailEntity implements Serializable {
+	/**
+	 * 主键ID
+	 */
+	private String uuid;
+
+	/**
+	 * 物资出入库ID
+	 */
+	private String numberid;
+
+	/**
+	 * 物资信息ID
+	 */
+	private String messageid;
+
+	/**
+	 * 库存量
+	 */
+	private String amount;
+
+	/**
+	 * 购置日期
+	 */
+	private Date purchaseDate;
+
+	/**
+	 * 生产日期
+	 */
+	private Date manufactureDate;
+
+	/**
+	 * 过保日期
+	 */
+	private Date overinsuredDate;
+
+	/**
+	 * 总价
+	 */
+	private BigDecimal totalPrices;
+
+	/**
+	 * 入库数量
+	 */
+	private BigDecimal outputAmount;
+
+	/**
+	 * 备注
+	 */
+	private String remark;
+
+	/**
+	 * 创建人姓名
+	 */
+	private String createName;
+
+	/**
+	 * 创建人登录名称
+	 */
+	private String createBy;
+
+	/**
+	 * 创建时间
+	 */
+	private Date createDate;
+
+	/**
+	 * 更新人姓名
+	 */
+	private String updateName;
+
+	/**
+	 * 更新人登录名称
+	 */
+	private String updateBy;
+
+	/**
+	 * 更新时间
+	 */
+	private Date updateDate;
+
+	/**
+	 * 所属公司
+	 */
+	private String sysCompanyCode;
+
+	/**
+	 * 所属部门
+	 */
+	private String sysOrgCode;
+
+	/**
+	 * 流程状态
+	 */
+	private String bpmStatus;
+
+	/**
+	 * 是否删除
+	 */
+	private Short isdeleted;
+
+	/**
+	 * 状态 (新:0, 回收1, 报废2)
+	 */
+	private Short status;
+
+	/**
+	 * 报废原因
+	 */
+	private String scrapReason;
+
+	/**
+	 * 物资入库详细ID
+	 */
+	private String storageDetail;
+
+	@Override
+	public String toString() {
+		return "RepStorageDetailEntity{" +
+				"uuid='" + uuid + '\'' +
+				", numberid='" + numberid + '\'' +
+				", messageid='" + messageid + '\'' +
+				", amount='" + amount + '\'' +
+				", purchaseDate=" + purchaseDate +
+				", manufactureDate=" + manufactureDate +
+				", overinsuredDate=" + overinsuredDate +
+				", totalPrices=" + totalPrices +
+				", outputAmount=" + outputAmount +
+				", remark='" + remark + '\'' +
+				", createName='" + createName + '\'' +
+				", createBy='" + createBy + '\'' +
+				", createDate=" + createDate +
+				", updateName='" + updateName + '\'' +
+				", updateBy='" + updateBy + '\'' +
+				", updateDate=" + updateDate +
+				", sysCompanyCode='" + sysCompanyCode + '\'' +
+				", sysOrgCode='" + sysOrgCode + '\'' +
+				", bpmStatus='" + bpmStatus + '\'' +
+				", isdeleted=" + isdeleted +
+				", status=" + status +
+				", scrapReason='" + scrapReason + '\'' +
+				'}';
+	}
+
+	@Id
+	@GeneratedValue(generator = "paymentableGenerator")
+	@GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
+	@Column(name = "UUID", length = 36, nullable = false)
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	@Column(name = "STORAGEDETAIL", length = 36, nullable = false)
+	public String getStorageDetail() {
+		return storageDetail;
+	}
+
+	public void setStorageDetail(String storageDetail) {
+		this.storageDetail = storageDetail;
+	}
+
+	@Column(name = "NUMBERID", length = 36, nullable = false)
+	public String getNumberid() {
+		return numberid;
+	}
+
+	public void setNumberid(String numberid) {
+		this.numberid = numberid;
+	}
+
+	@Column(name = "MESSAGEID", length = 36, nullable = false)
+	public String getMessageid() {
+		return messageid;
+	}
+
+	public void setMessageid(String messageid) {
+		this.messageid = messageid;
+	}
+
+	@Column(name = "AMOUNT", length = 36, nullable = false)
+	public String getAmount() {
+		return amount;
+	}
+
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+
+	@Column(name = "PURCHASE_DATE", nullable = false)
+	public Date getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
+
+	@Column(name = "MANUFACTURE_DATE", nullable = false)
+	public Date getManufactureDate() {
+		return manufactureDate;
+	}
+
+	public void setManufactureDate(Date manufactureDate) {
+		this.manufactureDate = manufactureDate;
+	}
+
+	@Column(name = "OVERINSURED_DATE", nullable = false)
+	public Date getOverinsuredDate() {
+		return overinsuredDate;
+	}
+
+	public void setOverinsuredDate(Date overinsuredDate) {
+		this.overinsuredDate = overinsuredDate;
+	}
+
+	@Column(name = "TOTAL_PRICES", length = 18, nullable = false)
+	public BigDecimal getTotalPrices() {
+		return totalPrices;
+	}
+
+	public void setTotalPrices(BigDecimal totalPrices) {
+		this.totalPrices = totalPrices;
+	}
+
+	@Column(name = "OUTPUT_AMOUNT", length = 36, nullable = false)
+	public BigDecimal getOutputAmount() {
+		return outputAmount;
+	}
+
+	public void setOutputAmount(BigDecimal outputAmount) {
+		this.outputAmount = outputAmount;
+	}
+
+	@Column(name = "REMARK", length = 500)
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	@Column(name = "CREATE_NAME", length = 36)
+	public String getCreateName() {
+		return createName;
+	}
+
+	public void setCreateName(String createName) {
+		this.createName = createName;
+	}
+
+	@Column(name = "CREATE_BY", length = 36)
+	public String getCreateBy() {
+		return createBy;
+	}
+
+	public void setCreateBy(String createBy) {
+		this.createBy = createBy;
+	}
+
+	@Column(name = "CREATE_DATE", length = 36)
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	@Column(name = "UPDATE_NAME", length = 36)
+	public String getUpdateName() {
+		return updateName;
+	}
+
+	public void setUpdateName(String updateName) {
+		this.updateName = updateName;
+	}
+
+	@Column(name = "UPDATE_BY", length = 36)
+	public String getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
+	}
+
+	@Column(name = "UPDATE_DATE", length = 36)
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	@Column(name = "SYS_COMPANY_CODE", length = 36)
+	public String getSysCompanyCode() {
+		return sysCompanyCode;
+	}
+
+	public void setSysCompanyCode(String sysCompanyCode) {
+		this.sysCompanyCode = sysCompanyCode;
+	}
+
+	@Column(name = "SYS_ORG_CODE", length = 36)
+	public String getSysOrgCode() {
+		return sysOrgCode;
+	}
+
+	public void setSysOrgCode(String sysOrgCode) {
+		this.sysOrgCode = sysOrgCode;
+	}
+
+	@Column(name = "BPM_STATUS", length = 36)
+	public String getBpmStatus() {
+		return bpmStatus;
+	}
+
+	public void setBpmStatus(String bpmStatus) {
+		this.bpmStatus = bpmStatus;
+	}
+
+	@Column(name = "ISDELETED", length = 1, nullable = false)
+	public Short getIsdeleted() {
+		return isdeleted;
+	}
+
+	public void setIsdeleted(Short isdeleted) {
+		this.isdeleted = isdeleted;
+	}
+
+	@Column(name = "STATUS", length = 1, nullable = false)
+	public Short getStatus() {
+		return status;
+	}
+
+	public void setStatus(Short status) {
+		this.status = status;
+	}
+
+	@Column(name = "SCRAP_REASON", length = 1000)
+	public String getScrapReason() {
+		return scrapReason;
+	}
+
+	public void setScrapReason(String scrapReason) {
+		this.scrapReason = scrapReason;
+	}
+}

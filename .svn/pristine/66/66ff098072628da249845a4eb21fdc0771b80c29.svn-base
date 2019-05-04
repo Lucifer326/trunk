@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+SELECT detil.UUID,
+detil.OUTHOUSEID,
+detil.MESSAGEID,
+detil.OUTHOUSE_AMOUNT,
+detil.ISRECYCLE,
+detil.OUTHOUSE_WAREHOUSE,
+detil.REMARK,
+sub.SUB_NUMBER,
+sub.SUB_NAME,
+sub.SUB_CATEGORY,
+sub.SPECIFICATION_TYPE,
+sub.ISRECYCLE,
+sub.SUPPLIER,
+sub.PRICE,
+sub.UNIT,
+cat.CATEGORY_NAME
+FROM REP_OUTHOUSE_DETAIL detil
+LEFT JOIN REP_SUBSTANCE_MESSAGE sub
+ON sub.UUID = detil.MESSAGEID
+LEFT JOIN REP_SUBSTANCE_CATEGORY cat
+ON cat.UUID = sub.SUB_CATEGORY
+WHERE detil.outhouse_warehouse = '${outhouseWarehouse}'
+ORDER BY detil.CREATE_DATE DESC
+]]></SQL>

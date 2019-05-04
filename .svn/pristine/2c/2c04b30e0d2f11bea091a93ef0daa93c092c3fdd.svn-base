@@ -1,0 +1,33 @@
+package com.jeecg.MaterialsOutPut.dao;
+
+import com.jeecg.MaterialsOutPut.entity.RepSubstanceOuthouse;
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @version 1.0
+ * @Auther zhenleichao
+ * @Date 2019/4/2
+ * @Description com.jeecg.MaterialsOutPut.dao
+ */
+@Repository("repSubstanceOuthouseMiniDao")
+public interface RepSubstanceOuthouseMiniDao {
+
+    @Arguments({"outhouseNumber","repositoryName","outhouseDate"})
+    List<Map<String,Object>> getAll(String outhouseNumber, String repositoryName, String outhouseDate);
+
+//    List<Map<String,Object>> getAllWithRepository();
+    /**
+     * 根据主键查询出库详细信息
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    Map<String,Object> getDetilById(String uuid);
+
+
+}

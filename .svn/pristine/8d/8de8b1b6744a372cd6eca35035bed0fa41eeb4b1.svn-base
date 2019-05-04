@@ -1,0 +1,283 @@
+package com.jeecg.system_management.controller;
+
+import com.jeecg.system_management.common.CommonCode;
+import com.jeecg.system_management.common.WarehouseQueryVo;
+import com.jeecg.system_management.pojo.RepAccessRepository;
+import com.jeecg.system_management.service.WarehouseService;
+import org.jeecgframework.core.common.controller.BaseController;
+import org.jeecgframework.core.common.model.json.AjaxJson;
+import org.jeecgframework.core.util.StringUtil;
+import org.jeecgframework.web.system.pojo.base.TSType;
+import org.jeecgframework.web.system.service.TypeServiceI;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+/**
+ * 仓储机构信息管理Controller
+ *
+ * @author 苑希阳
+ */
+@Controller
+@RequestMapping("/warehouse")
+public class WarehouseController extends BaseController {
+
+    @Resource
+    private TypeServiceI typeServiceImpl;
+
+    @Resource
+    private WarehouseService warehouseServiceImpl;
+
+    /**
+     * 显示index页
+     *
+     * @return
+     */
+    @RequestMapping(params = "index")
+    public String showIndex() {
+        return "jzwz/index";
+    }
+
+    @RequestMapping(params = "home1")
+    public String showHome() {
+        return "jzwz/home1";
+    }
+
+    /**
+     * 展示新建仓库页面
+     *
+     * @return
+     */
+    @RequestMapping(params = "WareHouseInformationManageAdd")
+    public String showWareHouseInformationManageAdd(Model model) {
+        //取库房类别列表
+        List<TSType> categoryItems = typeServiceImpl.getItems(CommonCode.WAREHOUSE_TYPE);
+        //取机构分类列表
+        List<TSType> jgItems = typeServiceImpl.getItems(CommonCode.JG_LASSIFY);
+        //放入域中
+        model.addAttribute("categoryItems", categoryItems);
+        model.addAttribute("jgItems", jgItems);
+        return "jzwz/MaterialManagement/WareHouseInformationManage/WareHouseInformationManageAdd";
+    }
+
+    /**
+     * 展示选择区划页面
+     *
+     * @return
+     */
+    @RequestMapping(params = "SelectDiv")
+    public String showSelectDiv() {
+        return "jzwz/CommonPage/SelectDiv";
+    }
+
+    /**
+     * 仓储机构列表页
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping(params = "list")
+    public String warehouseList(Model model) {
+        //取库房类别列表
+        List<TSType> items = typeServiceImpl.getItems(CommonCode.WAREHOUSE_TYPE);
+        //列表查询
+        List<RepAccessRepository> list = warehouseServiceImpl.repositoryList();
+        //放入域中
+        model.addAttribute("items", items);
+        model.addAttribute("list", list);
+        return "jzwz/MaterialManagement/WareHouseInformationManage/WareHouseInformationManageList";
+    }
+
+    /**
+     * 新建仓库
+     *
+     * @param repository
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "save")
+    public AjaxJson saveWarehouse(RepAccessRepository repository) {
+        AjaxJson ajaxJson = new AjaxJson();
+        //repository非空验证
+        if (null == repository) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //库房区划非空判断
+        if (StringUtil.isEmpty(repository.getRepositoryArea().trim())) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //机构分类非空判断
+        if (null == repository.getOrganizationClassify()) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //库房名称非空判断
+        if (StringUtil.isEmpty(repository.getRepositoryName().trim())) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //库房编号非空判断
+        if (StringUtil.isEmpty(repository.getRepositoryNumber().trim())) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //建成时间非空判断
+        if (null == repository.getActivateTime()) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //库房类别非空判断
+        if (StringUtil.isEmpty(repository.getRepositoryCategory().trim())) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //执行新增操作
+        ajaxJson = warehouseServiceImpl.saveWarehouse(repository);
+        return ajaxJson;
+    }
+
+    /**
+     * 根据条件查询仓库
+     *
+     * @param model
+     * @param vo
+     * @return
+     */
+    @RequestMapping(params = "listQuery")
+    public String warehouseListByQueryVo(WarehouseQueryVo vo, Model model) {
+        //取库房类别列表
+        List<TSType> items = typeServiceImpl.getItems(CommonCode.WAREHOUSE_TYPE);
+        //执行仓库列表查询
+        List<RepAccessRepository> list = warehouseServiceImpl.repositoryListByQuery(vo);
+        //放入域中
+        model.addAttribute("items", items);
+        model.addAttribute("vo", vo);
+        model.addAttribute("list", list);
+        return "jzwz/MaterialManagement/WareHouseInformationManage/WareHouseInformationManageList";
+    }
+
+    /**
+     * 根据uuid查询仓库
+     *
+     * @param model
+     * @param warhouseId
+     * @return
+     */
+    @RequestMapping(params = "find")
+    public String findWarehouseById(Model model, String warhouseId) {
+        //仓库id非空验证
+        if (StringUtil.isEmpty(warhouseId)) {
+            return "jzwz/MaterialManagement/WareHouseInformationManage/WareHouseInformationManageLook";
+        }
+        //取库房类别列表
+        List<TSType> categoryItems = typeServiceImpl.getItems(CommonCode.WAREHOUSE_TYPE);
+        //取机构分类列表
+        List<TSType> jgItems = typeServiceImpl.getItems(CommonCode.JG_LASSIFY);
+        //执行仓库查询
+        RepAccessRepository repository = warehouseServiceImpl.repositoryFindById(warhouseId);
+        //放入域中
+        model.addAttribute("categoryItems", categoryItems);
+        model.addAttribute("jgItems", jgItems);
+        model.addAttribute("repository", repository);
+        return "jzwz/MaterialManagement/WareHouseInformationManage/WareHouseInformationManageLook";
+    }
+
+    /**
+     * 通过uuid准备modify页面回显数据并跳转
+     *
+     * @return
+     */
+    @RequestMapping(params = "showModify")
+    public String showModifyPage(String warhouseId, Model model) {
+        //仓库Id非空验证
+        if (StringUtil.isEmpty(warhouseId)) {
+            return "jzwz/MaterialManagement/WareHouseInformationManage/WareHouseInformationManageEdit";
+        }
+        //取库房类别列表
+        List<TSType> categoryItems = typeServiceImpl.getItems(CommonCode.WAREHOUSE_TYPE);
+        //取机构分类列表
+        List<TSType> jgItems = typeServiceImpl.getItems(CommonCode.JG_LASSIFY);
+        //查找uuid对应仓库，准备回显数据
+        RepAccessRepository repository = warehouseServiceImpl.repositoryFindById(warhouseId);
+        //放入域中
+        model.addAttribute("categoryItems", categoryItems);
+        model.addAttribute("jgItems", jgItems);
+        model.addAttribute("repository", repository);
+        return "jzwz/MaterialManagement/WareHouseInformationManage/WareHouseInformationManageEdit";
+    }
+
+    /**
+     * 仓库修改
+     *
+     * @return ajaxJson
+     */
+    @ResponseBody
+    @RequestMapping(params = "modify")
+    public AjaxJson modifyWarehouse(RepAccessRepository repository) {
+        AjaxJson ajaxJson = new AjaxJson();
+        //repository非空判断
+        if (null == repository) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //库房区划非空判断
+        if (StringUtil.isEmpty(repository.getRepositoryArea().trim())) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //机构分类非空判断
+        if (null == repository.getOrganizationClassify()) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //库房名称
+        if (StringUtil.isEmpty(repository.getRepositoryName().trim())) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //库房编号非空判断
+        if (StringUtil.isEmpty(repository.getRepositoryNumber().trim())) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //建成时间非空判断
+        if (null == repository.getActivateTime()) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //库房类别非空判断
+        if (StringUtil.isEmpty(repository.getRepositoryCategory().trim())) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //修改
+        ajaxJson = warehouseServiceImpl.repositoryModify(repository);
+        return ajaxJson;
+    }
+
+    /**
+     * 删除仓库
+     *
+     * @param ids
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(params = "delete")
+    public AjaxJson deleteWarehouse(String ids) {
+        AjaxJson ajaxJson = new AjaxJson();
+        //ids非空验证
+        if (StringUtil.isEmpty(ids.trim())) {
+            ajaxJson.setSuccess(false);
+            return ajaxJson;
+        }
+        //执行删除操作
+        ajaxJson = warehouseServiceImpl.repositoryDelete(ids);
+        return ajaxJson;
+    }
+}

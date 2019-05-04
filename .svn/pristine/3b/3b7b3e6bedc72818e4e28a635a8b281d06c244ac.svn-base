@@ -1,0 +1,154 @@
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>列表页</title>
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/font-awesome.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/animate.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="add-dis">
+    <div class="wrapper wrapper-content animated">
+        <div class="row">
+           <form role="form" class="form-horizontal m-t" id="updateRepSubstanceMessage" method="post">
+               <input type="hidden" name="uuid" value="${repSubstanceMessage.uuid}">
+                <div class="form-group draggable">
+                    <label class="col-sm-2 control-label"><span class="start">*</span>物资编号：</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="subNumber" value="${repSubstanceMessage.subNumber}" class="form-control">
+                    </div>
+                    <label class="col-sm-2 control-label"><span class="start">*</span>物资品名：</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="subName" value="${repSubstanceMessage.subName}" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group draggable">
+                    <label class="col-sm-2 control-label"><span class="start">*</span>物资类别：</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="txt1" name="subCategory" value="${repSubstanceMessage.subCategory}" class="form-control fl" style="width: 60%">
+                        <button class="btn btn-primary btnh" id="btn1" type="button"><i class="fa fa-search"></i>&nbsp;选择</button>
+                    </div>
+               
+			   <label class="col-sm-2 control-label">规格型号：</label>
+                <div class="col-sm-4">
+                    <input type="text" name="specificationType" value="${repSubstanceMessage.specificationType}" class="form-control">
+                </div>  
+        </div>
+        <div class="form-group draggable">
+            <label class="col-sm-2 control-label">是否可回收：</label>
+            <div class="col-sm-4">
+                <select class="form-control chosen-select" name="isrecycle">
+                    <option>-请选择-</option>
+                    <option value="1" ${repSubstanceMessage.isrecycle==1?'selected':''}>是</option>
+                    <option value="0" ${repSubstanceMessage.isrecycle==0?'selected':''}>否</option>
+                </select>
+            </div>
+             <label class="col-sm-2 control-label">供应商：</label>
+                <div class="col-sm-4">
+                    <input type="text" name="supplier" value="${repSubstanceMessage.supplier}" class="form-control">
+                </div>
+			
+        </div>
+		<div class="form-group draggable">
+		<label class="col-sm-2 control-label">单位：</label>
+            <div class="col-sm-4">
+                <select class="form-control chosen-select" name="unit">
+                    <option>-请选择-</option>
+                    <option ${repSubstanceMessage.unit=='个'?'selected':''}>个</option>
+                    <option ${repSubstanceMessage.unit=='双'?'selected':''}>双</option>
+                    <option ${repSubstanceMessage.unit=='辆'?'selected':''}>辆</option>
+                    <option ${repSubstanceMessage.unit=='箱'?'selected':''}>箱</option>
+                    <option ${repSubstanceMessage.unit=='盒'?'selected':''}>盒</option>
+                </select>
+            </div>
+            <label class="col-sm-2 control-label">单价(元)：</label>
+            <div class="col-sm-4">
+                <input type="text" name="price" value="${repSubstanceMessage.price}" class="form-control">
+            </div>
+		</div>
+        <div class="form-group draggable">
+            <label class="col-sm-2 control-label">备注：</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" rows="3" name="remark">${repSubstanceMessage.remark}</textarea>
+            </div>
+        </div>
+        </form>
+        </div>
+
+    </div>
+
+    <!-- 全局js -->
+    <script src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+    <!-- 自定义js -->
+    <script src="${pageContext.request.contextPath}/js/content.js"></script>
+    <!--时间-->
+    <script src="${pageContext.request.contextPath}/js/plugins/layer/laydate/laydate.js"></script>
+    <!--编辑器-->
+    <script src="${pageContext.request.contextPath}/js/plugins/summernote/summernote.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/plugins/summernote/summernote-zh-CN.js"></script>
+    <!-- 上传 -->
+    <script src="${pageContext.request.contextPath}/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+    <!-- 下拉列表 -->
+    <script src="${pageContext.request.contextPath}/js/plugins/chosen/chosen.jquery.js"></script>
+    <!--固定格式-->
+    <script src="${pageContext.request.contextPath}/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+    <script>
+	 laydate({
+            elem: '#hello', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+            event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+        });
+		 laydate({
+            elem: '#hello1', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+            event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+        });
+		 laydate({
+            elem: '#hello2', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+            event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+        });
+        $(document).ready(function () {
+
+            $('.summernote').summernote({
+                lang: 'zh-CN'
+            });
+
+        });
+        $('input[type="file"]').prettyFile();
+        $(".chosen-select").chosen();
+
+        $('#btn1').on('click', function () {
+            parent.layer.open({
+                type: 2,
+                title: '选择',
+                maxmin: true,
+                zIndex: 100,
+                shadeClose: true, //点击遮罩关闭层
+                area: ['790px', '520px'],
+                content: 'SelectMaterialCategory.jsp',
+                btn: ['确定', '取消'],
+                yes: function (index, layero) {
+                    var child = $(layero).find('iframe')[0].contentWindow;
+                    var result = child.checked();
+                    if (result != false) {
+                        $("#txt1").val(result);
+                        parent.layer.close(index);
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
+

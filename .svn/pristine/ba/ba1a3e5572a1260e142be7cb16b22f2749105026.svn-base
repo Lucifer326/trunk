@@ -1,0 +1,18 @@
+package com.jeecg.MaterialsOutPut.dao;
+
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.MaterialsOutPut.entity.RepOuthouseDetail;
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.jeecgframework.minidao.annotation.MiniDao;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
+
+@Repository("materialsOutPutExamineMiniDao")
+public interface MaterialsOutPutExamineDao {
+      @Arguments({"uuid"})
+    public List<Map<String,Object>> selectstockByid(String uuid);
+      @Arguments({"uuid"})
+    public List<Map<String,Object>> selectMaterialStockByid(String uuid);
+}

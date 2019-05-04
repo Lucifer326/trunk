@@ -1,0 +1,38 @@
+package com.jeecg.mailSendAndReceiving.controller;
+
+        import com.jeecg.mailSendAndReceiving.service.SendMailService;
+        import com.jeecg.mailSendAndReceiving.service.SendMailUtil;
+        import org.jeecgframework.core.common.controller.BaseController;
+        import org.springframework.stereotype.Controller;
+        import org.springframework.web.bind.annotation.RequestMapping;
+
+        import javax.servlet.http.HttpServletRequest;
+        import javax.servlet.http.HttpSession;
+
+@Controller
+@RequestMapping("mailController")
+public class mailController extends BaseController {
+    @RequestMapping(params = "send")
+    public String send(String email, String title, String content, HttpServletRequest request){
+//      从content中取图片文件路径
+        int indexOf = content.indexOf("src");
+//      计算文件名的起始位置
+        int start = indexOf + 14;
+        int end = start + 40;
+        String subpath = content.substring(start, end);
+//      获取文件的绝对路径
+        HttpSession session = request.getSession();
+        String path = session.getServletContext().getRealPath(subpath);
+//      新建邮件发送类
+        SendMailService sendMail = new SendMailService();
+//        设定发件人
+        String sender = "1441249420@qq.com";
+        try {
+//            发送邮件，传递发件人，正文，收件人，主题，文中图片路径
+            sendMail.send(sender, content, email, title, path);
+        } catch (Exception e) {
+            System.out.println("发送失败");
+        }
+        return "jzwz/MailSendAndReceiving/mailbox";
+    }
+}

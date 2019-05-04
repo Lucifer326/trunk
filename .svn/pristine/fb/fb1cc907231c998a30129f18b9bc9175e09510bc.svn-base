@@ -1,0 +1,32 @@
+package com.jeecg.rep_substance_recycle.service;
+
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.rep_substance_recycle.entity.RepDetailedMaterialRecoveryEntity;
+import com.jeecg.rep_substance_recycle.entity.RepSubstanceRecycleEntity;
+import com.jeecg.rep_substance_recycle.vo.RecycleVo;
+
+import java.util.List;
+import java.util.Map;
+
+public interface RecycleService {
+
+    List<RepSubstanceRecycleEntity> recycleList();
+
+    List<RepSubstanceRecycleEntity> conditionList(RecycleVo vo);
+
+    RepSubstanceRecycleEntity lookRecycle(String uuid);
+
+    void deleteRecycles(String[] uuid);
+
+    List<Map<String, Object>> recyclingDetailsGet(String uuid);
+
+    void addRecycleAndMaterialRecovery(RepSubstanceRecycleEntity recycle, List<RepStorageDetailEntity> list);
+
+    void updateRecycleAndMaterialRecovery(RepSubstanceRecycleEntity recycle, List<RepStorageDetailEntity> list);
+
+    List<Map<String,Object>> seachAllocation(String input, String output);
+
+/*    RepSubstanceRecycleEntity recyclingEdit(String uuid);
+
+    List<Map<String, Object>> recoveryEdit(String uuid);*/
+}

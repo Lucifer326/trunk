@@ -1,0 +1,82 @@
+package com.jeecg.material_scrap.dao;
+
+import com.jeecg.material_scrap.entity.Scrap;
+import com.jeecg.material_scrap.entity.ScrapLookTwoInformation;
+import com.jeecg.system_management.pojo.RepSubstanceCategory;
+import org.jeecgframework.minidao.annotation.Arguments;
+import org.jeecgframework.minidao.annotation.MiniDao;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
+
+
+/**物资报废管理 Dao
+ * @author 任小昆
+ */
+@MiniDao
+public interface ScrapDao {
+    /**
+     * 显示物资报废的列表
+     * @return
+     */
+    @Arguments({"userId"})
+    List<Scrap> showScrapList(String userId);
+
+    /**
+     * 查询单据号
+     * @param scrapNumber
+     * @return
+     */
+    @Arguments({"scrapNumber","wareHouse","userId"})
+    List<Scrap> selectNumber(String scrapNumber,String wareHouse,String userId);
+
+    /**
+     * 查看数据
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    Scrap lookData(String uuid);
+
+    /**
+     *编辑数据
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    Scrap editData(String uuid);
+
+    /**
+     * 物资信息回显
+     * @param uuid
+     * @return
+     */
+    @Arguments({"uuid"})
+    List<Map<String,Object>> scrapTwoLook(String uuid);
+
+
+    /**
+     * 审批
+     *
+     * @param uuid
+     */
+    @Arguments({"uuid"})
+    Scrap reviewData(String uuid);
+    /**
+     * @author wangguoqiang
+     *
+     */
+    @Arguments({"storenum"})
+    List<Map<String, Object>> repositoryByStorenum(String storenum);
+    @Arguments({"storenum"})
+    List<Map<String, Object>> findRepSubstanceMessageBystorenum(String storenum);
+    @Arguments({"reviewId"})
+    List<Map<String,Object>> findScarpDetail(String reviewId);
+    @Arguments({"reviewId"})
+    Scrap findScarpById(String reviewId);
+    @Arguments({"storageid"})
+    Map<String,Object> findStorageid(String storageid);
+    @Arguments({"uuid"})
+    Map<String, Object> findStoreNum(String uuid);
+}

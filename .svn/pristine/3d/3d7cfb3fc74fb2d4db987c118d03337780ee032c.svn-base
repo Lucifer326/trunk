@@ -1,0 +1,260 @@
+package com.jeecg.rep_substance_recycle.service.impl;
+
+import com.jeecg.MaterialsInPut.entity.RepStorageDetailEntity;
+import com.jeecg.rep_substance_recycle.dao.RecycleDao;
+import com.jeecg.rep_substance_recycle.entity.RepSubstanceRecycleEntity;
+import com.jeecg.rep_substance_recycle.service.RecycleService;
+import com.jeecg.rep_substance_recycle.vo.RecycleVo;
+import org.jeecgframework.core.common.exception.BusinessException;
+import org.jeecgframework.core.common.service.impl.CommonServiceImpl;
+import org.jeecgframework.core.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author 刘雨泽
+ */
+@Service
+public class RecycleServiceImpl extends CommonServiceImpl implements RecycleService {
+
+    @Autowired
+    private RecycleDao recycleDao;
+
+
+    /**
+     * 查询物资回收结果集
+     * @return
+     */
+    @Override
+    public List<RepSubstanceRecycleEntity> recycleList() {
+        return recycleDao.recycleList();
+    }
+
+    /**
+     * 查询物资回收结果集 模糊查询
+     * @param vo 查询条件
+     * @return
+     */
+    @Override
+    public List<RepSubstanceRecycleEntity> conditionList(RecycleVo vo) {
+        String inDate = "";
+        String outDate = "";
+        if (vo != null){
+            if (vo.getRecycleNumber() != null && !"".equals(vo.getRecycleNumber())){
+                vo.setRecycleNumber(vo.getRecycleNumber().trim());
+            }
+            if (vo.getStorageWarehouse() != null && !"".equals(vo.getRecycleNumber())){
+                vo.setStorageWarehouse(vo.getStorageWarehouse().trim());
+            }
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            if (vo.getInDate() != null){
+                inDate = format.format(vo.getInDate());
+            }
+            if (vo.getOutDate() != null){
+                outDate = format.format(vo.getOutDate());
+            }
+        }
+        return recycleDao.conditionList(vo, inDate, outDate);
+    }
+
+    /**
+     * 查询物资回收信息
+     * @param uuid
+     * @return
+     */
+    @Override
+    public RepSubstanceRecycleEntity lookRecycle(String uuid) {
+        return recycleDao.lookRecycle(uuid);
+    }
+
+    /**
+     * 删除物资回收
+     * @param uuid 根据uuid删除
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteRecycles(String[] uuid) {
+
+        // 取到该id下有多少个物资回收详细物资 物资从表
+        for(int i = 0; i < uuid.length; i++){
+            String id = uuid[i];
+            String sql = "update REP_STORAGE_DETAIL set ISDELETED = 1 where NUMBERID = ?";
+            super.executeSql(sql, id);
+        }
+
+        // 修改物资回收表isdelete 物资主表
+        String param = "";
+        for (int i = 0; i < uuid.length - 1; i++){
+            param += "?,";
+        }
+        param += "?";
+
+        String sql = "update REP_SUBSTANCE_RECYCLE set ISDELETED = 1 where uuid in (" + param +")";
+        super.executeSql(sql, uuid);
+
+    }
+
+    /**
+     * 得到入库详细信息
+     * @param uuid 物资回收信息的uuid
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> recyclingDetailsGet(String uuid) {
+        // 获取回收单id
+        RepSubstanceRecycleEntity recycleEntitie = recycleDao.recyclingDetailsGet(uuid);
+        // 入库信息集合
+        List<Map<String, Object>> materialInfos = new ArrayList<>();
+        // 物资信息集合
+        List<Map<String, Object>> warehouseInfos = new ArrayList<>();
+        // 物资信息
+        Map<String, Object> warehouse = new HashMap<>();
+        // 入库信息
+        Map<String, Object> material = new HashMap<>();
+        if (recycleEntitie != null){
+            // 通过回收单id  获取入库信息
+            warehouseInfos = recycleDao.warehouseInfosGet(recycleEntitie.getUuid());
+
+            if (warehouseInfos != null){
+                for (int j = 0; j< warehouseInfos.size(); j++){
+                    warehouse = warehouseInfos.get(j);
+                    if (warehouse != null && material!= null){
+                        // 通过入库物资信息的物资id 获取物资信息
+                        material = recycleDao.materialInfosGet(warehouse.get("MESSAGEID"));
+                        // 补全物资信息数量
+                        material.put("NUMBER", warehouse.get("OUTPUT_AMOUNT"));
+                        materialInfos.add(material);
+                    }
+                }
+            }
+        }
+        return materialInfos;
+    }
+
+    /**
+     * 添加物资回收数据
+     * @param recycle
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addRecycleAndMaterialRecovery(RepSubstanceRecycleEntity recycle, List<RepStorageDetailEntity> list) {
+        // 保存物资回收信息
+        super.save(recycle);
+
+        if (list != null && list.size()!=0){
+            for (int i = 0; i < list.size(); i++){
+                if (StringUtil.isEmpty(list.get(i).getMessageid())){
+                    throw  new BusinessException("物资品名请选择");
+                }
+                // 补全对象属性
+                list.get(i).setNumberid(recycle.getUuid());
+                if (!"".equals(list.get(i).getMessageid())){
+                    // 保存物资回收详细(入库信息)
+                    super.save(list.get(i));
+                }
+            }
+        }else {
+            throw  new BusinessException("物资回收明细不能为空");
+        }
+    }
+
+    /**
+     * 修改物资回收
+     * @param recycle
+     * @param list
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateRecycleAndMaterialRecovery(RepSubstanceRecycleEntity recycle, List<RepStorageDetailEntity> list) {
+
+        // 得到原来的物资回收信息
+        if (recycle!=null){
+            RepSubstanceRecycleEntity entity = recycleDao.lookRecycle(recycle.getUuid());
+            if (entity!=null){
+                recycle.setCreateBy(entity.getCreateBy());
+                recycle.setCreateDate(entity.getCreateDate());
+                recycle.setCreateName(entity.getCreateName());
+                recycle.setIsdeleted(entity.getIsdeleted());
+                recycle.setSysCompanyCode(entity.getSysCompanyCode());
+                recycle.setSysOrgCode(entity.getSysOrgCode());
+            }
+        }
+        // 更新物资回收信息
+        super.saveOrUpdate(recycle);
+
+        // 删除回收详细表字段Repositoryid为uuid所有的数据  从新添加
+        String sql = "delete from REP_STORAGE_DETAIL where NUMBERID = ?";
+        super.executeSql(sql, recycle.getUuid());
+
+        if (list != null && list.size() != 0){
+            // 从新添加回收详细表数据
+            for (int i = 0; i < list.size(); i++){
+                if (StringUtil.isEmpty(list.get(i).getMessageid())){
+                    throw  new BusinessException("物资品名请选择");
+                }
+                // 补全对象属性
+                list.get(i).setNumberid(recycle.getUuid());
+                if (!"".equals(list.get(i).getMessageid())) {
+                    super.saveOrUpdate(list.get(i));
+                }
+            }
+        }else {
+            throw  new BusinessException("物资回收明细不能为空");
+        }
+    }
+
+    /**
+     * 调拨通知查询列表
+     * @param input 入库
+     * @param output 出库
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> seachAllocation(String input, String output, Short isUse ) {
+        return recycleDao.seachAllocation(input, output, isUse);
+    }
+
+    /*@Override
+    public RepSubstanceRecycleEntity recyclingEdit(String uuid) {
+        return recycleDao.recyclingEdit(uuid);
+    }
+
+    @Override
+    public List<Map<String, Object>> recoveryEdit(String uuid) {
+
+        // 获取回收单id
+        RepSubstanceRecycleEntity recycleEntities = recycleDao.recyclingDetailsGet(uuid);
+        List<Map<String, Object>> materialInfos = new ArrayList<>();
+        List<Map<String, Object>> warehouseInfos = new ArrayList<>();
+        Map<String, Object> warehouse = new HashMap<>();
+        Map<String, Object> material = new HashMap<>();
+        if (recycleEntities != null){
+            // 通过回收单id  获取入库信息
+            warehouseInfos = recycleDao.warehouseInfosGet(recycleEntities.getUuid());
+
+            if (warehouseInfos != null){
+                for (int j = 0; j< warehouseInfos.size(); j++){
+                    warehouse = warehouseInfos.get(j);
+                    if (warehouse != null && material!= null){
+                        // 通过入库物资信息的物资id 获取物资信息
+                        material = recycleDao.materialInfosGet(warehouse.get("MESSAGEID"));
+                        // 补全物资信息数量
+                        material.put("NUMBER", warehouse.get("OUTPUT_AMOUNT"));
+                        materialInfos.add(material);
+                    }
+                }
+            }
+        }
+        return materialInfos;
+
+    }*/
+}

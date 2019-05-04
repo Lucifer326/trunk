@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQL><![CDATA[
+select diao.uuid,
+        x.uuid as mid,
+        diao.ALLOT_AMOUNT,
+       diao.PRICE_TOTAL,
+       x.SUB_NAME,
+       x.SUB_Number,
+       x.sub_category,
+       x.specification_type,
+       x.price,
+       x.unit
+  from REP_INFORM_DETAIL diao
+  LEFT JOIN REP_SUBSTANCE_MESSAGE x
+    on diao.MESSAGEID = x.uuid
+ where diao.informid='${diaobo}'
+ and (diao.isdeleted is null
+    or diao.isdeleted = 0)
+
+
+
+]]></SQL>
