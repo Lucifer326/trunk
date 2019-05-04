@@ -106,7 +106,7 @@ public class mailController extends BaseController {
             String path = request.getServletContext().getRealPath("/");
 //            设置附件存储位置的相对路径
             MailParsing.path = path;
-//            获取所有邮件
+//            获取收件箱中所有邮件
             mailList = MailParsing.resceive();
 
             HttpSession session = request.getSession();
